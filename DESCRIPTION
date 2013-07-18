@@ -5,7 +5,11 @@ Version: 0.1
 Date: 2013-07-17
 Author: Wush Wu
 Maintainer: Wush Wu <wush978@gmail.com>
-Description: Rhiredis is a wrapper of hiredis, which is a minimalistic C client library for the Redis database.
+Description: Rhiredis is a wrapper of hiredis, which is a minimalistic C client
+    library for the Redis database.
 License: GPL (>= 3)
-Depends: Rcpp (>= 0.10.4)
+Depends:
+    Rcpp (>= 0.10.4)
 LinkingTo: Rcpp
+Collate:
+    'zzz.R'
