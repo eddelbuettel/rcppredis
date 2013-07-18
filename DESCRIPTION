@@ -9,9 +9,10 @@ Description: Rhiredis is a wrapper of hiredis, which is a minimalistic C client
     library for the Redis database.
 License: GPL (>= 3)
 Depends:
-		methods,
+    methods,
     Rcpp (>= 0.10.4)
 LinkingTo: Rcpp
 RcppModules: hiredis
 Collate:
     'zzz.R'
+    'RcppExports.R'

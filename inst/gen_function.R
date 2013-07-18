@@ -1,6 +1,6 @@
-URL <- sprintf("http://redis.io/commands/#")
 library(XML)
 library(stringr)
+URL <- sprintf("http://redis.io/commands/#")
 # src <- readLines(URL)
 src <- htmlParse(URL)
 
@@ -23,9 +23,9 @@ for(node in li.nodes) {
 	)
 }
 
-template <- paste(readLines("template.cpp"), collapse="\n")
+template <- paste(readLines("template.R"), collapse="\n")
 
-keys <- c("summary", "name", "args-argv", "args-cmd", "args-value")
+keys <- c("summary", "name", "funname", "args-argv", "args-cmd", "args-value")
 values <- list(
 	summary = function(cmd) {
 		cmd$summary
@@ -33,14 +33,21 @@ values <- list(
 	name = function(cmd) {
 		cmd$name
 	},
+	funname = function(cmd) {
+		gsub(" ", "_", cmd$name, fixed=TRUE)
+	},
 	"args-argv" = function(cmd) {
-		paste("CharacterVector", cmd$args, collapse=", ")
+		if (length(cmd$args) == 0) return("")
+		paste(paste("", cmd$args, collapse=", "), ", ", sep="")
 	},
 	"args-cmd" = function(cmd) {
+		if (length(cmd$args) == 0) return("")
 		paste(rep("%s", length(cmd$args)), collapse=" ")
 	}, 
 	"args-value" = function(cmd) {
-		paste(paste("CHAR(wrap(", cmd$args, "[0]))", sep=""), collapse=", ")
+		if (length(cmd$args) == 0) return("")
+# 		paste(", ", paste(paste("CHAR(wrap(", cmd$args, "[0]))", sep=""), collapse=", "), sep="")
+		paste(", ", paste(cmd$args, collapse=", "), sep="")
 	}
 )
 
@@ -49,9 +56,8 @@ for(cmd in result) {
 	for(key in keys) {
 		pattern <- paste("%%", key, "%%", sep="")
 		output <- gsub(pattern=pattern, replacement=values[[key]](cmd), x=output, fixed=TRUE)
+# 		print(pattern)
+# 		print(values[[key]](cmd))
 	}
-	write(output, sprintf("test/redis%s.cpp", cmd$name))
+	write(output, sprintf("../R/gen/redis%s.R", gsub(" ", "_", cmd$name, fixed=TRUE)))
 }
-
-
-

@@ -5,6 +5,22 @@
 
 using namespace Rcpp;
 
+// redisCommand
+SEXP redisCommand(std::string cmd, SEXP Rc);
+RcppExport SEXP Rhiredis_redisCommand(SEXP cmdSEXP, SEXP RcSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        std::string cmd = Rcpp::as<std::string >(cmdSEXP);
+        SEXP Rc = Rcpp::as<SEXP >(RcSEXP);
+        SEXP __result = redisCommand(cmd, Rc);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // redisConnect
 SEXP redisConnect(std::string host = "localhost", int port = 6379);
 RcppExport SEXP Rhiredis_redisConnect(SEXP hostSEXP, SEXP portSEXP) {
@@ -15,23 +31,6 @@ BEGIN_RCPP
         std::string host = Rcpp::as<std::string >(hostSEXP);
         int port = Rcpp::as<int >(portSEXP);
         SEXP __result = redisConnect(host, port);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// redisLPush
-SEXP redisLPush(CharacterVector key, CharacterVector value, SEXP Rc);
-RcppExport SEXP Rhiredis_redisLPush(SEXP keySEXP, SEXP valueSEXP, SEXP RcSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        CharacterVector key = Rcpp::as<CharacterVector >(keySEXP);
-        CharacterVector value = Rcpp::as<CharacterVector >(valueSEXP);
-        SEXP Rc = Rcpp::as<SEXP >(RcSEXP);
-        SEXP __result = redisLPush(key, value, Rc);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
