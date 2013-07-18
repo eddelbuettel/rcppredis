@@ -59,5 +59,5 @@ for(cmd in result) {
 # 		print(pattern)
 # 		print(values[[key]](cmd))
 	}
-	write(output, sprintf("../R/gen/redis%s.R", gsub(" ", "_", cmd$name, fixed=TRUE)))
+	write(output, sprintf("../R/redis%s.R", gsub(" ", "_", cmd$name, fixed=TRUE)))
 }
