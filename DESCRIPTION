@@ -10,7 +10,8 @@ Description: Rhiredis is a wrapper of hiredis, which is a minimalistic C client
 License: GPL (>= 3)
 Depends:
     methods,
-    Rcpp (>= 0.10.4)
+    Rcpp (>= 0.10.4),
+    bit64
 LinkingTo: Rcpp
 RcppModules: hiredis
 Collate:
