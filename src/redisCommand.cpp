@@ -7,6 +7,9 @@
 
 using namespace Rcpp;
 
+static void extract_array(redisReply *node, List& retval);
+static SEXP extract_reply(redisReply *r);
+
 //'@title General Redis Interface Function
 //'
 //'@description Perform any Redis command
@@ -20,6 +23,17 @@ SEXP redisCommand(std::string cmd, SEXP Rc) {
 	if (r.get() == NULL) {
 		throw std::runtime_error(std::string(c->errstr));
 	}
+	return extract_reply(r.get());
+	END_RCPP
+}
+
+void extract_array(redisReply *node, List& retval) {
+	for(int i = 0;i < node->elements;i++) {
+		retval[i] = extract_reply(node->element[i]);
+	}
+}
+
+SEXP extract_reply(redisReply *r) {
 	switch(r->type) {
 	case REDIS_REPLY_STRING: 
 	case REDIS_REPLY_STATUS: {
@@ -46,10 +60,11 @@ SEXP redisCommand(std::string cmd, SEXP Rc) {
 		return R_NilValue;
 	}
 	case REDIS_REPLY_ARRAY: {
-		return wrap("Array returned. TODO!");
+		List retval;
+		extract_array(r, retval);
+		return retval;
 	}
 	default:
 		throw std::logic_error("Unknown type");
 	}
-	END_RCPP
 }
