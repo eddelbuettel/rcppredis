@@ -6,8 +6,8 @@
 #'@description Perform any Redis command
 #'
 #'@export
-redisCommand <- function(cmd, Rc) {
-    .Call('Rhiredis_redisCommand', PACKAGE = 'Rhiredis', cmd, Rc)
+redisCommand <- function(Rc, cmd, args) {
+    .Call('Rhiredis_redisCommand', PACKAGE = 'Rhiredis', Rc, cmd, args)
 }
 
 #'@export

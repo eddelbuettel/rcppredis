@@ -47,7 +47,7 @@ values <- list(
 	"args-value" = function(cmd) {
 		if (length(cmd$args) == 0) return("")
 # 		paste(", ", paste(paste("CHAR(wrap(", cmd$args, "[0]))", sep=""), collapse=", "), sep="")
-		paste(", ", paste(cmd$args, collapse=", "), sep="")
+		paste(", list(", paste(cmd$args, collapse=", "), ")", sep="")
 	}
 )
 

@@ -1,6 +1,6 @@
 #'@title Inspect the internals of Redis objects
 #'@export
 redisOBJECT <- function( subcommand, Rc) {
-	cmd <- sprintf("OBJECT %s", subcommand)
-	redisCommand(cmd, Rc)
+	cmd <- "OBJECT"
+	redisCommand(Rc, cmd, list(subcommand))
 }

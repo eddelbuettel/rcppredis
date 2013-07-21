@@ -1,6 +1,6 @@
 #'@title Rename a key
 #'@export
 redisRENAME <- function( key,  newkey, Rc) {
-	cmd <- sprintf("RENAME %s %s", key, newkey)
-	redisCommand(cmd, Rc)
+	cmd <- "RENAME"
+	redisCommand(Rc, cmd, list(key, newkey))
 }

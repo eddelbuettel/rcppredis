@@ -16,10 +16,20 @@ static SEXP extract_reply(redisReply *r);
 //'
 //'@export
 //[[Rcpp::export]]
-SEXP redisCommand(std::string cmd, SEXP Rc) {
+SEXP redisCommand(SEXP Rc, std::string cmd, List args) {
 	BEGIN_RCPP
 	redisContext* c(extract_ptr<RredisContext>(Rc)->get_ptr());
-	boost::shared_ptr<redisReply> r((redisReply*) redisCommand(c, cmd.c_str()), std::ptr_fun<void*, void>(freeReplyObject));
+	int n = args.size() + 1;
+	std::vector<char*> argv(n, NULL);
+	argv[0] = &cmd[0];
+	std::vector<size_t> argvlen(n, NULL);
+	argvlen[0] = cmd.size();
+	for(int i = 1;i < n;i++) {
+		CharacterVector temp(wrap(args[i-1]));
+		argv[i] = const_cast<char*>(CHAR(wrap(temp[0])));
+		argvlen[i] = Rf_length(wrap(temp[0]));
+	}
+	boost::shared_ptr<redisReply> r((redisReply*) redisCommandArgv(c, argv.size(), const_cast<const char**>(&argv[0]), &argvlen[0]), std::ptr_fun<void*, void>(freeReplyObject));
 	if (r.get() == NULL) {
 		throw std::runtime_error(std::string(c->errstr));
 	}

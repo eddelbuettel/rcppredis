@@ -6,15 +6,16 @@
 using namespace Rcpp;
 
 // redisCommand
-SEXP redisCommand(std::string cmd, SEXP Rc);
-RcppExport SEXP Rhiredis_redisCommand(SEXP cmdSEXP, SEXP RcSEXP) {
+SEXP redisCommand(SEXP Rc, std::string cmd, List args);
+RcppExport SEXP Rhiredis_redisCommand(SEXP RcSEXP, SEXP cmdSEXP, SEXP argsSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        std::string cmd = Rcpp::as<std::string >(cmdSEXP);
         SEXP Rc = Rcpp::as<SEXP >(RcSEXP);
-        SEXP __result = redisCommand(cmd, Rc);
+        std::string cmd = Rcpp::as<std::string >(cmdSEXP);
+        List args = Rcpp::as<List >(argsSEXP);
+        SEXP __result = redisCommand(Rc, cmd, args);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

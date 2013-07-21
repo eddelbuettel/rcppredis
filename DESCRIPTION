@@ -164,3 +164,4 @@ Collate:
     'redisZREVRANK.R'
     'redisZSCORE.R'
     'redisZUNIONSTORE.R'
+    'redisCONFIG_REWRITE.R'

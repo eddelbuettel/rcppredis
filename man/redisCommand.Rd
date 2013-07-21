@@ -2,7 +2,7 @@
 \alias{redisCommand}
 \title{General Redis Interface Function}
 \usage{
-  redisCommand(cmd, Rc)
+  redisCommand(Rc, cmd, args)
 }
 \description{
   Perform any Redis command
