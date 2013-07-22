@@ -2,7 +2,7 @@
 \alias{redisHKEYS}
 \title{Get all the fields in a hash}
 \usage{
-  redisHKEYS(key, Rc)
+  redisHKEYS(key, Rc = NULL)
 }
 \description{
   Get all the fields in a hash

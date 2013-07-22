@@ -2,7 +2,7 @@
 \alias{redisBGSAVE}
 \title{Asynchronously save the dataset to disk}
 \usage{
-  redisBGSAVE(Rc)
+  redisBGSAVE(Rc = NULL)
 }
 \description{
   Asynchronously save the dataset to disk

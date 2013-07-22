@@ -2,7 +2,7 @@
 \alias{redisRANDOMKEY}
 \title{Return a random key from the keyspace}
 \usage{
-  redisRANDOMKEY(Rc)
+  redisRANDOMKEY(Rc = NULL)
 }
 \description{
   Return a random key from the keyspace

@@ -2,7 +2,7 @@
 \alias{redisSYNC}
 \title{Internal command used for replication}
 \usage{
-  redisSYNC(Rc)
+  redisSYNC(Rc = NULL)
 }
 \description{
   Internal command used for replication

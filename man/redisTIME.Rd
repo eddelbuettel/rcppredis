@@ -2,7 +2,7 @@
 \alias{redisTIME}
 \title{Return the current server time}
 \usage{
-  redisTIME(Rc)
+  redisTIME(Rc = NULL)
 }
 \description{
   Return the current server time

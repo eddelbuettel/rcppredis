@@ -2,7 +2,7 @@
 \alias{redisHSETNX}
 \title{Set the value of a hash field, only if the field does not exist}
 \usage{
-  redisHSETNX(key, field, value, Rc)
+  redisHSETNX(key, field, value, Rc = NULL)
 }
 \description{
   Set the value of a hash field, only if the field does not

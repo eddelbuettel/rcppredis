@@ -2,7 +2,7 @@
 \alias{redisUNWATCH}
 \title{Forget about all watched keys}
 \usage{
-  redisUNWATCH(Rc)
+  redisUNWATCH(Rc = NULL)
 }
 \description{
   Forget about all watched keys

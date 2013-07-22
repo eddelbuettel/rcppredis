@@ -1,4 +1,10 @@
 library(Rhiredis)
 
 con <- redisConnect()
-redisLPUSH("test", "as\ df", con)
+options(Rhiredis.connect = con)
+
+system.time({
+	for(i in 1:100) {
+		redisLPUSH("test", "as df")
+	}
+})

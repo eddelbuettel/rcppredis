@@ -2,7 +2,7 @@
 \alias{redisQUIT}
 \title{Close the connection}
 \usage{
-  redisQUIT(Rc)
+  redisQUIT(Rc = NULL)
 }
 \description{
   Close the connection

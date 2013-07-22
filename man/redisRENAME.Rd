@@ -2,7 +2,7 @@
 \alias{redisRENAME}
 \title{Rename a key}
 \usage{
-  redisRENAME(key, newkey, Rc)
+  redisRENAME(key, newkey, Rc = NULL)
 }
 \description{
   Rename a key

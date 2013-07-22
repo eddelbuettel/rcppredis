@@ -2,7 +2,7 @@
 \alias{redisTYPE}
 \title{Determine the type stored at key}
 \usage{
-  redisTYPE(key, Rc)
+  redisTYPE(key, Rc = NULL)
 }
 \description{
   Determine the type stored at key

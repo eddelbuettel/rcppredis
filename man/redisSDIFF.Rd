@@ -2,7 +2,7 @@
 \alias{redisSDIFF}
 \title{Subtract multiple sets}
 \usage{
-  redisSDIFF(key, Rc)
+  redisSDIFF(key, Rc = NULL)
 }
 \description{
   Subtract multiple sets

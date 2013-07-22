@@ -2,7 +2,7 @@
 \alias{redisPING}
 \title{Ping the server}
 \usage{
-  redisPING(Rc)
+  redisPING(Rc = NULL)
 }
 \description{
   Ping the server

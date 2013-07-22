@@ -2,7 +2,7 @@
 \alias{redisDEBUG_SEGFAULT}
 \title{Make the server crash}
 \usage{
-  redisDEBUG_SEGFAULT(Rc)
+  redisDEBUG_SEGFAULT(Rc = NULL)
 }
 \description{
   Make the server crash
