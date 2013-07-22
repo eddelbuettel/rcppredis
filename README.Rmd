@@ -80,3 +80,7 @@ benchmark(
 all.equal(unserialize(base64decode(Rhiredis::redisGET("a1"))), iris)
 all.equal(rredis::redisGet("a2"), iris)
 ```
+
+## License
+
+GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
