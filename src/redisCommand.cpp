@@ -20,9 +20,9 @@ SEXP redisCommand(SEXP Rc, std::string cmd, List args) {
 	BEGIN_RCPP
 	redisContext* c(extract_ptr<RredisContext>(Rc)->get_ptr());
 	int n = args.size() + 1;
-	std::vector<char*> argv(n, NULL);
+	std::vector<char*> argv(n, static_cast<char*>(NULL));
 	argv[0] = &cmd[0];
-	std::vector<size_t> argvlen(n, NULL);
+	std::vector<size_t> argvlen(n, 0);
 	argvlen[0] = cmd.size();
 	for(int i = 1;i < n;i++) {
 		CharacterVector temp(wrap(args[i-1]));
@@ -38,7 +38,7 @@ SEXP redisCommand(SEXP Rc, std::string cmd, List args) {
 }
 
 void extract_array(redisReply *node, List& retval) {
-	for(int i = 0;i < node->elements;i++) {
+	for(unsigned int i = 0;i < node->elements;i++) {
 		retval[i] = extract_reply(node->element[i]);
 	}
 }
