@@ -18,6 +18,7 @@ SEXP redisConnect(std::string host = "localhost", int port = 6379) {
 	if (retval.get_ptr() == NULL) {
 		throw std::runtime_error("Failed to initialize redisContext");
 	}
+	Function("options")(Named("Rhiredis.connect") = wrap(retval));
 	return wrap(retval);
 	END_RCPP
 }
