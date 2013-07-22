@@ -1,4 +1,5 @@
-library(Rhiredis)
+
+suppressMessages(library(Rhiredis))
 
 con <- redisConnect()
 options(Rhiredis.connect = con)
