@@ -1,3 +1,0 @@
-[submodule "src/hiredis"]
-	path = src/hiredis
-	url = https://github.com/redis/hiredis
