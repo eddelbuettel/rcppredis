@@ -1,5 +1,4 @@
-PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"`
+## TODO: configure test for -lhiredis, possible -L flag
+##       alternatively, use 'pkg-config --cflags' and 'pkg-config --libs'
+PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` -lhiredis
 
-HIREDIS_OBJECTS = hiredis/net.o hiredis/hiredis.o hiredis/sds.o hiredis/async.o
-CPP_SOURCES = $(wildcard *.cpp) $(wildcard gen/*.cpp)
-OBJECTS = $(CPP_SOURCES:.cpp=.o) $(HIREDIS_OBJECTS)
