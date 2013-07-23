@@ -149,3 +149,5 @@ export(redisZREVRANK)
 export(redisZSCORE)
 export(redisZUNIONSTORE)
 useDynLib(Rhiredis)
+
+export(redis)

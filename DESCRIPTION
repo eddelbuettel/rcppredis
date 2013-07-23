@@ -15,7 +15,7 @@ LinkingTo: Rcpp
 RcppModules: hiredis
 Collate:
     'zzz.R'
-    'talkToRedis.R'
+    'redis.R'
     'RcppExports.R'
     'redisAPPEND.R'
     'redisAUTH.R'
