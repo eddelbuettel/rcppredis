@@ -1,10 +1,14 @@
 #!/usr/bin/Rscript
 
 suppressMessages(library(Rhiredis))
+print(Redis)
 
-redis("PING")
-redis("PING")
-redis("PING")
+redis <- new(Redis)
+print(redis)
+redis$exec("PING")
+redis$exec("PING")
+redis$exec("PING")
 
-redis("SET testchannel 42")
-redis("GET testchannel")
+redis2 <- new(Redis, "127.0.0.1", 6379)
+redis2$exec("SET testchannel 42")
+redis2$exec("GET testchannel")
