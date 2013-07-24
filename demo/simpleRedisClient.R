@@ -1,11 +1,9 @@
 #!/usr/bin/Rscript
 
-suppressMessages(library(Rhiredis))
+suppressMessages(library(rhiredis))
 print(Redis)
 
 redis <- new(Redis)
-print(redis)
-redis$exec("PING")
 redis$exec("PING")
 redis$exec("PING")
 
