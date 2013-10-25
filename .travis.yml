@@ -12,5 +12,6 @@ before_script:
   - curl -OL http://raw.github.com/eddelbuettel/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  - ./travis-tool.sh aptget_install libhiredis-dev
-  - ./travis-tool.sh r_install "c('Rcpp')"
+  - ./travis-tool.sh aptget_install libhiredis-dev r-cran-rcpp
+  - ./travis-tool.sh r_install Rcpp
+
