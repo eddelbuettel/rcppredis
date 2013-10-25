@@ -18,4 +18,4 @@ Run the script from the demo/ directory.
 
 ## Status
 
-[![Build Status](https://travis-ci.org/[eddelbuettel]/[rhiredis].png)](https://travis-ci.org/[eddelbuettel]/[rhiredis])
+[![Build Status](https://travis-ci.org/eddelbuettel/rhiredis.png)](https://travis-ci.org/eddelbuettel/rhiredis)
