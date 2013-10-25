@@ -13,4 +13,4 @@ before_script:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh aptget_install libhiredis-dev
-  - ./travis-tool.sh install_deps
+  - ./travis-tool.sh r_install "c('Rcpp')"
