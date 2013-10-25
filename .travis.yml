@@ -1,6 +1,8 @@
 # Sample .travis.yml for R projects.
 # Taken from my fork of Craig Citro's r-travis
+#
 # See https://github.com/eddelbuettel/r-travis/
+# and https://github.com/craigcitro/r-travis
 #
 # See README.md for instructions.
 
