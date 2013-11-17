@@ -37,7 +37,7 @@ print(resP)
 hiredisLR <-	function() lapply(redis$exec("LRANGE abc1 0 -1"),function(x)unserialize(charToRaw(x)))
 rredisLR  <-  function() redisLRange("abc2",0,-1)
 
-resLR <- benchmark(hiredisLR(), rredisLR(), replications=1)[,1:4]
+resLR <- benchmark(hiredisLR(), rredisLR(), replications=100)[,1:4]
 print(resLR)
 
 abc1 <- hiredisLR()
