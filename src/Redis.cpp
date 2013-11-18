@@ -27,58 +27,60 @@ private:
         // should test for error here...
         Rcpp::Rcout << "Init'ed\n";
     }
-	
-public:
-	  
-		SEXP extract_reply(redisReply *reply){
-			switch(reply->type) {
-					case REDIS_REPLY_STRING:
-					case REDIS_REPLY_STATUS: {
-        		std::string res(reply->str);
-						return(wrap(res));
-				  }
-					case REDIS_REPLY_INTEGER: {
-						return(wrap((double)reply->integer));
-					}
-					case REDIS_REPLY_ERROR: {
-						std::string res(reply->str);
-						return(wrap(res));
-					}
-					case REDIS_REPLY_NIL: {
-     			 	return(R_NilValue);
-   				}
- 					case REDIS_REPLY_ARRAY: {
-						Rcpp::GenericVector retval(reply->elements);
-     				extract_array(reply, retval);
-     				return(retval);
-   				}
- 					default:
-     			throw std::logic_error("Unknown type");
-   		}
-		}
-		
-		void extract_array(redisReply *node, Rcpp::List& retval) {
-		 	for(unsigned int i = 0;i < node->elements;i++) {
-			 	retval[i] = extract_reply(node->element[i]);
-		 	}
-	 	 }
     
-		Redis(std::string host, int port)  { init(host, port); }
+    SEXP extract_reply(redisReply *reply){
+      switch(reply->type) {
+          case REDIS_REPLY_STRING:
+          case REDIS_REPLY_STATUS: {
+            std::string res(reply->str);
+            return(wrap(res));
+          }
+          case REDIS_REPLY_INTEGER: {
+            return(wrap((double)reply->integer));
+          }
+          case REDIS_REPLY_ERROR: {
+            std::string res(reply->str);
+            return(wrap(res));
+          }
+          case REDIS_REPLY_NIL: {
+            return(R_NilValue);
+          }
+          case REDIS_REPLY_ARRAY: {
+            Rcpp::GenericVector retval(reply->elements);
+            extract_array(reply, retval);
+            return(retval);
+          }
+          default:
+          throw std::logic_error("Unknown type");
+      }
+    }
+    
+    void extract_array(redisReply *node, Rcpp::List& retval) {
+      for(unsigned int i = 0;i < node->elements;i++) {
+        retval[i] = extract_reply(node->element[i]);
+      }
+     }
+
+
+public:
+    
+    
+    Redis(std::string host, int port)  { init(host, port); }
     Redis(std::string host)            { init(host);       }
     Redis()                            { init();           }
-		
-	    ~Redis() { 
+    
+      ~Redis() { 
         redisFree(prc_);
         prc_ = NULL;                // just to be on the safe side
         //Rcpp::Rcout << "Deleted\n";
     }
 
-			SEXP exec(std::string cmd) {
-				redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, cmd.c_str()));
-			  SEXP rep = extract_reply(reply);
-				freeReplyObject(reply);
-				return(rep);
-		}
+      SEXP exec(std::string cmd) {
+        redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, cmd.c_str()));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
 
     // could create new functions to (re-)connect with given host and port etc pp
 };
