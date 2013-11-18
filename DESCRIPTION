@@ -1,7 +1,7 @@
 Package: rhiredis
 Type: Package
 Title: R wrapper for Redis using the hiredis library
-Version: 0.2
+Version: 0.2.1
 Date: 2013-07-23
 Author: Dirk Eddelbuettel <edd@debian.org>
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
