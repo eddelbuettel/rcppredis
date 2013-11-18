@@ -54,6 +54,12 @@ private:
             throw std::logic_error("Unknown type");
         }
     }
+    
+    void extract_array(redisReply *node, Rcpp::List& retval) {
+      for(unsigned int i = 0;i < node->elements;i++) {
+        retval[i] = extract_reply(node->element[i]);
+      }
+     }
 
     void extract_array(redisReply *node, Rcpp::List& retval) {
         for(unsigned int i = 0;i < node->elements;i++) {
