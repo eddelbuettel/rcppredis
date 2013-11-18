@@ -25,11 +25,9 @@ private:
     void init(std::string host="127.0.0.1", int port=6379)  { 
         prc_ = redisConnect(host.c_str(), port);
         // should test for error here...
-        Rcpp::Rcout << "Init'ed\n";
+        // Rcpp::Rcout << "Init'ed\n";
     }
 	
-public:
-	  
     SEXP extract_reply(redisReply *reply){
         switch(reply->type) {
         case REDIS_REPLY_STRING:
@@ -56,17 +54,19 @@ public:
             throw std::logic_error("Unknown type");
         }
     }
-		
+
     void extract_array(redisReply *node, Rcpp::List& retval) {
         for(unsigned int i = 0;i < node->elements;i++) {
             retval[i] = extract_reply(node->element[i]);
         }
     }
-    
+
+public:
+   
     Redis(std::string host, int port)  { init(host, port); }
     Redis(std::string host)            { init(host);       }
     Redis()                            { init();           }
-		
+
     ~Redis() { 
         redisFree(prc_);
         prc_ = NULL;                // just to be on the safe side
