@@ -1,0 +1,37 @@
+2013-12-24  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/serialize.cpp: First cut at native (de-)serialization
+	* R/serialize.R: R side of (de-)serialization
+
+2013-11-16  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: New 'multibulk' code contributed by William Pleasant
+	committed with minor rerrangements
+
+	* demo/simpleBenchmark.R: Include test code for multibulk
+
+2013-10-25  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Do not install r-cran-rcpp from Ubuntu, use CRAN version
+
+2013-10-24  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Added for automated builds and testing via Travis
+	* README.md: Show Travis build status
+
+2013-08-23  Dirk Eddelbuettel  <edd@debian.org>
+
+	* demo/simpleRedisClient.R: Added serialization and deserialization
+
+2013-07-23  Dirk Eddelbuettel  <edd@debian.org>
+
+	* demo/simpleBenchmark.R: Added
+
+2013-07-23  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Version 0.2
+
+2013-07-22  Dirk Eddelbuettel  <edd@debian.org>
+
+	* Initial version
+
