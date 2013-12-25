@@ -30,7 +30,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#define USE_INTERNAL
+// does not seem to be needed #define USE_INTERNAL
 #include <Rinternals.h>
 
 static const int R_DefaultSerializeVersion = 2;
@@ -48,24 +48,24 @@ typedef struct membuf_st {
 
 #define MAXELTSIZE 8192
 #define INCR MAXELTSIZE
-static void resize_buffer(membuf_t mb, R_xlen_t needed)
-{
+
+static void resize_buffer(membuf_t mb, R_xlen_t needed) {
     unsigned char *tmp;
     if(needed > R_XLEN_T_MAX)
 	error("serialization is too large to store in a raw vector");
-#ifdef LONG_VECTOR_SUPPORT
-    if(needed < 10000000) /* ca 10MB */
-	needed = (1+2*needed/INCR) * INCR;
-    else 
-	needed = (R_xlen_t)((1+1.2*(double)needed/INCR) * INCR);
-#else
-    if(needed < 10000000) /* ca 10MB */
-	needed = (1+2*needed/INCR) * INCR;
-    else if(needed < 1700000000) /* close to 2GB/1.2 */
-	needed = (R_xlen_t)((1+1.2*(double)needed/INCR) * INCR);
-    else if(needed < INT_MAX - INCR)
-	needed = (1+needed/INCR) * INCR;
-#endif
+    #ifdef LONG_VECTOR_SUPPORT
+        if(needed < 10000000) /* ca 10MB */
+            needed = (1+2*needed/INCR) * INCR;
+        else 
+            needed = (R_xlen_t)((1+1.2*(double)needed/INCR) * INCR);
+    #else
+        if(needed < 10000000) /* ca 10MB */
+            needed = (1+2*needed/INCR) * INCR;
+        else if(needed < 1700000000) /* close to 2GB/1.2 */
+            needed = (R_xlen_t)((1+1.2*(double)needed/INCR) * INCR);
+        else if(needed < INT_MAX - INCR)
+            needed = (1+needed/INCR) * INCR;
+    #endif
     tmp = (unsigned char*) realloc((void*) mb->buf, (size_t) needed);
     if (tmp == NULL) {
 	free(mb->buf); mb->buf = NULL;
@@ -86,11 +86,11 @@ static void OutBytesMem(R_outpstream_t stream, void *buf, int length)
 {
     membuf_t mb = (membuf_t) stream->data;
     R_xlen_t needed = mb->count + (R_xlen_t) length;
-#ifndef LONG_VECTOR_SUPPORT
-    /* There is a potential overflow here on 32-bit systems */
-    if((double) mb->count + length > (double) INT_MAX)
-	error(_("serialization is too large to store in a raw vector"));
-#endif
+    #ifndef LONG_VECTOR_SUPPORT
+        /* There is a potential overflow here on 32-bit systems */
+        if((double) mb->count + length > (double) INT_MAX)
+            error(_("serialization is too large to store in a raw vector"));
+    #endif
     if (needed > mb->size) resize_buffer(mb, needed);
     memcpy(mb->buf + mb->count, buf, length);
     mb->count = needed;
@@ -184,7 +184,8 @@ extern "C" SEXP serializeToChar(SEXP object)
     /* end the context after anything that could raise an error but before
        calling OutTerm so it doesn't get called twice */
 
-    // rawToChar
+
+    // borrowed from rawToChar
     SEXP ans;
     int i, j, nc = LENGTH(val);
     /* String is not necessarily 0-terminated and may contain nuls.
@@ -202,10 +203,11 @@ extern "C" SEXP serializeToChar(SEXP object)
 
 extern "C" SEXP unserializeFromChar(SEXP object)
 {
-    // charToRaw
+    // borrowed from charToRaw
     int nc = LENGTH(STRING_ELT(object, 0));
     SEXP ans = allocVector(RAWSXP, nc);
     memcpy(RAW(ans), CHAR(STRING_ELT(object, 0)), nc);
+
 
     struct R_inpstream_st in;
 

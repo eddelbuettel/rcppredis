@@ -2,6 +2,8 @@
 \alias{Redis}
 \alias{Rcpp_Redis}
 \alias{Rcpp_Redis-class}
+\alias{serializeToChar}
+\alias{unserializeFromChar}
 \docType{package}
 \title{Rcpp module using hiredis library to connect R to Redis}
 \description{
@@ -15,6 +17,11 @@
 
   Currently, the module has just one worker command which sends a string
   to the Redis instance and returns a string.
+
+  The helper functions \code{serializeToChar()} and
+  \code{unserializeFromChar} convert R objects to a character
+  representation (and internalize the conversion from \code{raw}
+  to \code{char} representation at the compiled level).
 }
 \details{
   Please consult the Redis documentation for details on the available

@@ -1,15 +1,15 @@
 
 ## maybe call toChar() and fromChar instead ?
 
-serialize <- function(obj) {
+serializeToChar <- function(obj) {
     .Call("serializeToChar", obj, PACKAGE="rhiredis")
 }
 
-unserialize <- function(obj) {
+unserializeFromChar <- function(obj) {
     .Call("unserializeFromChar", obj, PACKAGE="rhiredis")
 }
 
-## example using rredis
+## example using rredis (when function was still called serialize() and produced raw types
 ##
 ## R> val <- rhiredis::serialize(1:4)
 ## R> val
@@ -23,11 +23,7 @@ unserialize <- function(obj) {
 ##
 ##
 
-## R> val <- rhiredis::serialize(1:4)
-## R> val
-##  [1] 41 0a 32 0a 31 39 36 36 31 30 0a 31 33 31 38 34 30 0a 31 33 0a 34 0a 31 0a 32
-## [27] 0a 33 0a 34 0a
-## R>
+
 
 
 ## set and retrieve a number
@@ -37,9 +33,9 @@ unserialize <- function(obj) {
 
 ## now with charToRaw / rawToChar built in
 .simpleDemo <- function() {
-    val <- rhiredis::serialize(1:4)
+    val <- rhiredis::serializeToChar(1:4)
     redis <- new(Redis, "127.0.0.1", 6379)
     redis$exec(paste("SET serialTest ", val))
-    rhiredis::unserialize(redis$exec("GET serialTest"))
+    rhiredis::unserializeFromChar(redis$exec("GET serialTest"))
     NULL
 }
