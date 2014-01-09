@@ -1,3 +1,8 @@
+2014-01-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/serialize.cpp: Remove unused variable, and modify one error
+	string
+
 2013-12-25  Dirk Eddelbuettel  <edd@debian.org>
 
 	* R/serialize.R: Rename R-level functions to serializeToChar() and

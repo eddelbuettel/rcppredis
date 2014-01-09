@@ -89,7 +89,7 @@ static void OutBytesMem(R_outpstream_t stream, void *buf, int length)
     #ifndef LONG_VECTOR_SUPPORT
         /* There is a potential overflow here on 32-bit systems */
         if((double) mb->count + length > (double) INT_MAX)
-            error(_("serialization is too large to store in a raw vector"));
+            error("serialization is too large to store in a raw vector");
     #endif
     if (needed > mb->size) resize_buffer(mb, needed);
     memcpy(mb->buf + mb->count, buf, length);
@@ -163,7 +163,6 @@ extern "C" SEXP serializeToChar(SEXP object)
 {
     struct R_outpstream_st out;
     R_pstream_format_t type;
-    SEXP (*hook)(SEXP, SEXP) = NULL;
     int version;
     struct membuf_st mbs;
     SEXP val;
@@ -171,7 +170,6 @@ extern "C" SEXP serializeToChar(SEXP object)
     version = R_DefaultSerializeVersion;
     //type = R_pstream_binary_format;
     type = R_pstream_ascii_format;
-    hook = NULL;
     
 
     /* set up a context which will free the buffer if there is an error */

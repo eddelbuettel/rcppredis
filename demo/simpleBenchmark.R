@@ -22,8 +22,8 @@ print(res)
 all.equal(unserialize(charToRaw(redis$exec("GET fits1"))), fit)
 all.equal(rredis::redisGet("fits2"), fit)
 
-if(redisExists("abc1"))	redisDelete("abc1")
-if(redisExists("abc2")) redisDelete("abc2")
+if (redisExists("abc1")) redisDelete("abc1")
+if (redisExists("abc2")) redisDelete("abc2")
 
 abc <- paste0(rep(letters,10),collapse="")
 

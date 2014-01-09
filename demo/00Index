@@ -1,2 +1,3 @@
 simpleRedisClient	simple Redis demo
 simpleBenchmark		simple benchmark versus rredis
+simpleBenchmark2	another simple benchmark versus rredis
