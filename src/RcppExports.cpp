@@ -5,19 +5,3 @@
 
 using namespace Rcpp;
 
-// setRaw
-std::string setRaw(std::string key, Rcpp::RawVector x);
-RcppExport SEXP rhiredis_setRaw(SEXP keySEXP, SEXP xSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< std::string >::type key(keySEXP );
-        Rcpp::traits::input_parameter< Rcpp::RawVector >::type x(xSEXP );
-        std::string __result = setRaw(key, x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}

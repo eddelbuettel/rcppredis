@@ -10,7 +10,7 @@ rredis::redisConnect(nodelay=TRUE)      # new rredis option to mimich networking
 
 ## write with setRaw()
 key <- "foo"
-rhiredis::setRaw(key, serialize(fit,NULL,ascii=TRUE))
+redis$set(key, serialize(fit,NULL,ascii=TRUE))
 
 ## retrieve with rredis
 fit2 <- rredis::redisGet(key)
@@ -21,7 +21,7 @@ all.equal(fit, fit2)
 
 ## write with setRaw(), our serialize
 key <- "foo2"
-rhiredis::setRaw(key, serializeToRaw(fit))
+redis$set(key, serializeToRaw(fit))
 
 ## retrieve with rredis
 fit3 <- rredis::redisGet(key)

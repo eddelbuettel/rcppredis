@@ -1,3 +1,8 @@
+2014-01-11  Dirk Eddelbuettel  <edd@debian.org>
+
+ 	* src/Redis.cpp: New member function 'set' for direct binary
+	interface via hiredis
+
 2014-01-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/serialize.cpp: Remove unused variable, and modify one error
