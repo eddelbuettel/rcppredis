@@ -12,6 +12,9 @@
 #include <Rcpp.h>
 #include <hiredis/hiredis.h>         // on Ubuntu file /usr/include/hiredis/hiredis.h
 
+extern "C" SEXP serializeToRaw(SEXP object);
+
+
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
 //
@@ -83,7 +86,11 @@ public:
 
 
     // redis set
-    std::string set(std::string key, Rcpp::RawVector x) {
+    std::string set(std::string key, SEXP s) {
+
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+
         // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "SET %s %b", 
@@ -108,6 +115,6 @@ RCPP_MODULE(Redis) {
 
         .method("exec", &Redis::exec,  "execute given redis command")
 
-        .method("set", &Redis::set,  "runs 'SET key rawVector'")
+        .method("set", &Redis::set,  "runs 'SET key serializedObject'")
     ;
 }
