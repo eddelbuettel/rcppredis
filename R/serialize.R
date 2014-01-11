@@ -5,6 +5,10 @@ serializeToChar <- function(obj) {
     .Call("serializeToChar", obj, PACKAGE="rhiredis")
 }
 
+serializeToRaw <- function(obj) {
+    .Call("serializeToRaw", obj, PACKAGE="rhiredis")
+}
+
 unserializeFromChar <- function(obj) {
     .Call("unserializeFromChar", obj, PACKAGE="rhiredis")
 }

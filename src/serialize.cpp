@@ -51,7 +51,7 @@ typedef struct membuf_st {
 
 static void resize_buffer(membuf_t mb, R_xlen_t needed) {
     unsigned char *tmp;
-    if(needed > R_XLEN_T_MAX)
+    if (needed > R_XLEN_T_MAX)
 	error("serialization is too large to store in a raw vector");
     #ifdef LONG_VECTOR_SUPPORT
         if(needed < 10000000) /* ca 10MB */
@@ -88,7 +88,7 @@ static void OutBytesMem(R_outpstream_t stream, void *buf, int length)
     R_xlen_t needed = mb->count + (R_xlen_t) length;
     #ifndef LONG_VECTOR_SUPPORT
         /* There is a potential overflow here on 32-bit systems */
-        if((double) mb->count + length > (double) INT_MAX)
+        if ((double) mb->count + length > (double) INT_MAX)
             error("serialization is too large to store in a raw vector");
     #endif
     if (needed > mb->size) resize_buffer(mb, needed);
@@ -159,6 +159,34 @@ static SEXP CloseMemOutPStream(R_outpstream_t stream)
 
 /** ---- **/
 
+// edd test
+extern "C" SEXP serializeToRaw(SEXP object)
+{
+    struct R_outpstream_st out;
+    R_pstream_format_t type;
+    int version;
+    struct membuf_st mbs;
+    SEXP val;
+    
+    version = R_DefaultSerializeVersion;
+    //type = R_pstream_binary_format;
+    //type = R_pstream_ascii_format;
+    type = R_pstream_xdr_format;
+    
+
+    /* set up a context which will free the buffer if there is an error */
+    
+    InitMemOutPStream(&out, &mbs, type, version, NULL, R_NilValue);
+    R_Serialize(object, &out);
+    
+    val =  CloseMemOutPStream(&out);
+    
+    /* end the context after anything that could raise an error but before
+       calling OutTerm so it doesn't get called twice */
+
+    return val;
+}
+
 extern "C" SEXP serializeToChar(SEXP object)
 {
     struct R_outpstream_st out;
@@ -169,7 +197,8 @@ extern "C" SEXP serializeToChar(SEXP object)
     
     version = R_DefaultSerializeVersion;
     //type = R_pstream_binary_format;
-    type = R_pstream_ascii_format;
+    //type = R_pstream_ascii_format;
+    type = R_pstream_xdr_format;
     
 
     /* set up a context which will free the buffer if there is an error */
