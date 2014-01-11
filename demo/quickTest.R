@@ -19,6 +19,18 @@ fit2 <- rredis::redisGet(key)
 all.equal(fit, fit2)
 
 
+## write with setRaw(), our serialize
+key <- "foo2"
+rhiredis::setRaw(key, serializeToRaw(fit))
+
+## retrieve with rredis
+fit3 <- rredis::redisGet(key)
+
+## check
+all.equal(fit, fit3)
+
+
+
                                  
                                  
 
