@@ -4,6 +4,8 @@
 \alias{Rcpp_Redis-class}
 \alias{serializeToChar}
 \alias{unserializeFromChar}
+\alias{serializeToRaw}
+\alias{unserializeFromRaw}
 \docType{package}
 \title{Rcpp module using hiredis library to connect R to Redis}
 \description{
@@ -19,9 +21,12 @@
   to the Redis instance and returns a string.
 
   The helper functions \code{serializeToChar()} and
-  \code{unserializeFromChar} convert R objects to a character
+  \code{unserializeFromChar} convert R objects to/from a character
   representation (and internalize the conversion from \code{raw}
   to \code{char} representation at the compiled level).
+  The helper functions \code{serializeToRaw()} and
+  \code{unserializeFromRaw} convert R objects to/from raw vectors.
+
 }
 \details{
   Please consult the Redis documentation for details on the available

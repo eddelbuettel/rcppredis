@@ -13,6 +13,10 @@ unserializeFromChar <- function(obj) {
     .Call("unserializeFromChar", obj, PACKAGE="rhiredis")
 }
 
+unserializeFromRaw <- function(obj) {
+    .Call("unserializeFromRaw", obj, PACKAGE="rhiredis")
+}
+
 ## example using rredis (when function was still called serialize() and produced raw types
 ##
 ## R> val <- rhiredis::serialize(1:4)
@@ -43,3 +47,7 @@ unserializeFromChar <- function(obj) {
     rhiredis::unserializeFromChar(redis$exec("GET serialTest"))
     NULL
 }
+
+
+
+
