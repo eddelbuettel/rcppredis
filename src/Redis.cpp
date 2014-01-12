@@ -40,7 +40,7 @@ private:
             return(Rcpp::wrap(res));
         }
         case REDIS_REPLY_INTEGER: {
-            return(Rcpp::wrap((double)reply->integer));
+            return(Rcpp::wrap(static_cast<double>(reply->integer)));
         }
         case REDIS_REPLY_ERROR: {
             std::string res(reply->str);
@@ -50,18 +50,18 @@ private:
             return(R_NilValue);
         }
         case REDIS_REPLY_ARRAY: {
-            Rcpp::List retval(reply->elements);
-            extract_array(reply, retval);
-            return(retval);
+            Rcpp::List retlist(reply->elements);
+            extract_array(reply, retlist);
+            return(retlist);
         }
         default:
             throw std::logic_error("Unknown type");
         }
     }
     
-    void extract_array(redisReply *node, Rcpp::List& retval) {
+    void extract_array(redisReply *node, Rcpp::List& retlist) {
         for(unsigned int i = 0;i < node->elements;i++) {
-            retval[i] = extract_reply(node->element[i]);
+            retlist[i] = extract_reply(node->element[i]);
         }
     }
 
@@ -116,6 +116,22 @@ public:
         return(obj);
     }
 
+    // redis get
+    SEXP keys(std::string regexp) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "KEYS %s", regexp.c_str()));
+
+        unsigned int nc = reply->elements;
+        Rcpp::CharacterVector vec(nc);
+        for (unsigned int i = 0; i < nc; i++) {
+            vec[i] = reply->element[i]->str;
+        }
+        freeReplyObject(reply);
+        return(vec);
+    }
+
     // could create new functions to (re-)connect with given host and port etc pp
 
 
@@ -129,9 +145,10 @@ RCPP_MODULE(Redis) {
         .constructor<std::string>("constructor with host port")  
         .constructor<std::string, int>("constructor with host and port")  
 
-        .method("exec", &Redis::exec,  "execute given redis command")
+        .method("exec", &Redis::exec,  "execute given redis command and arguments")
 
-        .method("set", &Redis::set,  "runs 'SET key serializedObject'")
-        .method("get", &Redis::get,  "runs 'GET key'")
+        .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
+        .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
+        .method("keys", &Redis::keys,  "runs 'KEYS expr' as character vector")
     ;
 }

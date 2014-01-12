@@ -22,7 +22,7 @@ hiredisInt <- function() redis$set("fits3", fit)
 
 
 res <- benchmark(hiredis(), rredis(), hiredisInt(), replications=500, order="relative")[,1:4]
-cat("Results for SET\n")
+cat("\nResults for SET\n")
 print(res)
 
 stopifnot(all.equal(unserialize(charToRaw(redis$exec("GET fits1"))), fit))
@@ -39,7 +39,7 @@ hiredisInt <- function() redis$get("fits3")
 
 
 res <- benchmark(hiredis(), rredis(), hiredisInt(), replications=500, order="relative")[,1:4]
-cat("Results for GET\n")
+cat("\nResults for GET\n")
 print(res)
                                  
 
