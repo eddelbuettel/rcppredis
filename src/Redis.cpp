@@ -13,12 +13,12 @@
 #include <hiredis/hiredis.h>         // on Ubuntu file /usr/include/hiredis/hiredis.h
 
 extern "C" SEXP serializeToRaw(SEXP object);
+extern "C" SEXP unserializeFromChar(SEXP object);
 
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
 //
-using namespace Rcpp; 
 
 class Redis {
 
@@ -37,20 +37,20 @@ private:
         case REDIS_REPLY_STRING:
         case REDIS_REPLY_STATUS: {
             std::string res(reply->str);
-            return(wrap(res));
+            return(Rcpp::wrap(res));
         }
         case REDIS_REPLY_INTEGER: {
-            return(wrap((double)reply->integer));
+            return(Rcpp::wrap((double)reply->integer));
         }
         case REDIS_REPLY_ERROR: {
             std::string res(reply->str);
-            return(wrap(res));
+            return(Rcpp::wrap(res));
         }
         case REDIS_REPLY_NIL: {
             return(R_NilValue);
         }
         case REDIS_REPLY_ARRAY: {
-            Rcpp::GenericVector retval(reply->elements);
+            Rcpp::List retval(reply->elements);
             extract_array(reply, retval);
             return(retval);
         }
@@ -100,6 +100,18 @@ public:
         return(res);
     }
 
+    // redis get
+    SEXP get(std::string key) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
+        SEXP res = extract_reply(reply);                                                
+        freeReplyObject(reply);
+        SEXP obj = unserializeFromChar(res);
+        return(obj);
+    }
+
     // could create new functions to (re-)connect with given host and port etc pp
 
 
@@ -116,5 +128,6 @@ RCPP_MODULE(Redis) {
         .method("exec", &Redis::exec,  "execute given redis command")
 
         .method("set", &Redis::set,  "runs 'SET key serializedObject'")
+        .method("get", &Redis::get,  "runs 'GET key'")
     ;
 }

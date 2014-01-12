@@ -159,9 +159,7 @@ static SEXP CloseMemOutPStream(R_outpstream_t stream)
 
 /** ---- **/
 
-// edd test
-extern "C" SEXP serializeToRaw(SEXP object)
-{
+extern "C" SEXP serializeToRaw(SEXP object) {
     struct R_outpstream_st out;
     R_pstream_format_t type;
     int version;
@@ -187,8 +185,7 @@ extern "C" SEXP serializeToRaw(SEXP object)
     return val;
 }
 
-extern "C" SEXP serializeToChar(SEXP object)
-{
+extern "C" SEXP serializeToChar(SEXP object) {
     struct R_outpstream_st out;
     R_pstream_format_t type;
     int version;
@@ -228,8 +225,7 @@ extern "C" SEXP serializeToChar(SEXP object)
 }
 
 
-extern "C" SEXP unserializeFromChar(SEXP object)
-{
+extern "C" SEXP unserializeFromChar(SEXP object) {
     // borrowed from charToRaw
     int nc = LENGTH(STRING_ELT(object, 0));
     SEXP ans = allocVector(RAWSXP, nc);
