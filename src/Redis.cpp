@@ -13,7 +13,7 @@
 #include <hiredis/hiredis.h>         // on Ubuntu file /usr/include/hiredis/hiredis.h
 
 extern "C" SEXP serializeToRaw(SEXP object);
-extern "C" SEXP unserializeFromChar(SEXP object);
+extern "C" SEXP unserializeFromRaw(SEXP object);
 
 
 // A simple and lightweight class -- with just a simple private member variable 
@@ -106,9 +106,13 @@ public:
         // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
-        SEXP res = extract_reply(reply);                                                
+
+        int nc = reply->len;
+        SEXP res = Rf_allocVector(RAWSXP, nc);
+        memcpy(RAW(res), reply->str, nc);
+                                               
         freeReplyObject(reply);
-        SEXP obj = unserializeFromChar(res);
+        SEXP obj = unserializeFromRaw(res);
         return(obj);
     }
 

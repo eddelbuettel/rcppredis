@@ -247,4 +247,21 @@ extern "C" SEXP unserializeFromChar(SEXP object) {
     return(R_UnboundValue);
 }
 
+extern "C" SEXP unserializeFromRaw(SEXP object) {
+
+    struct R_inpstream_st in;
+
+    /* We might want to read from a long raw vector */
+    struct membuf_st mbs;
+
+    if (TYPEOF(object) == RAWSXP) {
+        void *data = RAW(object);
+        R_xlen_t length = XLENGTH(object);
+        InitMemInPStream(&in, &mbs, data,  length, NULL, NULL);
+        return R_Unserialize(&in);
+    }
+    error("can't unserialize object");
+    return(R_UnboundValue);
+}
+
 
