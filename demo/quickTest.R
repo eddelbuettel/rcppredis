@@ -30,6 +30,12 @@ fit3 <- rredis::redisGet(key)
 ## check
 all.equal(fit, fit3)
 
+## retrieve with rredis
+fit4 <- redis$get(key)
+
+## check
+all.equal(fit, fit4)
+
 
 
                                  
