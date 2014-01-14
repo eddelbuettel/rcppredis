@@ -4,7 +4,7 @@
 //
 // uses hiredis library which provides a basic C API to redis
 //
-// (for now) forked from Wush Wu's Rhiredis
+// initially forked from Wush Wu's Rhiredis
 // slowly adding some more Redis functions
 //
 // Dirk Eddelbuettel, 2013 - 2014
@@ -85,7 +85,7 @@ public:
     }
 
 
-    // redis set
+    // redis set -- serializes to R internal format
     std::string set(std::string key, SEXP s) {
 
         // if raw, use as is else serialize to raw
@@ -100,7 +100,7 @@ public:
         return(res);
     }
 
-    // redis get
+    // redis get -- deserializes from R format
     SEXP get(std::string key) {
 
         // uses binary protocol, see hiredis doc at github
@@ -116,7 +116,7 @@ public:
         return(obj);
     }
 
-    // redis get
+    // redis keys -- returns character vector
     SEXP keys(std::string regexp) {
 
         // uses binary protocol, see hiredis doc at github
@@ -149,6 +149,6 @@ RCPP_MODULE(Redis) {
 
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
-        .method("keys", &Redis::keys,  "runs 'KEYS expr' as character vector")
+        .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
     ;
 }

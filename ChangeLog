@@ -1,7 +1,7 @@
 2014-01-12  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: New member function 'keys' returning a vector of
-	character strings
+	strings matching the supplied regexp
 
 2014-01-11  Dirk Eddelbuettel  <edd@debian.org>
 
