@@ -1,4 +1,4 @@
 ## TODO: configure test for -lhiredis, possible -L flag
 ##       alternatively, use 'pkg-config --cflags' and 'pkg-config --libs'
-PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` -lhiredis
+PKG_LIBS = -lhiredis
 

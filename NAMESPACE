@@ -1,3 +1,5 @@
-import(Rcpp,methods)                    # packages we require
 useDynLib(rhiredis)                     # this package's shared library
+
+import(methods,Rcpp) 	                # packages we require
+
 exportPattern("^[[:alpha:]]+")          # export all identifiers starting with letters

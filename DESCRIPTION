@@ -8,5 +8,5 @@ Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: rhiredis is a simple Redis package using the minimalistic C 
   client library hiredis for Redis
 License: GPL (>= 2)
-Depends: methods, Rcpp (>= 0.10.0)
+Depends: methods, Rcpp (>= 0.11.0)
 LinkingTo: Rcpp
