@@ -135,6 +135,35 @@ public:
     // could create new functions to (re-)connect with given host and port etc pp
 
 
+    // redis "set a vector" -- without R serialization, without attributes, ...
+    // this is somewhat experimental
+    std::string setVector(std::string key, Rcpp::NumericVector x) {
+
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "SET %s %b", 
+                                                  key.c_str(), x.begin(), x.size()*sizeof(double)));
+        std::string res(reply->str);                                                
+        freeReplyObject(reply);
+        return(res);
+    }
+
+    // redis "get a vector" -- without R serialization, without attributes, ...
+    // this is somewhat experimental
+    Rcpp::NumericVector getVector(std::string key) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
+
+        int nc = reply->len;
+        Rcpp::NumericVector x(nc/sizeof(double));
+        memcpy(x.begin(), reply->str, nc);
+                                               
+        freeReplyObject(reply);
+        return(x);
+    }
+
+
 };
 
 
@@ -150,5 +179,9 @@ RCPP_MODULE(Redis) {
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
         .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
+
+        .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
+        .method("getVector",  &Redis::getVector,   "runs 'SET key object' for a numeric vector")
+
     ;
 }
