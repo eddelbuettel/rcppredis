@@ -134,6 +134,9 @@ public:
 
     // could create new functions to (re-)connect with given host and port etc pp
 
+    
+    // used in functions below
+    static const unsigned int szdb = sizeof(double);
 
     // redis "set a vector" -- without R serialization, without attributes, ...
     // this is somewhat experimental
@@ -141,7 +144,7 @@ public:
 
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "SET %s %b", 
-                                                  key.c_str(), x.begin(), x.size()*sizeof(double)));
+                                                  key.c_str(), x.begin(), x.size()*szdb));
         std::string res(reply->str);                                                
         freeReplyObject(reply);
         return(res);
@@ -156,8 +159,34 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
 
         int nc = reply->len;
-        Rcpp::NumericVector x(nc/sizeof(double));
+        Rcpp::NumericVector x(nc/szdb);
         memcpy(x.begin(), reply->str, nc);
+                                               
+        freeReplyObject(reply);
+        return(x);
+    }
+
+
+
+    // redis "get from list from start to end" -- with R serialization
+    Rcpp::List lrange(std::string key, int start, int end) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LRANGE %s %d %d", 
+                                                  key.c_str(), start, end));
+
+        unsigned int len = reply->elements;
+        //Rcpp::Rcout << "Seeing " << len << " elements\n";
+        Rcpp::List x(len);
+        for (unsigned int i = 0; i < len; i++) {
+            //Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
+            int nc = reply->element[i]->len;
+            SEXP res = Rf_allocVector(RAWSXP, nc);
+            memcpy(RAW(res), reply->element[i]->str, nc);
+            SEXP obj = unserializeFromRaw(res);
+            x[i] = obj;
+        }
                                                
         freeReplyObject(reply);
         return(x);
@@ -183,5 +212,9 @@ RCPP_MODULE(Redis) {
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'SET key object' for a numeric vector")
 
+        .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
     ;
 }
+
+
+
