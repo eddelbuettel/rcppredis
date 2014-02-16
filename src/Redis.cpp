@@ -6,7 +6,11 @@
 //
 // initially forked from Wush Wu's Rhiredis
 // slowly adding some more Redis functions
-//
+// trying to figure out if we want
+//  -- R serialization for interop with rredis
+//  -- 'native' serialization for interop with redis-cli
+//  -- 'binary' serialization for faster processing
+
 // Dirk Eddelbuettel, 2013 - 2014
 
 #include <Rcpp.h>
@@ -132,9 +136,35 @@ public:
         return(vec);
     }
 
+    // redis lrange: get list from start to end -- with R serialization
+    Rcpp::List lrange(std::string key, int start, int end) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LRANGE %s %d %d", 
+                                                  key.c_str(), start, end));
+
+        unsigned int len = reply->elements;
+        //Rcpp::Rcout << "Seeing " << len << " elements\n";
+        Rcpp::List x(len);
+        for (unsigned int i = 0; i < len; i++) {
+            //Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
+            int nc = reply->element[i]->len;
+            SEXP res = Rf_allocVector(RAWSXP, nc);
+            memcpy(RAW(res), reply->element[i]->str, nc);
+            SEXP obj = unserializeFromRaw(res);
+            x[i] = obj;
+        }
+                                               
+        freeReplyObject(reply);
+        return(x);
+    }
+
     // could create new functions to (re-)connect with given host and port etc pp
 
     
+    // Experimental "non-R-serialzation" functions below
+
     // used in functions below
     static const unsigned int szdb = sizeof(double);
 
@@ -167,9 +197,8 @@ public:
     }
 
 
-
-    // redis "get from list from start to end" -- with R serialization
-    Rcpp::List lrange(std::string key, int start, int end) {
+    // redis "get from list from start to end" -- without R serialization
+    Rcpp::List listRange(std::string key, int start, int end) {
 
         // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
@@ -177,21 +206,44 @@ public:
                                                   key.c_str(), start, end));
 
         unsigned int len = reply->elements;
-        //Rcpp::Rcout << "Seeing " << len << " elements\n";
         Rcpp::List x(len);
         for (unsigned int i = 0; i < len; i++) {
-            //Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
             int nc = reply->element[i]->len;
-            SEXP res = Rf_allocVector(RAWSXP, nc);
-            memcpy(RAW(res), reply->element[i]->str, nc);
-            SEXP obj = unserializeFromRaw(res);
-            x[i] = obj;
+            Rcpp::NumericVector v(nc/szdb);
+            memcpy(v.begin(), reply->element[i]->str, nc);
+            x[i] = v;
         }
-                                               
         freeReplyObject(reply);
         return(x);
     }
 
+    // redis "prepend to list" -- without R serialization
+    // as above: pure vector, no attributes, ...
+    std::string listLPush(std::string key, Rcpp::NumericVector x) {
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LPUSH %s %b", 
+                                                  key.c_str(), x.begin(), x.size()*szdb));
+
+        //std::string res(reply->str);                                                
+        std::string res = "";
+        freeReplyObject(reply);
+        return(res);
+    }
+
+    // redis "append to list" -- without R serialization
+    // as above: pure vector, no attributes, ...
+    std::string listRPush(std::string key, Rcpp::NumericVector x) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "RPUSH %s %b", 
+                                                  key.c_str(), x.begin(), x.size()*szdb));
+
+        std::string res(reply->str);                                                
+        freeReplyObject(reply);
+        return(res);
+    }
 
 };
 
@@ -207,12 +259,18 @@ RCPP_MODULE(Redis) {
 
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
+
         .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
 
+        .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
+
+        // non-R serialization methods below
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'SET key object' for a numeric vector")
+        .method("listLPush",  &Redis::listLPush,   "prepends vector to list")
+        .method("listRPush",  &Redis::listRPush,   "appends vector to list")
+        .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
 
-        .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
     ;
 }
 
