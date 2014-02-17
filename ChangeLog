@@ -1,3 +1,7 @@
+2014-02-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Added functions to check return type
+
 2014-02-16  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Added list getter and append/prepend without R

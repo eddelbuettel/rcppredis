@@ -69,6 +69,40 @@ private:
         }
     }
 
+    std::string replyTypeToString(const redisReply *reply) {
+        switch(reply->type) {
+        case REDIS_REPLY_STRING:  return std::string("string");
+        case REDIS_REPLY_STATUS:  return std::string("status");
+        case REDIS_REPLY_INTEGER: return std::string("integer");
+        case REDIS_REPLY_ERROR:   return std::string("error");
+        case REDIS_REPLY_NIL:     return std::string("nil");
+        case REDIS_REPLY_ARRAY:   return std::string("array");
+        default:                  return std::string("unknown");
+        }
+    }
+
+    enum { replyString_t = 0, replyStatus_t, replyInteger_t, replyError_t, 
+           replyNil_t, replyArray_t };
+
+    int replyTypeToInteger(const redisReply *reply) {
+        switch(reply->type) {
+        case REDIS_REPLY_STRING:  return replyString_t;
+        case REDIS_REPLY_STATUS:  return replyStatus_t;
+        case REDIS_REPLY_INTEGER: return replyInteger_t;
+        case REDIS_REPLY_ERROR:   return replyError_t;
+        case REDIS_REPLY_NIL:     return replyNil_t;
+        case REDIS_REPLY_ARRAY:   return replyArray_t;
+        default:                  return -1;
+        }
+    }
+
+
+    void checkReplyType(const redisReply *reply, int replyType) {
+        if (replyType != replyTypeToInteger(reply)) {
+            Rcpp::stop(std::string("Wrong reply type, got ") + replyTypeToString(reply));
+        }
+    }
+
 public:
    
     Redis(std::string host, int port)  { init(host, port); }
@@ -205,9 +239,12 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "LRANGE %s %d %d", 
                                                   key.c_str(), start, end));
 
+        //Rcpp::Rcout << "listRange got type: " << replyTypeToString(reply) << "\n";
+        checkReplyType(reply, replyArray_t); // ensure we got array
         unsigned int len = reply->elements;
         Rcpp::List x(len);
         for (unsigned int i = 0; i < len; i++) {
+            checkReplyType(reply->element[i], replyString_t); // ensure we got [binary] string 
             int nc = reply->element[i]->len;
             Rcpp::NumericVector v(nc/szdb);
             memcpy(v.begin(), reply->element[i]->str, nc);
