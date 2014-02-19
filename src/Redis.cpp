@@ -254,6 +254,19 @@ public:
         return(x);
     }
 
+    // redis "get from list from start to end" as matrix -- without R serialization
+    Rcpp::NumericMatrix listToMatrix(Rcpp::List Z) {
+        unsigned int n = Z.size();
+        int k = Rcpp::NumericVector(Z[0]).size();
+        Rcpp::NumericMatrix X(n, k);
+        for (unsigned int i = 0; i < n; i++) {
+            Rcpp::NumericVector z(Z[i]);
+            if (z.size() != k) Rcpp::stop("Wrong dimension");
+            X.row(i) = z;
+        }
+        return(X);
+    }
+
     // redis "prepend to list" -- without R serialization
     // as above: pure vector, no attributes, ...
     std::string listLPush(std::string key, Rcpp::NumericVector x) {
@@ -307,6 +320,8 @@ RCPP_MODULE(Redis) {
         .method("listLPush",  &Redis::listLPush,   "prepends vector to list")
         .method("listRPush",  &Redis::listRPush,   "appends vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
+
+        .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")
 
     ;
 }
