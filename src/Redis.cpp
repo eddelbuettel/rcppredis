@@ -184,8 +184,8 @@ public:
         for (unsigned int i = 0; i < len; i++) {
             //Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
             int nc = reply->element[i]->len;
-            SEXP res = Rf_allocVector(RAWSXP, nc);
-            memcpy(RAW(res), reply->element[i]->str, nc);
+            Rcpp::RawVector res(nc);
+            memcpy(res.begin(), reply->element[i]->str, nc);
             SEXP obj = unserializeFromRaw(res);
             x[i] = obj;
         }
