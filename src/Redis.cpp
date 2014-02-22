@@ -146,7 +146,7 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
 
         int nc = reply->len;
-        Rcpp::RawVector(nc);
+        Rcpp::RawVector res(nc);
         memcpy(res.begin(), reply->str, nc);
                                                
         freeReplyObject(reply);
@@ -326,6 +326,3 @@ RCPP_MODULE(Redis) {
 
     ;
 }
-
-
-
