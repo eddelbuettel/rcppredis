@@ -146,8 +146,8 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
 
         int nc = reply->len;
-        SEXP res = Rf_allocVector(RAWSXP, nc);
-        memcpy(RAW(res), reply->str, nc);
+        Rcpp::RawVector(nc);
+        memcpy(res.begin(), reply->str, nc);
                                                
         freeReplyObject(reply);
         SEXP obj = unserializeFromRaw(res);
@@ -290,7 +290,8 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "RPUSH %s %b", 
                                                   key.c_str(), x.begin(), x.size()*szdb));
 
-        std::string res(reply->str);                                                
+        //std::string res(reply->str);                                                
+        std::string res = "";
         freeReplyObject(reply);
         return(res);
     }
