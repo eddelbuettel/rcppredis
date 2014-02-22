@@ -1,5 +1,7 @@
 2014-02-22  Dirk Eddelbuettel  <edd@debian.org>
 
+	* demo/spDemo.R: New demo for time series retrieval from list storage
+
 	* src/Redis.cpp: Use a RawVector, rather than a SEXP converted to raw
 
 2014-02-18  Dirk Eddelbuettel  <edd@debian.org>

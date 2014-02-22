@@ -2,3 +2,4 @@ simpleRedisClient	simple Redis demo
 simpleBenchmark		simple benchmark versus rredis
 simpleBenchmark2	another simple benchmark versus rredis
 quickTest               a simple comparison to rredis
+spDemo                  simple timing for several decades of (daily) SP500 data
