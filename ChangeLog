@@ -1,3 +1,15 @@
+2014-04-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Package renamed to 'RcppRedis'
+	* NAMESPACE: Idem
+	* R/serialize.R: Load from package 'RcppRedis'
+	* demo/*: Load package 'RcppRedis'
+	* .travis.yml: Updated to enable Redis as a Travis service
+
+2014-03-02  Dirk Eddelbuettel  <edd@debian.org>
+
+	* demo/spDemo.R: Updated to compare with Bryan's changed in rredis
+
 2014-02-22  Dirk Eddelbuettel  <edd@debian.org>
 
 	* demo/spDemo.R: New demo for time series retrieval from list storage

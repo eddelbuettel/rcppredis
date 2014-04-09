@@ -1,11 +1,11 @@
-rhiredis
-========
+## RcppRedis
 
-rhiredis is a simple Redis client for R which uses hiredis, a minimalistic C
-client library for Redis.
+RcppRedis is a simple Redis client for R which uses Rcpp and hiredis, a
+minimalistic C client library for Redis.
 
-This is mostly a demonstration package, forked from an earlier attempt by
-Wush Wu and greatly simplified.
+This package derived from an initial forked of an earlier attempt named
+'rhiredis' by Wush Wu, and has since been extend. William Pleasant provided
+some early patches.
 
 ## Dependencies
 
@@ -18,4 +18,4 @@ Run the script from the demo/ directory.
 
 ## Status
 
-[![Build Status](https://travis-ci.org/eddelbuettel/rhiredis.png)](https://travis-ci.org/eddelbuettel/rhiredis)
+[![Build Status](https://travis-ci.org/eddelbuettel/rcppredis.png)](https://travis-ci.org/eddelbuettel/rcppredis)

@@ -1,12 +1,13 @@
-Package: rhiredis
+Package: RcppRedis
 Type: Package
-Title: R wrapper for Redis using the hiredis library
-Version: 0.2.1
-Date: 2013-12-25
+Title: Rcpp binding for Redis using the hiredis library
+Version: 0.2.2
+Date: 2014-04-08
 Author: Dirk Eddelbuettel <edd@debian.org>
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
-Description: rhiredis is a simple Redis package using the minimalistic C 
+Description: RcppRedis is a simple Redis package using the minimalistic C 
   client library hiredis for Redis
+SystemRequirements: hiredis library
 License: GPL (>= 2)
 Depends: methods, Rcpp (>= 0.11.0)
 LinkingTo: Rcpp

@@ -1,4 +1,4 @@
-\name{rhiredis}
+\name{RcppRedis}
 \alias{Redis}
 \alias{Rcpp_Redis}
 \alias{Rcpp_Redis-class}

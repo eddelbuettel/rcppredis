@@ -1,5 +1,5 @@
 
-suppressMessages(library(rhiredis))
+suppressMessages(library(RcppRedis))
 suppressMessages(library(rredis))
 suppressMessages(library(rbenchmark))
 

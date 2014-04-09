@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 
-suppressMessages(library(rhiredis))
+suppressMessages(library(RcppRedis))
 print(Redis)
 
 ## simple ping / pong test

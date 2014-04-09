@@ -1,5 +1,5 @@
 
-library(rhiredis)
+library(RcppRedis)
 library(rredis)
 library(rbenchmark)
 

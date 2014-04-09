@@ -2,19 +2,19 @@
 ## maybe call toChar() and fromChar instead ?
 
 serializeToChar <- function(obj) {
-    .Call("serializeToChar", obj, PACKAGE="rhiredis")
+    .Call("serializeToChar", obj, PACKAGE="RcppRedis")
 }
 
 serializeToRaw <- function(obj) {
-    .Call("serializeToRaw", obj, PACKAGE="rhiredis")
+    .Call("serializeToRaw", obj, PACKAGE="RcppRedis")
 }
 
 unserializeFromChar <- function(obj) {
-    .Call("unserializeFromChar", obj, PACKAGE="rhiredis")
+    .Call("unserializeFromChar", obj, PACKAGE="RcppRedis")
 }
 
 unserializeFromRaw <- function(obj) {
-    .Call("unserializeFromRaw", obj, PACKAGE="rhiredis")
+    .Call("unserializeFromRaw", obj, PACKAGE="RcppRedis")
 }
 
 ## example using rredis (when function was still called serialize() and produced raw types
