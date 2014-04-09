@@ -19,7 +19,7 @@ unserializeFromRaw <- function(obj) {
 
 ## example using rredis (when function was still called serialize() and produced raw types
 ##
-## R> val <- rhiredis::serialize(1:4)
+## R> val <- RcppRedis::serialize(1:4)
 ## R> val
 ##  [1] 42 0a 02 00 00 00 02 00 03 00 00 03 02 00 0d 00 00 00 04 00 00 00 01 00 00 00
 ## [27] 02 00 00 00 03 00 00 00 04 00 00 00
@@ -41,10 +41,10 @@ unserializeFromRaw <- function(obj) {
 
 ## now with charToRaw / rawToChar built in
 .simpleDemo <- function() {
-    val <- rhiredis::serializeToChar(1:4)
+    val <- RcppRedis::serializeToChar(1:4)
     redis <- new(Redis, "127.0.0.1", 6379)
     redis$exec(paste("SET serialTest ", val))
-    rhiredis::unserializeFromChar(redis$exec("GET serialTest"))
+    RcppRedis::unserializeFromChar(redis$exec("GET serialTest"))
     NULL
 }
 
