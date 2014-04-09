@@ -82,3 +82,11 @@ print(res)
 ## 2        do.call(rbind, redis$lrange("sp500_R", 0, -1))           25   2.629    8.882
 ## 1         do.call(rbind, redisLRange("sp500_R", 0, -1))           25  48.028  162.257
 ## R> 
+
+## redo after Bryan's socket/nagle update to rredis:
+##                                                    test replications elapsed relative
+## 4 redis$listToMatrix(redis$listRange("sp500_C", 0, -1))           25   0.407    1.000
+## 3    redis$listToMatrix(redis$lrange("sp500_R", 0, -1))           25   2.112    5.189
+## 2        do.call(rbind, redis$lrange("sp500_R", 0, -1))           25   2.458    6.039
+## 1         do.call(rbind, redisLRange("sp500_R", 0, -1))           25  48.367  118.838
+## edd@max:~/git/rhiredis/demo$ 
