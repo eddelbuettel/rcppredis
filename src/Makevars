@@ -1,4 +1,0 @@
-## TODO: configure test for -lhiredis, possible -L flag
-##       alternatively, use 'pkg-config --cflags' and 'pkg-config --libs'
-PKG_LIBS = -lhiredis
-

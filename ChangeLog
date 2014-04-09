@@ -6,6 +6,12 @@
 	* demo/*: Load package 'RcppRedis'
 	* .travis.yml: Updated to enable Redis as a Travis service
 
+	* configure.ac: Beginnings of a configure script
+	* configure: Idem
+	* src/Makevars.in: Primary target for configire script
+
+	* cleanup: Remove temporary files and leftovers
+
 2014-03-02  Dirk Eddelbuettel  <edd@debian.org>
 
 	* demo/spDemo.R: Updated to compare with Bryan's changed in rredis

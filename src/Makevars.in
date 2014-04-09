@@ -1,0 +1,6 @@
+## -*- mode: makefile; -*-
+
+## Configure tells us about locations for
+## hiredis headers and library via the variables
+PKG_CXXFLAGS = @PKG_CXXFLAGS@
+PKG_LIBS     = @PKG_LIBS@ 
