@@ -11,12 +11,13 @@ some early patches.
 
 ## Dependencies
 
-- hiredis library (eg libhiredis-dev on Debian or Ubuntu)
-- Rcpp
+- [hiredis](https://github.com/redis/hiredis) library (eg [libhiredis-dev](https://packages.debian.org/sid/libhiredis-dev) on Debian or Ubuntu)
+- [Rcpp](https://github.com/RcppCore/Rcpp) for seamless R and C++ integration
+- [RApiSerialize](https://github.com/eddelbuettel/rapiserialize) for C-level serialization from the R API
 
 The package should install from source like any other R package provided the
 dependencies are met. `pkg-config` is used to find the hiredis headers and
-library. 
+library. Rcpp can be install from CRAN or GitHub; RApiSerialize is currently only on GitHub.
 
 ## Getting Started
 
