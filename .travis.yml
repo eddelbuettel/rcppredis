@@ -20,8 +20,8 @@ before_install:
 
 install:
   - ./travis-tool.sh install_aptget r-cran-runit libhiredis-dev 
-  - ./travis-tool.sh install_r Rcpp
-  - ./travis-tool.sh install_githu eddelbuettel/rapiserialize
+  - ./travis-tool.sh install_r Rcpp rredis
+  - ./travis-tool.sh install_github eddelbuettel/rapiserialize
 
 script: 
   - ./travis-tool.sh run_tests
