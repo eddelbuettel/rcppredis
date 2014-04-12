@@ -1,21 +1,21 @@
 
 ## maybe call toChar() and fromChar instead ?
 
-serializeToChar <- function(obj) {
-    .Call("serializeToChar", obj, PACKAGE="RcppRedis")
-}
+## serializeToChar <- function(obj) {
+##     .Call("serializeToChar", obj, PACKAGE="RcppRedis")
+## }
 
-serializeToRaw <- function(obj) {
-    .Call("serializeToRaw", obj, PACKAGE="RcppRedis")
-}
+## serializeToRaw <- function(obj) {
+##     .Call("serializeToRaw", obj, PACKAGE="RcppRedis")
+## }
 
-unserializeFromChar <- function(obj) {
-    .Call("unserializeFromChar", obj, PACKAGE="RcppRedis")
-}
+## unserializeFromChar <- function(obj) {
+##     .Call("unserializeFromChar", obj, PACKAGE="RcppRedis")
+## }
 
-unserializeFromRaw <- function(obj) {
-    .Call("unserializeFromRaw", obj, PACKAGE="RcppRedis")
-}
+## unserializeFromRaw <- function(obj) {
+##     .Call("unserializeFromRaw", obj, PACKAGE="RcppRedis")
+## }
 
 ## example using rredis (when function was still called serialize() and produced raw types
 ##
@@ -41,10 +41,10 @@ unserializeFromRaw <- function(obj) {
 
 ## now with charToRaw / rawToChar built in
 .simpleDemo <- function() {
-    val <- RcppRedis::serializeToChar(1:4)
+    val <- RApiSerialize::serializeToChar(1:4)
     redis <- new(Redis, "127.0.0.1", 6379)
     redis$exec(paste("SET serialTest ", val))
-    RcppRedis::unserializeFromChar(redis$exec("GET serialTest"))
+    RApiSerialize::unserializeFromChar(redis$exec("GET serialTest"))
     NULL
 }
 

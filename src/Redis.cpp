@@ -13,12 +13,11 @@
 
 // Dirk Eddelbuettel, 2013 - 2014
 
+
 #include <Rcpp.h>
 #include <hiredis/hiredis.h>         // on Ubuntu file /usr/include/hiredis/hiredis.h
 
-extern "C" SEXP serializeToRaw(SEXP object);
-extern "C" SEXP unserializeFromRaw(SEXP object);
-
+#include <RApiSerializeAPI.h>
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...

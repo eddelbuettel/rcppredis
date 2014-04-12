@@ -1,3 +1,12 @@
+2014-04-12  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Use new package RApiSerialize
+	* DESCRIPTION: Import new package RApiSerialize
+	* R/serialize.R: Simplified due to new package RApiSerialize
+	* src/serialize.cpp: Removed, code now in RApiSerializef
+
+	* .travis.yml: Install RApiSerialize from rapiserialize on github
+
 2014-04-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Package renamed to 'RcppRedis'
