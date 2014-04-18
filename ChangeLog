@@ -1,3 +1,8 @@
+2014-04-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/examples/: Added some simple motivating Redis examples in
+	Python and Shell / Command-line
+
 2014-04-12  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Use new package RApiSerialize
