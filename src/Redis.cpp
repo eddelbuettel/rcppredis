@@ -1,5 +1,27 @@
 // -*- indent-tabs-mode: nil; tab-width: 4; c-indent-level: 4; c-basic-offset: 4; -*-
 //
+//  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
+//
+//  Copyright (C) 2014            Dirk Eddelbuettel 
+//  Portfions Copyright (C) 2013  Wush Wu
+//  Portfions Copyright (C) 2013  William Pleasant
+//
+//  This file is part of RcppRedis
+//
+//  RcppRedis is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  RcppRedis is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with RcppRedis.  If not, see <http://www.gnu.org/licenses/>.
+
+
 // simple C++ class to host a stateful connection to redis
 //
 // uses hiredis library which provides a basic C API to redis
@@ -7,21 +29,23 @@
 // initially forked from Wush Wu's Rhiredis
 // slowly adding some more Redis functions
 // trying to figure out if we want
-//  -- R serialization for interop with rredis
-//  -- 'native' serialization for interop with redis-cli
-//  -- 'binary' serialization for faster processing
-
+//    -- R serialization for interop with rredis
+//    -- 'native' serialization for interop with redis-cli
+// or possibly both
+//  
+// We do use 'binary' serialization for faster processing
+//
 // Dirk Eddelbuettel, 2013 - 2014
 
 
 #include <Rcpp.h>
-#include <hiredis/hiredis.h>         // on Ubuntu file /usr/include/hiredis/hiredis.h
+#include <hiredis/hiredis.h>        // we check in configure for this
 
-#include <RApiSerializeAPI.h>
+#include <RApiSerializeAPI.h>   	// provides C API with serialization for R
+
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
-//
 
 class Redis {
 
@@ -29,45 +53,50 @@ private:
    
     redisContext *prc_;                // private pointer to redis context
 
+    // set up a connection to Redis on the given machine and port
     void init(std::string host="127.0.0.1", int port=6379)  { 
         prc_ = redisConnect(host.c_str(), port);
         if (prc_->err) 
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
     }
-	
+
+
+    // This function was originally contributed by William Pleasant
+    // It switches according to the return type
     SEXP extract_reply(redisReply *reply){
         switch(reply->type) {
         case REDIS_REPLY_STRING:
-        case REDIS_REPLY_STATUS: {
-            std::string res(reply->str);
-            return(Rcpp::wrap(res));
+        case REDIS_REPLY_STATUS: 
+        case REDIS_REPLY_ERROR: {
+            return Rcpp::wrap(std::string(reply->str));
         }
         case REDIS_REPLY_INTEGER: {
-            return(Rcpp::wrap(static_cast<double>(reply->integer)));
-        }
-        case REDIS_REPLY_ERROR: {
-            std::string res(reply->str);
-            return(Rcpp::wrap(res));
+            // cast to double to avoid INT_MAX overflow
+            return Rcpp::wrap(static_cast<double>(reply->integer));
         }
         case REDIS_REPLY_NIL: {
-            return(R_NilValue);
+            return R_NilValue;
         }
         case REDIS_REPLY_ARRAY: {
-            Rcpp::List retlist(reply->elements);
-            extract_array(reply, retlist);
-            return(retlist);
+            return extract_array(reply);
         }
         default:
-            throw std::logic_error("Unknown type");
+            Rcpp::stop("Unknown type");
         }
+        return R_NilValue;      // makes 'g++ -Wall -pedantic' happy
     }
     
-    void extract_array(redisReply *node, Rcpp::List& retlist) {
+    // for vector results (of any type), fill a list (as a list type can contain
+    // different basuc types and we switch later over these
+    Rcpp::List extract_array(redisReply *node) {
+        Rcpp::List retlist(node->elements);
         for(unsigned int i = 0;i < node->elements;i++) {
             retlist[i] = extract_reply(node->element[i]);
         }
+        return retlist;
     }
 
+    // helper function
     std::string replyTypeToString(const redisReply *reply) {
         switch(reply->type) {
         case REDIS_REPLY_STRING:  return std::string("string");
@@ -94,7 +123,6 @@ private:
         default:                  return -1;
         }
     }
-
 
     void checkReplyType(const redisReply *reply, int replyType) {
         if (replyType != replyTypeToInteger(reply)) {
@@ -178,10 +206,10 @@ public:
                                                   key.c_str(), start, end));
 
         unsigned int len = reply->elements;
-        //Rcpp::Rcout << "Seeing " << len << " elements\n";
+        Rcpp::Rcout << "Seeing " << len << " elements\n";
         Rcpp::List x(len);
         for (unsigned int i = 0; i < len; i++) {
-            //Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
+            Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
             int nc = reply->element[i]->len;
             Rcpp::RawVector res(nc);
             memcpy(res.begin(), reply->element[i]->str, nc);
@@ -193,16 +221,26 @@ public:
         return(x);
     }
 
+
     // could create new functions to (re-)connect with given host and port etc pp
 
     
-    // Experimental "non-R-serialzation" functions below
+    // Some "non-R-serialzation" functions below
 
     // used in functions below
     static const unsigned int szdb = sizeof(double);
 
+    // redis get a string without deserializes from R format [as get() above does]
+    std::string getString(std::string key) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
+        std::string res(reply->str);
+        freeReplyObject(reply);
+        return(res);
+    }
+
+
     // redis "set a vector" -- without R serialization, without attributes, ...
-    // this is somewhat experimental
     std::string setVector(std::string key, Rcpp::NumericVector x) {
 
         redisReply *reply = 
@@ -214,7 +252,6 @@ public:
     }
 
     // redis "get a vector" -- without R serialization, without attributes, ...
-    // this is somewhat experimental
     Rcpp::NumericVector getVector(std::string key) {
 
         // uses binary protocol, see hiredis doc at github
@@ -231,6 +268,7 @@ public:
 
 
     // redis "get from list from start to end" -- without R serialization
+    // assume numerical vectors, doesn't test all that well
     Rcpp::List listRange(std::string key, int start, int end) {
 
         // uses binary protocol, see hiredis doc at github
@@ -295,6 +333,27 @@ public:
         return(res);
     }
 
+    // redis "get from list from start to end" -- without R serialization
+    // assume strings numerical vectors, doesn't test all that well
+    Rcpp::CharacterVector listRangeAsStrings(std::string key, int start, int end) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LRANGE %s %d %d", 
+                                                  key.c_str(), start, end));
+
+        //Rcpp::Rcout << "listRange got type: " << replyTypeToString(reply) << "\n";
+        checkReplyType(reply, replyArray_t); // ensure we got array
+        unsigned int len = reply->elements;
+        Rcpp::CharacterVector x(len);
+        for (unsigned int i = 0; i < len; i++) {
+            checkReplyType(reply->element[i], replyString_t); // ensure we got [binary] string 
+            x[i] = reply->element[i]->str;
+        }
+        freeReplyObject(reply);
+        return(x);
+    }
+
 };
 
 
@@ -315,6 +374,7 @@ RCPP_MODULE(Redis) {
         .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
 
         // non-R serialization methods below
+        .method("getString",  &Redis::getString,   "runs 'get key' without deserialization")
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'SET key object' for a numeric vector")
         .method("listLPush",  &Redis::listLPush,   "prepends vector to list")
@@ -322,6 +382,8 @@ RCPP_MODULE(Redis) {
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
 
         .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")
+
+        .method("listRangeAsStrings",  &Redis::listRangeAsStrings,   "runs 'LRANGE key start end' for list, returns string vector")
 
     ;
 }
