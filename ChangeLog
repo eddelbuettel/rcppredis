@@ -5,6 +5,8 @@
 
 	* inst/examples/: Expanded the Python and Shell examples a little
 
+	* src/Redis.cpp: Added some 'getters' for plain strings
+
 2014-04-17  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/examples/: Added some simple motivating Redis examples in
