@@ -1,5 +1,8 @@
 2014-04-20  Dirk Eddelbuettel  <edd@debian.org>
 
+	* tests/runUnitTests.R: Added RUnit test support
+	* inst/tests/runit.basicTest.R: Added first test script
+
 	* .travis.yml: Install RApiSerialize from CRAN rather than GitHub
 
 2014-04-18  Dirk Eddelbuettel  <edd@debian.org>

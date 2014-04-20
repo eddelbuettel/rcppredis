@@ -1,0 +1,51 @@
+
+test_01_setup <- function() {
+    suppressMessages(library(datasets))
+    suppressMessages(library(RcppRedis))
+    suppressMessages(library(rredis))
+
+    data(trees)
+    fit <<- lm(log(Volume) ~ log(Girth) + log(Height), data=trees)
+
+    redis <<- new(Redis)
+    rredis::redisConnect(nodelay=TRUE)      # new rredis option to mimich networking behavior of hiredis
+}
+
+test_02_treesExternalSerialize <- function() {
+    ## set a externally serialized object
+    key <- "foo"
+    redis$set(key, serialize(fit,NULL,ascii=TRUE))
+
+    ## retrieve with rredis
+    fit2 <- rredis::redisGet(key)
+
+    ## check
+    checkEquals(fit, fit2)
+}
+
+test_03_treesInternalSerialize <- function() {
+    ## or serialize an object internally 
+    key <- "foo2"
+    redis$set(key, fit)
+
+    ## retrieve with rredis
+    fit3 <- rredis::redisGet(key)
+
+    ## check
+    checkEquals(fit, fit3)
+}
+
+test_04_treesRRedis <- function() {
+    ## retrieve with rredis
+    key <- "foo2"
+    fit4 <- redis$get(key)
+    
+    ## check
+    checkEquals(fit, fit4)
+}
+
+
+                                 
+                                 
+
+

@@ -1,14 +1,15 @@
 # Sample .travis.yml for R projects.
-# Taken from my fork of Craig Citro's r-travis
 #
-# See https://github.com/eddelbuettel/r-travis/
-# and https://github.com/craigcitro/r-travis
-#
-# See README.md for instructions.
+# See the r-travis repo and its wiki 
+#   https://github.com/craigcitro/r-travis/wiki
+#   https://github.com/eddelbuettel/r-travis/
+
+language: c
 
 env:
   global:
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
+    - RunRcppRedisTests=yes
 
 services:
   - redis-server
