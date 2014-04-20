@@ -1,3 +1,7 @@
+2014-04-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Install RApiSerialize from CRAN rather than GitHub
+
 2014-04-18  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Reset version number to 0.1.0 as we are after all
@@ -19,7 +23,7 @@
 	* R/serialize.R: Simplified due to new package RApiSerialize
 	* src/serialize.cpp: Removed, code now in RApiSerializef
 
-	* .travis.yml: Install RApiSerialize from rapiserialize on github
+	* .travis.yml: Install RApiSerialize from rapiserialize on GitHub
 
 2014-04-08  Dirk Eddelbuettel  <edd@debian.org>
 
