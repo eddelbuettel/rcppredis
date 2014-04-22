@@ -1,3 +1,8 @@
+2014-04-21  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/tests/runit.basicTest.R: Ensure keys used are within a more
+	clearly separated 'namespace', and remove added keys at end
+
 2014-04-20  Dirk Eddelbuettel  <edd@debian.org>
 
 	* tests/runUnitTests.R: Added RUnit test support
