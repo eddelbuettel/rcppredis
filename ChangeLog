@@ -1,3 +1,10 @@
+2014-04-22  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Added string 'setter'
+
+	* inst/examples/readR.R: Added (very) simple R example
+	* inst/examples/writeR.R: Added (very) simple R example
+
 2014-04-21  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/tests/runit.basicTest.R: Ensure keys used are within a more

@@ -168,14 +168,12 @@ public:
     // redis get -- deserializes from R format
     SEXP get(std::string key) {
 
-        // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
 
         int nc = reply->len;
         Rcpp::RawVector res(nc);
         memcpy(res.begin(), reply->str, nc);
-                                               
         freeReplyObject(reply);
         SEXP obj = unserializeFromRaw(res);
         return(obj);
@@ -229,6 +227,16 @@ public:
 
     // used in functions below
     static const unsigned int szdb = sizeof(double);
+
+    // redis set a string without deserializes from R format [as set() above does]
+    std::string setString(std::string key, std::string value) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "SET %s %s", 
+                                                  key.c_str(), value.c_str()));
+        std::string res(reply->str);
+        freeReplyObject(reply);
+        return(res);
+    }
 
     // redis get a string without deserializes from R format [as get() above does]
     std::string getString(std::string key) {
@@ -374,7 +382,9 @@ RCPP_MODULE(Redis) {
         .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
 
         // non-R serialization methods below
-        .method("getString",  &Redis::getString,   "runs 'get key' without deserialization")
+        .method("setString",  &Redis::setString,   "runs 'SET key obj' without deserialization")
+        .method("getString",  &Redis::getString,   "runs 'GET key' without deserialization")
+
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'SET key object' for a numeric vector")
         .method("listLPush",  &Redis::listLPush,   "prepends vector to list")
