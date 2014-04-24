@@ -5,7 +5,7 @@ library(RcppRedis)
 
 redis <- new(Redis)
 
-key1 <- "simpleString"
+key1 <- "ex:simpleString"
 val1 <- "abracadrabra"
 res <- redis$setString(key1, val1)
 cat("Wrote", val1, "for", key1, "with result", res, "\n")
