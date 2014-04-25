@@ -182,7 +182,6 @@ public:
     // redis keys -- returns character vector
     SEXP keys(std::string regexp) {
 
-        // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "KEYS %s", regexp.c_str()));
 
@@ -198,7 +197,6 @@ public:
     // redis lrange: get list from start to end -- with R serialization
     Rcpp::List lrange(std::string key, int start, int end) {
 
-        // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "LRANGE %s %d %d", 
                                                   key.c_str(), start, end));
@@ -262,7 +260,6 @@ public:
     // redis "get a vector" -- without R serialization, without attributes, ...
     Rcpp::NumericVector getVector(std::string key) {
 
-        // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
 
@@ -279,7 +276,6 @@ public:
     // assume numerical vectors, doesn't test all that well
     Rcpp::List listRange(std::string key, int start, int end) {
 
-        // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "LRANGE %s %d %d", 
                                                   key.c_str(), start, end));
@@ -312,9 +308,26 @@ public:
         return(X);
     }
 
+    // redis "lpop from" -- without R serialization
+    std::string listLPop(std::string key) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LPOP %s", key.c_str()));
+
+        std::string res;
+        if (replyTypeToInteger(reply) == replyNil_t) {
+            res = "(nil)";
+        } else {
+            checkReplyType(reply, replyString_t); // ensure we got string
+            res = reply->str;
+        }
+        freeReplyObject(reply);
+        return(res);
+    }
+
     // redis "prepend to list" -- without R serialization
     // as above: pure vector, no attributes, ...
     std::string listLPush(std::string key, Rcpp::NumericVector x) {
+
         // uses binary protocol, see hiredis doc at github
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "LPUSH %s %b", 
@@ -387,8 +400,9 @@ RCPP_MODULE(Redis) {
 
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'SET key object' for a numeric vector")
-        .method("listLPush",  &Redis::listLPush,   "prepends vector to list")
-        .method("listRPush",  &Redis::listRPush,   "appends vector to list")
+        .method("listLPop",   &Redis::listLPop,    "pops num. vector to list")
+        .method("listLPush",  &Redis::listLPush,   "prepends num. vector to list")
+        .method("listRPush",  &Redis::listRPush,   "appends num. vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
 
         .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")

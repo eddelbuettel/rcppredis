@@ -1,3 +1,9 @@
+2014-04-24  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Added (non-serialized) list LPop
+
+	* inst/examples/readR.R: Used in example
+
 2014-04-22  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Added string 'setter'
