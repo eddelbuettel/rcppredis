@@ -18,9 +18,9 @@ function runPython {
 
 function cleanup {
     # cleanup
-    redis-cli del 'ex:simpleString'
-    redis-cli del 'ex:scalarVal'
-    redis-cli del 'ex:vectorVal'
+    redis-cli del 'ex:ascii:simpleString'
+    redis-cli del 'ex:ascii:scalarVal'
+    redis-cli del 'ex:ascii:vectorVal'
 }
 
 
