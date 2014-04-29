@@ -2,9 +2,9 @@
 //
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2014            Dirk Eddelbuettel 
-//  Portfions Copyright (C) 2013  Wush Wu
-//  Portfions Copyright (C) 2013  William Pleasant
+//  Copyright (C) 2014           Dirk Eddelbuettel 
+//  Portions Copyright (C) 2013  Wush Wu
+//  Portions Copyright (C) 2013  William Pleasant
 //
 //  This file is part of RcppRedis
 //
