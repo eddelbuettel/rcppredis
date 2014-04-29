@@ -354,6 +354,63 @@ public:
         return(res);
     }
 
+    // redis "zadd" -- insert score and vector (without R serialization)
+    // by convention, the first element of the vector is the score value
+    double zadd(std::string key, Rcpp::NumericVector x) {
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "ZADD %s %f %b", 
+                                                  key.c_str(), x[0], x.begin(), x.size()*szdb));
+        checkReplyType(reply, replyInteger_t); // ensure we got array
+        double res = static_cast<double>(reply->integer); // a 'long long' which would overflow an int here
+        freeReplyObject(reply);
+        return(res);
+    }
+
+    // redis "zrangebyscore" -- retrieve vectors for score in [min, max] (without R serialization)
+    Rcpp::NumericMatrix zrangebyscore(std::string key, double min, double max) {
+        
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, 
+                                                                  "ZRANGEBYSCORE %s %f %f", 
+                                                                  key.c_str(), min, max));
+        checkReplyType(reply, replyArray_t); // ensure we got array
+        unsigned int rows = reply->elements;
+        unsigned int cols = reply->element[0]->len; // assumes all row have same number of entries
+        Rcpp::NumericMatrix x(rows, cols/szdb);     // and that all elements are type double
+        for (unsigned int i = 0; i < rows; i++) {
+            checkReplyType(reply->element[i], replyString_t); // ensure we got [binary] string 
+            Rcpp::NumericVector v(cols/szdb);
+            memcpy(v.begin(), reply->element[i]->str, cols);
+            x.row(i) = v;
+        }
+        freeReplyObject(reply);
+        return(x);
+    }
+
+    // redis "zadd" -- insert score and vector (without R serialization)
+    // by convention, the first element of the vector is the score value
+    Rcpp::List zrangebyscoreOld(std::string key, double min, double max) {
+        
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "ZRANGEBYSCORE %s %f %f", 
+                                                  key.c_str(), min, max));
+        checkReplyType(reply, replyArray_t); // ensure we got array
+        unsigned int len = reply->elements;
+        Rcpp::List x(len);
+        for (unsigned int i = 0; i < len; i++) {
+            checkReplyType(reply->element[i], replyString_t); // ensure we got [binary] string 
+            int nc = reply->element[i]->len;
+            Rcpp::NumericVector v(nc/szdb);
+            memcpy(v.begin(), reply->element[i]->str, nc);
+            x[i] = v;
+        }
+        freeReplyObject(reply);
+        return(x);
+    }
+
     // redis "get from list from start to end" -- without R serialization
     // assume strings numerical vectors, doesn't test all that well
     Rcpp::CharacterVector listRangeAsStrings(std::string key, int start, int end) {
@@ -375,6 +432,7 @@ public:
         return(x);
     }
 
+
 };
 
 
@@ -395,15 +453,17 @@ RCPP_MODULE(Redis) {
         .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
 
         // non-R serialization methods below
-        .method("setString",  &Redis::setString,   "runs 'SET key obj' without deserialization")
+        .method("setString",  &Redis::setString,   "runs 'SET key obj' without serialization")
         .method("getString",  &Redis::getString,   "runs 'GET key' without deserialization")
 
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
-        .method("getVector",  &Redis::getVector,   "runs 'SET key object' for a numeric vector")
-        .method("listLPop",   &Redis::listLPop,    "pops num. vector to list")
-        .method("listLPush",  &Redis::listLPush,   "prepends num. vector to list")
-        .method("listRPush",  &Redis::listRPush,   "appends num. vector to list")
+        .method("getVector",  &Redis::getVector,   "runs 'GET key object' for a numeric vector")
+        .method("listLPop",   &Redis::listLPop,    "pops numeric vector to list")
+        .method("listLPush",  &Redis::listLPush,   "prepends numeric vector to list")
+        .method("listRPush",  &Redis::listRPush,   "appends numeric vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
+        .method("zadd",          &Redis::zadd,     "inserts vector into sorted set, first value is score, binary")
+        .method("zrangebyscore", &Redis::zrangebyscore,  "retrieve sorted range over [min, max], binary")
 
         .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")
 

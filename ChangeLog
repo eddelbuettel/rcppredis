@@ -1,3 +1,7 @@
+2014-04-28  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Added zadd and zrangebyscore
+
 2014-04-26  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/examples/*: Now use key as part of type
