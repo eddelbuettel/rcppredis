@@ -393,9 +393,10 @@ public:
     Rcpp::NumericMatrix zrangebyscore(std::string key, double min, double max) {
         
         // uses binary protocol, see hiredis doc at github
-        redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, 
-                                                                  "ZRANGEBYSCORE %s %f %f", 
-                                                                  key.c_str(), min, max));
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, 
+                                                  "ZRANGEBYSCORE %s %f %f", 
+                                                  key.c_str(), min, max));
         checkReplyType(reply, replyArray_t); // ensure we got array
         unsigned int rows = reply->elements;
         unsigned int cols = reply->element[0]->len; // assumes all row have same nb of cols
@@ -410,6 +411,19 @@ public:
         return(x);
     }
 
+    // redis "zremrangebyscore" -- remove elements in [min, max] 
+    double zremrangebyscore(std::string key, double min, double max) {
+        
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, 
+                                                  "ZREMRANGEBYSCORE %s %f %f", 
+                                                  key.c_str(), min, max));
+        checkReplyType(reply, replyInteger_t); // ensure we got array
+        double res = static_cast<double>(reply->integer); // a 'long long' would overflow int
+        freeReplyObject(reply);
+        return(res);
+    }
 
     // redis "get from list from start to end" -- without R serialization
     // assume strings numerical vectors, doesn't test all that well
@@ -462,9 +476,10 @@ RCPP_MODULE(Redis) {
         .method("listLPush",  &Redis::listLPush,   "prepends numeric vector to list")
         .method("listRPush",  &Redis::listRPush,   "appends numeric vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
-        .method("zadd",          &Redis::zadd,     "inserts vector into sorted set, first value is score, binary")
-        .method("zrange",     &Redis::zrange,       "retrieve sorted range over index [min, max], binary")
+        .method("zadd",       &Redis::zadd,        "inserts vector into sorted set, first value is score, binary")
+        .method("zrange",     &Redis::zrange,      "retrieve sorted range over index [min, max], binary")
         .method("zrangebyscore", &Redis::zrangebyscore,  "retrieve sorted range over score [min, max], binary")
+        .method("zremrangebyscore", &Redis::zremrangebyscore,  "remove sorted range in [min, max]")
 
         .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")
 

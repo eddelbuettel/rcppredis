@@ -1,6 +1,6 @@
 2014-04-29  Dirk Eddelbuettel  <edd@debian.org>
 
-	* src/Redis.cpp: Added zrange 
+	* src/Redis.cpp: Added zrange and zremrangebyscore
 
 2014-04-28  Dirk Eddelbuettel  <edd@debian.org>
 
