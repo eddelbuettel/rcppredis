@@ -16,7 +16,7 @@ some early patches.
 - [RApiSerialize](https://github.com/eddelbuettel/rapiserialize) for C-level serialization from the R API
 
 The package should install from source like any other R package provided the
-dependency on the [hiredis](https://github.com/redis/hiredis) is
+dependency on the [hiredis](https://github.com/redis/hiredis) library is
 met. `pkg-config` is used to find the hiredis headers and library. Both Rcpp
 and RApiSerialized can be installed from CRAN or GitHub. 
 
