@@ -1,3 +1,8 @@
+2014-05-06  Dirk Eddelbuettel  <edd@debian.org>
+
+	* demo/simDemo.R: Beginnings of a new demo / benchmark for comparing
+	ascii and binary payloads
+
 2014-04-29  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Added zrange and zremrangebyscore
