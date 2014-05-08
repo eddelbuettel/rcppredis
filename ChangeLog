@@ -1,5 +1,7 @@
 2014-05-07  Dirk Eddelbuettel  <edd@debian.org>
 
+	* demo/simDemo.R: Expanded demo
+
 	* src/Redis.cpp: zadd now takes entire matrix and loop internally
 
 2014-05-06  Dirk Eddelbuettel  <edd@debian.org>
