@@ -354,19 +354,40 @@ public:
         return(res);
     }
 
-    // redis "zadd" -- insert score and vector (without R serialization)
-    // by convention, the first element of the vector is the score value
-    double zadd(std::string key, Rcpp::NumericVector x) {
+    // // redis "zadd" -- insert score and vector (without R serialization)
+    // // by convention, the first element of the vector is the score value
+    // double zadd(std::string key, Rcpp::NumericVector x) {
 
-        // uses binary protocol, see hiredis doc at github
-        redisReply *reply = 
-            static_cast<redisReply*>(redisCommand(prc_, "ZADD %s %f %b", 
-                                                  key.c_str(), x[0], x.begin(), x.size()*szdb));
-        checkReplyType(reply, replyInteger_t); // ensure we got array
-        double res = static_cast<double>(reply->integer); // a 'long long' would overflow int
-        freeReplyObject(reply);
+    //     // uses binary protocol, see hiredis doc at github
+    //     redisReply *reply = 
+    //         static_cast<redisReply*>(redisCommand(prc_, "ZADD %s %f %b", 
+    //                                               key.c_str(), x[0], x.begin(), x.size()*szdb));
+    //     checkReplyType(reply, replyInteger_t); // ensure we got array
+    //     double res = static_cast<double>(reply->integer); // a 'long long' would overflow int
+    //     freeReplyObject(reply);
+    //     return(res);
+    // }
+
+    // redis "zadd" -- insert score and matrix row (without R serialization)
+    // by convention, the first element of each row vector is the score value
+    double zadd(std::string key, Rcpp::NumericMatrix x) {
+
+        double res = 0;
+        for (int i=0; i<x.nrow(); i++) {
+            Rcpp::NumericVector y = x.row(i);
+            // uses binary protocol, see hiredis doc at github
+            redisReply *reply = 
+                static_cast<redisReply*>(redisCommand(prc_, "ZADD %s %f %b", 
+                                                      key.c_str(), 
+                                                      y[0], 
+                                                      y.begin(), y.size()*szdb));
+            checkReplyType(reply, replyInteger_t); // ensure we got array
+            res += static_cast<double>(reply->integer); // a 'long long' would overflow int
+            freeReplyObject(reply);
+        }
         return(res);
     }
+
 
     // redis "zrange" (withscores) -- retrieve vectors from index [min, max] (without R serial.)
     Rcpp::NumericMatrix zrange(std::string key, int min, int max) {
@@ -476,7 +497,8 @@ RCPP_MODULE(Redis) {
         .method("listLPush",  &Redis::listLPush,   "prepends numeric vector to list")
         .method("listRPush",  &Redis::listRPush,   "appends numeric vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
-        .method("zadd",       &Redis::zadd,        "inserts vector into sorted set, first value is score, binary")
+        .method("zadd",       &Redis::zadd,        "inserts rows of matrix into sorted set, first value is score, binary")
+
         .method("zrange",     &Redis::zrange,      "retrieve sorted range over index [min, max], binary")
         .method("zrangebyscore", &Redis::zrangebyscore,  "retrieve sorted range over score [min, max], binary")
         .method("zremrangebyscore", &Redis::zremrangebyscore,  "remove sorted range in [min, max]")

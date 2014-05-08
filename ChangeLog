@@ -1,3 +1,7 @@
+2014-05-07  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: zadd now takes entire matrix and loop internally
+
 2014-05-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* demo/simDemo.R: Beginnings of a new demo / benchmark for comparing
