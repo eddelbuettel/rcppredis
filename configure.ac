@@ -1,6 +1,6 @@
 ## -*- mode: autoconf; autoconf-indentation: 4; -*-
 ##
-##  RcppRedis configure.in 
+##  RcppRedis configure.ac
 ##
 ##  RcppRedis -- R interface to Redis via Rcpp and hiredis
 ##
