@@ -1,3 +1,12 @@
+2014-05-10  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Finalizing release 0.1.0
+
+	* DESCRIPTION: List the corresponding RedHat package as well as the
+	GitHub URL for the hiredis library
+
+	* configure.ac: Renamed from configure.in
+
 2014-05-07  Dirk Eddelbuettel  <edd@debian.org>
 
 	* demo/simDemo.R: Expanded demo
