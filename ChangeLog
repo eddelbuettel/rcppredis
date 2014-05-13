@@ -1,3 +1,7 @@
+2014-05-12  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Added zcard
+
 2014-05-10  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Finalizing release 0.1.0

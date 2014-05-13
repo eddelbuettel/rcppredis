@@ -354,19 +354,6 @@ public:
         return(res);
     }
 
-    // // redis "zadd" -- insert score and vector (without R serialization)
-    // // by convention, the first element of the vector is the score value
-    // double zadd(std::string key, Rcpp::NumericVector x) {
-
-    //     // uses binary protocol, see hiredis doc at github
-    //     redisReply *reply = 
-    //         static_cast<redisReply*>(redisCommand(prc_, "ZADD %s %f %b", 
-    //                                               key.c_str(), x[0], x.begin(), x.size()*szdb));
-    //     checkReplyType(reply, replyInteger_t); // ensure we got array
-    //     double res = static_cast<double>(reply->integer); // a 'long long' would overflow int
-    //     freeReplyObject(reply);
-    //     return(res);
-    // }
 
     // redis "zadd" -- insert score and matrix row (without R serialization)
     // by convention, the first element of each row vector is the score value
@@ -446,6 +433,19 @@ public:
         return(res);
     }
 
+    // redis "zcard" -- number of members in sorted set
+    double zcard(std::string key) {
+        
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, 
+                                                  "ZCARD %s", key.c_str()));
+        checkReplyType(reply, replyInteger_t); // ensure we got integer
+        double res = static_cast<double>(reply->integer); // a 'long long' would overflow int
+        freeReplyObject(reply);
+        return(res);
+    }
+
     // redis "get from list from start to end" -- without R serialization
     // assume strings numerical vectors, doesn't test all that well
     Rcpp::CharacterVector listRangeAsStrings(std::string key, int start, int end) {
@@ -502,6 +502,7 @@ RCPP_MODULE(Redis) {
         .method("zrange",     &Redis::zrange,      "retrieve sorted range over index [min, max], binary")
         .method("zrangebyscore", &Redis::zrangebyscore,  "retrieve sorted range over score [min, max], binary")
         .method("zremrangebyscore", &Redis::zremrangebyscore,  "remove sorted range in [min, max]")
+        .method("zcard",      &Redis::zcard,       "get number of members in sorted set")
 
         .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")
 
