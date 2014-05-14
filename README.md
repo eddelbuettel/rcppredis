@@ -17,8 +17,9 @@ some early patches.
 
 The package should install from source like any other R package provided the
 dependency on the [hiredis](https://github.com/redis/hiredis) library is
-met. `pkg-config` is used to find the hiredis headers and library. Both Rcpp
-and RApiSerialized can be installed from CRAN or GitHub.  
+met. `pkg-config` is used to find the hiredis headers and library. All of
+Rcpp, RApiSerialized and RcppRedis can be installed from CRAN (which is
+recommended) or GitHub.
 
 On OS X, the header file `hiredis.h` has been seen to be installed directly
 in `/usr/local/include` whereas we generally assume a location within a
