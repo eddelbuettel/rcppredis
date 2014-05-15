@@ -14,3 +14,4 @@ License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
 LinkingTo: Rcpp, RApiSerialize
 Suggests: rredis, RUnit
+OS_type: unix

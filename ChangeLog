@@ -1,7 +1,11 @@
+2014-05-14  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (OS_type): Add missing OS_type: unix
+
 2014-05-13  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Once more finalizing release 0.1.0
-	
+
 	* inst/hiredis.COPYING: Added per request of CRAN
 
 2014-05-12  Dirk Eddelbuettel  <edd@debian.org>
