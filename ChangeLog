@@ -1,8 +1,12 @@
+2014-05-30  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp (RCPP_MODULE): Added zcount
+
 2014-05-15  Dirk Eddelbuettel  <edd@debian.org>
 
-	* src/Makevars.win: Updated for Hiredis Windows library kindly
+	* src/Makevars.win: Updated for the Hiredis Windows library kindly
 	prepared by John Buonagurio
-	
+
 	* DESCRIPTION (OS_type): With Windows support, remove OS_type: unix
 
 2014-05-14  Dirk Eddelbuettel  <edd@debian.org>

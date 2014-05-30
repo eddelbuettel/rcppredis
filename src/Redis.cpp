@@ -2,7 +2,7 @@
 //
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2014           Dirk Eddelbuettel 
+//  Copyright (C) 2013 - 2014    Dirk Eddelbuettel 
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
 //
@@ -446,6 +446,18 @@ public:
         return(res);
     }
 
+    // redis "zcount" -- counter members in set with scores in given range
+    Rcpp::NumericMatrix zcount(std::string key, double min, double max) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, 
+                                                  "ZCOUNT %s %f %f", 
+                                                  key.c_str(), min, max));
+        checkReplyType(reply, replyInteger_t); // ensure we got array
+        double res = static_cast<double>(reply->integer); // a 'long long' would overflow int
+        freeReplyObject(reply);
+        return(res);
+    }
+
     // redis "get from list from start to end" -- without R serialization
     // assume strings numerical vectors, doesn't test all that well
     Rcpp::CharacterVector listRangeAsStrings(std::string key, int start, int end) {
@@ -503,6 +515,7 @@ RCPP_MODULE(Redis) {
         .method("zrangebyscore", &Redis::zrangebyscore,  "retrieve sorted range over score [min, max], binary")
         .method("zremrangebyscore", &Redis::zremrangebyscore,  "remove sorted range in [min, max]")
         .method("zcard",      &Redis::zcard,       "get number of members in sorted set")
+        .method("zcount",     &Redis::zcount,      "get number of members in sorted set within range [min,max]")
 
         .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")
 
