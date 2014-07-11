@@ -1,3 +1,7 @@
+2014-07-11  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Added HSET and HGET per pull request #4 by Whit
+
 2014-06-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Date): New release 0.1.1
