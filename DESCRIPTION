@@ -1,7 +1,7 @@
 Package: RcppRedis
 Type: Package
 Title: Rcpp bindings for Redis using the hiredis library
-Version: 0.1.1
+Version: 0.1.2
 Date: 2014-06-09
 Author: Dirk Eddelbuettel <edd@debian.org>
 Maintainer: Dirk Eddelbuettel <edd@debian.org>

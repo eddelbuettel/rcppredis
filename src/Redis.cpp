@@ -193,6 +193,37 @@ public:
         return(obj);
     }
 
+    // redis set -- serializes to R internal format
+    int hset(std::string key, std::string field, SEXP s) {
+
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommand(prc_, "HSET %s %s %b",
+                                                  key.c_str(), field.c_str(), x.begin(), x.size()));
+
+        checkReplyType(reply, replyInteger_t); // ensure we got integer
+        int res = reply->integer;
+        freeReplyObject(reply);
+        return(res);
+    }
+
+    // redis get -- deserializes from R format
+    SEXP hget(std::string key, std::string field) {
+
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommand(prc_, "HGET %s %s", key.c_str(), field.c_str()));
+
+        int nc = reply->len;
+        Rcpp::RawVector res(nc);
+        memcpy(res.begin(), reply->str, nc);
+        freeReplyObject(reply);
+        SEXP obj = unserializeFromRaw(res);
+        return(obj);
+    }
+
     // redis keys -- returns character vector
     SEXP keys(std::string regexp) {
 
@@ -509,6 +540,9 @@ RCPP_MODULE(Redis) {
 
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
+
+        .method("hset",  &Redis::hset,   "runs 'HSET key field object', serializes internally")
+        .method("hget",  &Redis::hget,   "runs 'HGET key field', deserializes internally")
 
         .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
 
