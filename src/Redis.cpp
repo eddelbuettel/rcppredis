@@ -224,6 +224,65 @@ public:
         return(obj);
     }
 
+    // redis sadd -- serializes to R internal format
+    SEXP sadd(std::string key, SEXP s) {
+
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        const char* cmdv[3] = {"SADD", key.c_str(), reinterpret_cast<char*>(x.begin())};
+        size_t cmdlen[3] = {4, key.length(), x.size()};
+        //const char* cmdv[3];
+        //cmdv[0] = "SADD";
+        //cmdv[1] = key.c_str();
+        //redisFormatCommand(&(cmdv[2]), "%b", x.begin(), x.size());
+        //sprintf(cmdv[2], "%b", x.begin(), x.size());
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = static_cast<redisReply*>(redisCommandArgv(prc_, 3, cmdv, cmdlen));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
+
+    // redis srem -- serializes to R internal format
+    SEXP srem(std::string key, SEXP s) {
+
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        const char* cmdv[3] = {"SREM", key.c_str(), reinterpret_cast<char*>(x.begin())};
+        size_t cmdlen[3] = {4, key.length(), x.size()};
+        //cmdv[0] = "SREM";
+        //cmdv[1] = key.c_str();
+        //redisFormatCommand(&(cmdv[2]), "%b", x.begin(), x.size());
+        //sprintf(cmdv[2], "%b", x.begin(), x.size());
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = static_cast<redisReply*>(redisCommandArgv(prc_, 3, cmdv, cmdlen));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
+
+    // redis smembers -- deserializes from R format
+    Rcpp::List smembers(std::string key) {
+
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "SMEMBERS %s", key.c_str()));
+
+        unsigned int len = reply->elements;
+        Rcpp::List x(len);
+        for (unsigned int i = 0; i < len; i++) {
+            int nc = reply->element[i]->len;
+            Rcpp::RawVector res(nc);
+            memcpy(res.begin(), reply->element[i]->str, nc);
+            SEXP obj = unserializeFromRaw(res);
+            x[i] = obj;
+        }
+
+        freeReplyObject(reply);
+        return(x);
+    }
+
     // redis keys -- returns character vector
     SEXP keys(std::string regexp) {
 
@@ -543,6 +602,10 @@ RCPP_MODULE(Redis) {
 
         .method("hset",  &Redis::hset,   "runs 'HSET key field object', serializes internally")
         .method("hget",  &Redis::hget,   "runs 'HGET key field', deserializes internally")
+
+        .method("sadd",     &Redis::sadd,     "runs 'SADD key member', serializes internally")
+        .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
+        .method("smembers", &Redis::smembers, "runs 'SMEMBERS key', deserializes internally")
 
         .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
 
