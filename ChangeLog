@@ -1,3 +1,8 @@
+2014-11-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Added SADD, SREM and SMEMBERS from pull request #5
+	by John
+
 2014-07-11  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Added HSET and HGET per pull request #4 by Whit
