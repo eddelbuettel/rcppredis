@@ -233,11 +233,6 @@ public:
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
         const char* cmdv[3] = {"SADD", key.c_str(), reinterpret_cast<char*>(x.begin())};
         size_t cmdlen[3] = {4, key.length(), static_cast<size_t>(x.size())};
-        //const char* cmdv[3];
-        //cmdv[0] = "SADD";
-        //cmdv[1] = key.c_str();
-        //redisFormatCommand(&(cmdv[2]), "%b", x.begin(), x.size());
-        //sprintf(cmdv[2], "%b", x.begin(), x.size());
 
         // uses binary protocol, see hiredis doc at github
         redisReply *reply = static_cast<redisReply*>(redisCommandArgv(prc_, 3, cmdv, cmdlen));
@@ -253,10 +248,6 @@ public:
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
         const char* cmdv[3] = {"SREM", key.c_str(), reinterpret_cast<char*>(x.begin())};
         size_t cmdlen[3] = {4, key.length(), static_cast<size_t>(x.size())};
-        //cmdv[0] = "SREM";
-        //cmdv[1] = key.c_str();
-        //redisFormatCommand(&(cmdv[2]), "%b", x.begin(), x.size());
-        //sprintf(cmdv[2], "%b", x.begin(), x.size());
 
         // uses binary protocol, see hiredis doc at github
         redisReply *reply = static_cast<redisReply*>(redisCommandArgv(prc_, 3, cmdv, cmdlen));
