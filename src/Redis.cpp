@@ -150,14 +150,16 @@ public:
     }
 
     SEXP execv(std::vector<std::string> cmd) {
-        const char* cmdv[cmd.size()];
-        size_t cmdlen[cmd.size()];
-        for (int i=0; i < cmd.size(); ++i) {
+        std::vector<const char*> cmdv(cmd.size());
+        std::vector<size_t> cmdlen(cmd.size());
+        for (unsigned int i=0; i < cmd.size(); ++i) {
           cmdv[i] = cmd[i].c_str();
           cmdlen[i] = cmd[i].size();
         }
 
-        redisReply *reply = static_cast<redisReply*>(redisCommandArgv(prc_, cmd.size(), cmdv, cmdlen));
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommandArgv(prc_, cmd.size(), 
+                                                      &(cmdv[0]), &(cmdlen[0])));
         SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
         return(rep);
@@ -230,7 +232,7 @@ public:
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
         const char* cmdv[3] = {"SADD", key.c_str(), reinterpret_cast<char*>(x.begin())};
-        size_t cmdlen[3] = {4, key.length(), x.size()};
+        size_t cmdlen[3] = {4, key.length(), static_cast<size_t>(x.size())};
         //const char* cmdv[3];
         //cmdv[0] = "SADD";
         //cmdv[1] = key.c_str();
@@ -250,7 +252,7 @@ public:
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
         const char* cmdv[3] = {"SREM", key.c_str(), reinterpret_cast<char*>(x.begin())};
-        size_t cmdlen[3] = {4, key.length(), x.size()};
+        size_t cmdlen[3] = {4, key.length(), static_cast<size_t>(x.size())};
         //cmdv[0] = "SREM";
         //cmdv[1] = key.c_str();
         //redisFormatCommand(&(cmdv[2]), "%b", x.begin(), x.size());
