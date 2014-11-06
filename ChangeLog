@@ -1,3 +1,7 @@
+2014-11-06  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: New release 0.1.2
+
 2014-11-05  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/tests/runit.execvTests.R: New tests from John
