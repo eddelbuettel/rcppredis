@@ -1,6 +1,7 @@
 2014-11-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: New release 0.1.2
+	* inst/NEWS: Ditto
 
 2014-11-05  Dirk Eddelbuettel  <edd@debian.org>
 
