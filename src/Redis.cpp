@@ -544,7 +544,7 @@ public:
     }
 
     // redis "zcount" -- counter members in set with scores in given range
-    Rcpp::NumericMatrix zcount(std::string key, double min, double max) {
+    double zcount(std::string key, double min, double max) {
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, 
                                                   "ZCOUNT %s %f %f", 

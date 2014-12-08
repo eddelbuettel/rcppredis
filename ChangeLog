@@ -1,3 +1,7 @@
+2014-12-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Use the correct return value for zcount
+
 2014-11-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: New release 0.1.2
