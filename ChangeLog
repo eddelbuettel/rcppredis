@@ -1,6 +1,12 @@
+2014-12-10  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: New release 0.1.3
+
+	* inst/NEWS: Ditto
+
 2014-12-08  Dirk Eddelbuettel  <edd@debian.org>
 
-	* src/Redis.cpp: Use the correct return value for zcount
+	* src/Redis.cpp: Use the correct return type for zcount
 
 2014-11-06  Dirk Eddelbuettel  <edd@debian.org>
 

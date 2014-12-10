@@ -2,6 +2,12 @@
 \title{News for Package \pkg{RcppRedis}}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in version 0.1.3 (2014-12-10)}{
+  \itemize{
+    \item Bug fix setting correct return type of \code{zcount}
+  }
+}
+
 \section{Changes in version 0.1.2 (2014-11-06)}{
   \itemize{
     \item New commands \code{execv}, \code{hset}, \code{hget},
