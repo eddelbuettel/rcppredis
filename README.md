@@ -26,7 +26,8 @@ Run some of the scripts from the `demo/` directory.
 
 ### Status
 
-The package works well as is used in production but does p
+The package works well and is used in production. It is however only providing
+a subset of the Redis API.
 
 ### History
 
