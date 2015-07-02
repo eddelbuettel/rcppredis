@@ -33,5 +33,4 @@
   commands. See the Rcpp-modules vignette for details on Rcpp modules. 
 }
 \author{Dirk Eddelbuettel \email{edd@debian.org}}
-\references{Redis: \url{http://redis.io/commands}}
 \keyword{package}
