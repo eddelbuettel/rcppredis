@@ -9,8 +9,8 @@
 ##
 ## Dirk Eddelbuettel, Jan - April 2014
 
-stopifnot(require(RUnit, quietly=TRUE))
-stopifnot(require(RcppRedis, quietly=TRUE))
+stopifnot(require("RUnit", quietly=TRUE))
+stopifnot(require("RcppRedis", quietly=TRUE))
 
 ## Set a seed to make the test deterministic
 set.seed(42)

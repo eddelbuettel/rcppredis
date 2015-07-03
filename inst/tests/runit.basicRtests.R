@@ -8,7 +8,7 @@ test_01_setup <- function() {
     fit <<- lm(log(Volume) ~ log(Girth) + log(Height), data=trees)
 
     redis <<- new(Redis)
-    rredis::redisConnect(nodelay=TRUE)      # new rredis option to mimich networking behavior of hiredis
+    rredis::redisConnect()
 }
 
 test_02_treesExternalSerialize <- function() {

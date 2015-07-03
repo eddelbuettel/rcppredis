@@ -1,3 +1,15 @@
+2015-07-02  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/tests/runit.basicRtests.R: No longer set tcp parameter
+	explicitly as rredis now deals with this
+
+	* man/rhiredis.Rd: Removed Redis site URL as curl fails to follow
+	redirect triggering a (spurious) CRAN testing complaint
+
+	* tests/runUnitTests.R: Minor edit to stopifnot(require())
+
+	* DESCRIPTION: Update to confirm with CRAN editing standards
+
 2015-04-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Some small updates (including license shield) and edits
