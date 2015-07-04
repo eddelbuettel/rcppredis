@@ -1,3 +1,7 @@
+2015-07-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: New release 0.1.4
+
 2015-07-02  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/tests/runit.basicRtests.R: No longer set tcp parameter

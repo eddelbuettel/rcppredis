@@ -2,6 +2,14 @@
 \title{News for Package \pkg{RcppRedis}}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in version 0.1.4 (2015-07-04)}{
+  \itemize{
+    \item Minor update to unit test setup for \cpkg{rredis}.
+    \item No longer list URLs to Redis as automated CRAN tests for URL
+    validity choke on redirects.
+  }
+}
+
 \section{Changes in version 0.1.3 (2014-12-10)}{
   \itemize{
     \item Bug fix setting correct return type of \code{zcount}
