@@ -1,4 +1,4 @@
-## RcppRedis [![Build Status](https://travis-ci.org/eddelbuettel/rcppredis.png)](https://travis-ci.org/eddelbuettel/rcppredis) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
+## RcppRedis [![Build Status](https://travis-ci.org/eddelbuettel/rcppredis.svg)](https://travis-ci.org/eddelbuettel/rcppredis) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppRedis)](http://cran.rstudio.com/package=RcppRedis) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppRedis?color=brightgreen)](http://www.r-pkg.org/pkg/RcppRedis)
 
 RcppRedis is a Rcpp and hiredis based Redis client for R 
 
@@ -26,8 +26,10 @@ Run some of the scripts from the `demo/` directory.
 
 ### Status
 
-The package works well and is used in production. It is however only providing
-a subset of the Redis API.
+The package works well, is used in production, and has been on
+[CRAN](http://cran.r-project.org) for some time.
+
+It is however only providing a subset of the Redis API.
 
 ### History
 
