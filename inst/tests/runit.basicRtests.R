@@ -1,15 +1,18 @@
 
 test_01_setup <- function() {
     suppressMessages(library(datasets))
-    suppressMessages(library(RcppRedis))
     suppressMessages(library(rredis))
+    suppressMessages(library(RcppRedis))
+
+    rredis::redisConnect(nodelay=FALSE) 	# rredis connection object, but no tcpdelay
+                                                # as our use of hiredis seesm to interfere
+   
+    redis <<- new(Redis)                	# RcppRedis object
 
     data(trees)
     fit <<- lm(log(Volume) ~ log(Girth) + log(Height), data=trees)
-
-    redis <<- new(Redis)
-    rredis::redisConnect()
 }
+
 
 test_02_treesExternalSerialize <- function() {
 

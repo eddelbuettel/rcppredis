@@ -1,3 +1,10 @@
+2015-07-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: New release 0.1.5
+
+	* inst/tests/runit.basicRtests.R: Set nodelay=FALSE for rredis as
+	both rredis and RcppRedis load the hiredis library
+
 2015-07-04  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: New release 0.1.4
