@@ -2,6 +2,12 @@
 \title{News for Package \pkg{RcppRedis}}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in version 0.1.5 (2015-07-17)}{
+  \itemize{
+    \item Another minor fix to unit test setup for \cpkg{rredis}.
+  }
+}
+
 \section{Changes in version 0.1.4 (2015-07-04)}{
   \itemize{
     \item Minor update to unit test setup for \cpkg{rredis}.
