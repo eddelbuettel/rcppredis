@@ -669,6 +669,11 @@ RCPP_MODULE(Redis) {
         .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
         .method("smembers", &Redis::smembers, "runs 'SMEMBERS key', deserializes internally")
 
+        .method("LPop",        &Redis::LPop,       "pops R object to list")
+        .method("RPop",        &Redis::RPop,       "pops R object to list")
+        .method("LPush",      &Redis::LPush,       "prepends R object from left side of list")
+        .method("RPush",      &Redis::RPush,       "appends R object from right side of list")
+
         .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
 
         .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
@@ -680,11 +685,7 @@ RCPP_MODULE(Redis) {
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'GET key object' for a numeric vector")
         .method("listLPop",   &Redis::listLPop,    "pops numeric vector to list")
-        .method("LPop",        &Redis::LPop,       "pops R object to list")
-        .method("RPop",        &Redis::RPop,       "pops R object to list")
         .method("listLPush",  &Redis::listLPush,   "prepends numeric vector to list")
-        .method("LPush",      &Redis::LPush,       "prepends R object to list")
-        .method("RPush",      &Redis::RPush,       "appends R object to list")
         .method("listRPush",  &Redis::listRPush,   "appends numeric vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
         .method("zadd",       &Redis::zadd,        "inserts rows of matrix into sorted set, first value is score, binary")
