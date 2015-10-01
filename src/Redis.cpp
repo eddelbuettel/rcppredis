@@ -54,10 +54,15 @@ private:
     redisContext *prc_;                // private pointer to redis context
 
     // set up a connection to Redis on the given machine and port
-    void init(std::string host="127.0.0.1", int port=6379)  { 
+    void init(std::string host="127.0.0.1", int port=6379, std::string auth="")  { 
+        Rcpp::Rcout << auth;
         prc_ = redisConnect(host.c_str(), port);
         if (prc_->err) 
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
+        else if (auth != "") {
+            redisCommand(prc_, ("AUTH " + auth).c_str());
+            // additional code to grab the response and be sure the AUTH resulted in success?
+        }
     }
 
 
@@ -132,6 +137,7 @@ private:
 
 public:
    
+    Redis(std::string host, int port, std::string auth)  { init(host, port, auth); }
     Redis(std::string host, int port)  { init(host, port); }
     Redis(std::string host)            { init(host);       }
     Redis()                            { init();           }
@@ -645,6 +651,7 @@ RCPP_MODULE(Redis) {
         .constructor("default constructor")  
         .constructor<std::string>("constructor with host port")  
         .constructor<std::string, int>("constructor with host and port")  
+        .constructor<std::string, int, std::string>("constructor with host and port and auth")  
 
         .method("exec", &Redis::exec,  "execute given redis command and arguments")
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
@@ -659,11 +666,6 @@ RCPP_MODULE(Redis) {
         .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
         .method("smembers", &Redis::smembers, "runs 'SMEMBERS key', deserializes internally")
 
-        .method("LPush",      &Redis::LPush,      "prepends R object to list")
-        .method("RPush",      &Redis::RPush,      "appends R object to list")
-        .method("LPop",       &Redis::LPop,       "pops R object from the left side of the list")
-        .method("RPop",       &Redis::RPop,       "pops R object from the right side of the list")
-
         .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
 
         .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
@@ -675,7 +677,11 @@ RCPP_MODULE(Redis) {
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'GET key object' for a numeric vector")
         .method("listLPop",   &Redis::listLPop,    "pops numeric vector to list")
+        .method("LPop",        &Redis::LPop,       "pops R object to list")
+        .method("RPop",        &Redis::RPop,       "pops R object to list")
         .method("listLPush",  &Redis::listLPush,   "prepends numeric vector to list")
+        .method("LPush",      &Redis::LPush,       "prepends R object to list")
+        .method("RPush",      &Redis::RPush,       "appends R object to list")
         .method("listRPush",  &Redis::listRPush,   "appends numeric vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
         .method("zadd",       &Redis::zadd,        "inserts rows of matrix into sorted set, first value is score, binary")
