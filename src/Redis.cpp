@@ -317,7 +317,66 @@ public:
 
     // could create new functions to (re-)connect with given host and port etc pp
 
+    // Some "R-serialization" functions below
+    // redis "lpop from" -- with R serialization
+    SEXP LPop(std::string key) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LPOP %s", key.c_str()));
+
+        int nc = reply->len;
+        Rcpp::RawVector res(nc);
+        memcpy(res.begin(), reply->str, nc);
+        freeReplyObject(reply);
+        SEXP obj = unserializeFromRaw(res);
+        return(obj);
+    }
+  
+  // redis "rpop from" -- with R serialization
+    SEXP RPop(std::string key) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "RPOP %s", key.c_str()));
+
+        int nc = reply->len;
+        Rcpp::RawVector res(nc);
+        memcpy(res.begin(), reply->str, nc);
+        freeReplyObject(reply);
+        SEXP obj = unserializeFromRaw(res);
+        return(obj);
+    }
     
+    // redis "prepend to list" -- with R serialization
+    std::string LPush(std::string key, SEXP s) {
+        
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+      
+      // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LPUSH %s %b", 
+                                                  key.c_str(), x.begin(), x.size()*szdb));
+
+        std::string res = "";
+        freeReplyObject(reply);
+        return(res);
+    }
+  
+      // redis "append to list" -- with R serialization
+    std::string RPush(std::string key, SEXP s) {
+        
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+      
+      // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "RPUSH %s %b", 
+                                                  key.c_str(), x.begin(), x.size()*szdb));
+
+        std::string res = "";
+        freeReplyObject(reply);
+        return(res);
+    }
+  
+  
     // Some "non-R-serialzation" functions below
 
     // used in functions below
@@ -611,7 +670,11 @@ RCPP_MODULE(Redis) {
         .method("setVector",  &Redis::setVector,   "runs 'SET key object' for a numeric vector")
         .method("getVector",  &Redis::getVector,   "runs 'GET key object' for a numeric vector")
         .method("listLPop",   &Redis::listLPop,    "pops numeric vector to list")
+        .method("LPop",        &Redis::LPop,       "pops R object to list")
+        .method("RPop",        &Redis::RPop,       "pops R object to list")
         .method("listLPush",  &Redis::listLPush,   "prepends numeric vector to list")
+        .method("LPush",      &Redis::LPush,       "prepends R object to list")
+        .method("RPush",      &Redis::RPush,       "appends R object to list")
         .method("listRPush",  &Redis::listRPush,   "appends numeric vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
         .method("zadd",       &Redis::zadd,        "inserts rows of matrix into sorted set, first value is score, binary")
