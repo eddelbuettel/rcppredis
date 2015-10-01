@@ -60,8 +60,11 @@ private:
         if (prc_->err) 
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
         else if (auth != "") {
-            redisCommand(prc_, ("AUTH " + auth).c_str());
-            // additional code to grab the response and be sure the AUTH resulted in success?
+          redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
+          if (reply->type == REDIS_REPLY_ERROR) {
+            freeReplyObject(reply);
+            Rcpp::stop(std::string("Redis authentication error."));
+          }
         }
     }
 
