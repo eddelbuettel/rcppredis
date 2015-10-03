@@ -1,3 +1,8 @@
+2015-10-01  Russell Pierce  <russell.s.pierce@gmail.com>
+
+	* src/Redis.cpp: Add support for LPUSH, LPOP, RPUSH, RPOP; also
+	add additional constructor argument to be used for AUTH
+
 2015-07-17  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: New release 0.1.5
