@@ -54,10 +54,18 @@ private:
     redisContext *prc_;                // private pointer to redis context
 
     // set up a connection to Redis on the given machine and port
-    void init(std::string host="127.0.0.1", int port=6379)  { 
+    void init(std::string host="127.0.0.1", int port=6379, std::string auth="")  { 
+        Rcpp::Rcout << auth;
         prc_ = redisConnect(host.c_str(), port);
         if (prc_->err) 
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
+        else if (auth != "") {
+          redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
+          if (reply->type == REDIS_REPLY_ERROR) {
+            freeReplyObject(reply);
+            Rcpp::stop(std::string("Redis authentication error."));
+          }
+        }
     }
 
 
@@ -132,6 +140,7 @@ private:
 
 public:
    
+    Redis(std::string host, int port, std::string auth)  { init(host, port, auth); }
     Redis(std::string host, int port)  { init(host, port); }
     Redis(std::string host)            { init(host);       }
     Redis()                            { init();           }
@@ -317,7 +326,66 @@ public:
 
     // could create new functions to (re-)connect with given host and port etc pp
 
+    // Some "R-serialization" functions below
+    // redis "lpop from" -- with R serialization
+    SEXP LPop(std::string key) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LPOP %s", key.c_str()));
+
+        int nc = reply->len;
+        Rcpp::RawVector res(nc);
+        memcpy(res.begin(), reply->str, nc);
+        freeReplyObject(reply);
+        SEXP obj = unserializeFromRaw(res);
+        return(obj);
+    }
+  
+  // redis "rpop from" -- with R serialization
+    SEXP RPop(std::string key) {
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "RPOP %s", key.c_str()));
+
+        int nc = reply->len;
+        Rcpp::RawVector res(nc);
+        memcpy(res.begin(), reply->str, nc);
+        freeReplyObject(reply);
+        SEXP obj = unserializeFromRaw(res);
+        return(obj);
+    }
     
+    // redis "prepend to list" -- with R serialization
+    std::string LPush(std::string key, SEXP s) {
+        
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+      
+      // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LPUSH %s %b", 
+                                                  key.c_str(), x.begin(), x.size()*szdb));
+
+        std::string res = "";
+        freeReplyObject(reply);
+        return(res);
+    }
+  
+      // redis "append to list" -- with R serialization
+    std::string RPush(std::string key, SEXP s) {
+        
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+      
+      // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "RPUSH %s %b", 
+                                                  key.c_str(), x.begin(), x.size()*szdb));
+
+        std::string res = "";
+        freeReplyObject(reply);
+        return(res);
+    }
+  
+  
     // Some "non-R-serialzation" functions below
 
     // used in functions below
@@ -586,6 +654,7 @@ RCPP_MODULE(Redis) {
         .constructor("default constructor")  
         .constructor<std::string>("constructor with host port")  
         .constructor<std::string, int>("constructor with host and port")  
+        .constructor<std::string, int, std::string>("constructor with host and port and auth")  
 
         .method("exec", &Redis::exec,  "execute given redis command and arguments")
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
@@ -599,6 +668,11 @@ RCPP_MODULE(Redis) {
         .method("sadd",     &Redis::sadd,     "runs 'SADD key member', serializes internally")
         .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
         .method("smembers", &Redis::smembers, "runs 'SMEMBERS key', deserializes internally")
+
+        .method("LPop",        &Redis::LPop,       "pops R object to list")
+        .method("RPop",        &Redis::RPop,       "pops R object to list")
+        .method("LPush",      &Redis::LPush,       "prepends R object from left side of list")
+        .method("RPush",      &Redis::RPush,       "appends R object from right side of list")
 
         .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
 
