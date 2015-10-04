@@ -48,7 +48,12 @@ test_04_treesRRedis <- function() {
     checkEquals(fit, fit4)
 }
 
-test_05_cleanup <- function() {
+test_05_ping <- function() {
+    res <- redis$ping()
+    checkEquals(res, "PONG")
+}
+
+test_06_cleanup <- function() {
     checkEquals(redis$exec("del RcppRedis:test:foo"), 1)
     checkEquals(redis$exec("del RcppRedis:test:foo2"), 1)
 }

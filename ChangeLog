@@ -1,3 +1,9 @@
+2015-10-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: New ping command
+
+	* inst/tests/runit.basicRtests.R (test_05_ping): New test
+
 2015-10-03  Russell Pierce  <russell.s.pierce@gmail.com>
 
 	* src/Redis.cpp: lpush, rpush now return number of elements in list;
