@@ -1,3 +1,9 @@
+2015-10-03  Russell Pierce  <russell.s.pierce@gmail.com>
+
+	* src/Redis.cpp: lpop, rpop now return number of elements left, also
+	check whether null; one more object free'ed at initialization
+	* inst/tests/runit.listTests.R: Added tests for list operations
+
 2015-10-03  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Minor editing to lpop et al addition

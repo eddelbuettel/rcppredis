@@ -5,9 +5,10 @@
 
 \section{Changes in version 0.1.6 (2015-12-01)}{
   \itemize{
-    \item Added support for \code{lpop}, \code{rpop}, \code{lpush},
-    \code{rpush} as well as \code{auth} via augmented constructor
-    (all thanks to PR \ghpr{11} by Russell Pierce)
+    \item Added support (including new unit tests) for \code{lpop},
+    \code{rpop}, \code{lpush}, \code{rpush} as well as \code{auth} via
+    augmented constructor (all thanks to PRs \ghpr{11} and \ghpr{13} by
+    Russell Pierce) 
   }
 }
 
