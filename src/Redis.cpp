@@ -175,6 +175,13 @@ public:
         return(rep);
     }
 
+    // redis ping -- see if server is alive and responding
+    std::string ping(void) {
+        redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, "PING"));
+        std::string res(reply->str);
+        freeReplyObject(reply);
+        return(res);
+    }
 
     // redis set -- serializes to R internal format
     std::string set(std::string key, SEXP s) {
@@ -676,6 +683,7 @@ RCPP_MODULE(Redis) {
         .method("exec", &Redis::exec,  "execute given redis command and arguments")
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
 
+        .method("ping", &Redis::ping,  "runs 'PING' command to test server state")
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
 
