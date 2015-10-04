@@ -64,6 +64,8 @@ private:
             if (reply->type == REDIS_REPLY_ERROR) {
                 freeReplyObject(reply);
                 Rcpp::stop(std::string("Redis authentication error."));
+            } else {
+                freeReplyObject(reply);
             }
         }
     }
