@@ -328,27 +328,42 @@ public:
     // Some "R-serialization" functions below
     // redis "lpop from" -- with R serialization
     SEXP lpop(std::string key) {
+        SEXP obj;
+        std::string res;
+        
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "LPOP %s", key.c_str()));
 
-        int nc = reply->len;
-        Rcpp::RawVector res(nc);
-        memcpy(res.begin(), reply->str, nc);
-        freeReplyObject(reply);
-        SEXP obj = unserializeFromRaw(res);
+        if (replyTypeToInteger(reply) == replyNil_t) {
+            obj = R_NilValue;
+        } else {
+            checkReplyType(reply, replyString_t); // ensure we got string
+            int nc = reply->len;
+            Rcpp::RawVector res(nc);
+            memcpy(res.begin(), reply->str, nc);
+            obj = unserializeFromRaw(res);
+        }
+        
         return(obj);
     }
   
   // redis "rpop from" -- with R serialization
     SEXP rpop(std::string key) {
+        SEXP obj;
+        std::string res;
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "RPOP %s", key.c_str()));
 
-        int nc = reply->len;
-        Rcpp::RawVector res(nc);
-        memcpy(res.begin(), reply->str, nc);
-        freeReplyObject(reply);
-        SEXP obj = unserializeFromRaw(res);
+        if (replyTypeToInteger(reply) == replyNil_t) {
+            obj = R_NilValue;
+        } else {
+            checkReplyType(reply, replyString_t); // ensure we got string
+            int nc = reply->len;
+            Rcpp::RawVector res(nc);
+            memcpy(res.begin(), reply->str, nc);
+            obj = unserializeFromRaw(res);
+        }
+        
         return(obj);
     }
     
