@@ -53,7 +53,7 @@ test_07_rpopnull <- function() {
 }
 
 test_08_cleanup <- function() {
-    ## delete set
+    ## delete key
     n <- redis$exec(paste("del", key))
-    checkEquals(n, 1)
+    checkEquals(n, 0)
 }
