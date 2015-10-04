@@ -55,11 +55,11 @@ private:
 
     // set up a connection to Redis on the given machine and port
     void init(std::string host="127.0.0.1", int port=6379, std::string auth="")  { 
-        Rcpp::Rcout << auth;
         prc_ = redisConnect(host.c_str(), port);
         if (prc_->err) {
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
-        } else if (auth != "") {
+        }
+        if (auth != "") {
             redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
             if (reply->type == REDIS_REPLY_ERROR) {
                 freeReplyObject(reply);
@@ -67,7 +67,6 @@ private:
             }
         }
     }
-
 
     // This function was originally contributed by William Pleasant
     // It switches according to the return type
