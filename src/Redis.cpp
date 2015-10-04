@@ -64,6 +64,8 @@ private:
             if (reply->type == REDIS_REPLY_ERROR) {
                 freeReplyObject(reply);
                 Rcpp::stop(std::string("Redis authentication error."));
+            } else {
+                freeReplyObject(reply);
             }
         }
     }
@@ -328,32 +330,47 @@ public:
     // Some "R-serialization" functions below
     // redis "lpop from" -- with R serialization
     SEXP lpop(std::string key) {
+        SEXP obj;
+        std::string res;
+        
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "LPOP %s", key.c_str()));
 
-        int nc = reply->len;
-        Rcpp::RawVector res(nc);
-        memcpy(res.begin(), reply->str, nc);
-        freeReplyObject(reply);
-        SEXP obj = unserializeFromRaw(res);
+        if (replyTypeToInteger(reply) == replyNil_t) {
+            obj = R_NilValue;
+        } else {
+            checkReplyType(reply, replyString_t); // ensure we got string
+            int nc = reply->len;
+            Rcpp::RawVector res(nc);
+            memcpy(res.begin(), reply->str, nc);
+            obj = unserializeFromRaw(res);
+        }
+        
         return(obj);
     }
   
   // redis "rpop from" -- with R serialization
     SEXP rpop(std::string key) {
+        SEXP obj;
+        std::string res;
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "RPOP %s", key.c_str()));
 
-        int nc = reply->len;
-        Rcpp::RawVector res(nc);
-        memcpy(res.begin(), reply->str, nc);
-        freeReplyObject(reply);
-        SEXP obj = unserializeFromRaw(res);
+        if (replyTypeToInteger(reply) == replyNil_t) {
+            obj = R_NilValue;
+        } else {
+            checkReplyType(reply, replyString_t); // ensure we got string
+            int nc = reply->len;
+            Rcpp::RawVector res(nc);
+            memcpy(res.begin(), reply->str, nc);
+            obj = unserializeFromRaw(res);
+        }
+        
         return(obj);
     }
     
     // redis "prepend to list" -- with R serialization
-    std::string lpush(std::string key, SEXP s) {
+    SEXP lpush(std::string key, SEXP s) {
         
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
@@ -363,13 +380,14 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "LPUSH %s %b", 
                                                   key.c_str(), x.begin(), x.size()*szdb));
 
-        std::string res = "";
+        
+        SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
-        return(res);
+        return(rep);
     }
   
       // redis "append to list" -- with R serialization
-    std::string rpush(std::string key, SEXP s) {
+    SEXP rpush(std::string key, SEXP s) {
         
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
@@ -379,9 +397,9 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "RPUSH %s %b", 
                                                   key.c_str(), x.begin(), x.size()*szdb));
 
-        std::string res = "";
+        SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
-        return(res);
+        return(rep);
     }
   
   
