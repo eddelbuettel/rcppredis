@@ -1,4 +1,8 @@
-2015-10-01  Russell Pierce  <russell.s.pierce@gmail.com>
+2015-10-03  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Minor editing to lpop et al addition
+
+2015-30-09  Russell Pierce  <russell.s.pierce@gmail.com>
 
 	* src/Redis.cpp: Add support for LPUSH, LPOP, RPUSH, RPOP; also
 	add additional constructor argument to be used for AUTH

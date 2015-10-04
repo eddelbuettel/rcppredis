@@ -2,7 +2,7 @@
 //
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2013 - 2014    Dirk Eddelbuettel 
+//  Copyright (C) 2013 - 2015    Dirk Eddelbuettel 
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
 //
@@ -57,14 +57,14 @@ private:
     void init(std::string host="127.0.0.1", int port=6379, std::string auth="")  { 
         Rcpp::Rcout << auth;
         prc_ = redisConnect(host.c_str(), port);
-        if (prc_->err) 
+        if (prc_->err) {
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
-        else if (auth != "") {
-          redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
-          if (reply->type == REDIS_REPLY_ERROR) {
-            freeReplyObject(reply);
-            Rcpp::stop(std::string("Redis authentication error."));
-          }
+        } else if (auth != "") {
+            redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
+            if (reply->type == REDIS_REPLY_ERROR) {
+                freeReplyObject(reply);
+                Rcpp::stop(std::string("Redis authentication error."));
+            }
         }
     }
 
@@ -141,9 +141,9 @@ private:
 public:
    
     Redis(std::string host, int port, std::string auth)  { init(host, port, auth); }
-    Redis(std::string host, int port)  { init(host, port); }
-    Redis(std::string host)            { init(host);       }
-    Redis()                            { init();           }
+    Redis(std::string host, int port)                    { init(host, port);       }
+    Redis(std::string host)                              { init(host);             }
+    Redis()                                              { init();                 }
 
     ~Redis() { 
         redisFree(prc_);
@@ -328,7 +328,7 @@ public:
 
     // Some "R-serialization" functions below
     // redis "lpop from" -- with R serialization
-    SEXP LPop(std::string key) {
+    SEXP lpop(std::string key) {
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "LPOP %s", key.c_str()));
 
@@ -341,7 +341,7 @@ public:
     }
   
   // redis "rpop from" -- with R serialization
-    SEXP RPop(std::string key) {
+    SEXP rpop(std::string key) {
         redisReply *reply = 
             static_cast<redisReply*>(redisCommand(prc_, "RPOP %s", key.c_str()));
 
@@ -354,7 +354,7 @@ public:
     }
     
     // redis "prepend to list" -- with R serialization
-    std::string LPush(std::string key, SEXP s) {
+    std::string lpush(std::string key, SEXP s) {
         
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
@@ -370,7 +370,7 @@ public:
     }
   
       // redis "append to list" -- with R serialization
-    std::string RPush(std::string key, SEXP s) {
+    std::string rpush(std::string key, SEXP s) {
         
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
@@ -669,14 +669,14 @@ RCPP_MODULE(Redis) {
         .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
         .method("smembers", &Redis::smembers, "runs 'SMEMBERS key', deserializes internally")
 
-        .method("LPop",        &Redis::LPop,       "pops R object to list")
-        .method("RPop",        &Redis::RPop,       "pops R object to list")
-        .method("LPush",      &Redis::LPush,       "prepends R object from left side of list")
-        .method("RPush",      &Redis::RPush,       "appends R object from right side of list")
+        .method("lpop",     &Redis::lpop,     "pops and return first R object from list")
+        .method("rpop",     &Redis::rpop,     "pops and return last R object from list")
+        .method("lpush",    &Redis::lpush,    "prepends R object from left side of list")
+        .method("rpush",    &Redis::rpush,    "appends R object to right side of list")
 
-        .method("keys", &Redis::keys,  "runs 'KEYS expr', returns character vector")
+        .method("keys",     &Redis::keys,     "runs 'KEYS expr', returns character vector")
 
-        .method("lrange",  &Redis::lrange,   "runs 'LRANGE key start end' for list")
+        .method("lrange",   &Redis::lrange,   "runs 'LRANGE key start end' for list")
 
         // non-R serialization methods below
         .method("setString",  &Redis::setString,   "runs 'SET key obj' without serialization")
