@@ -353,7 +353,7 @@ public:
     }
     
     // redis "prepend to list" -- with R serialization
-    std::string lpush(std::string key, SEXP s) {
+    SEXP lpush(std::string key, SEXP s) {
         
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
@@ -363,13 +363,14 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "LPUSH %s %b", 
                                                   key.c_str(), x.begin(), x.size()*szdb));
 
-        std::string res = "";
+        
+        SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
-        return(res);
+        return(rep);
     }
   
       // redis "append to list" -- with R serialization
-    std::string rpush(std::string key, SEXP s) {
+    SEXP rpush(std::string key, SEXP s) {
         
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
@@ -379,9 +380,9 @@ public:
             static_cast<redisReply*>(redisCommand(prc_, "RPUSH %s %b", 
                                                   key.c_str(), x.begin(), x.size()*szdb));
 
-        std::string res = "";
+        SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
-        return(res);
+        return(rep);
     }
   
   
