@@ -3,7 +3,7 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/Rcppredis/issue/#1}{##1}}
 
-\section{Changes in version 0.1.6 (2015-12-01)}{
+\section{Changes in version 0.1.6 (2015-10-05)}{
   \itemize{
     \item Added support (including new unit tests) for \code{lpop},
     \code{rpop}, \code{lpush}, \code{rpush} as well as \code{auth} via

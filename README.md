@@ -39,8 +39,8 @@ ways. William Pleasant provided some early patches.
 
 ### Author
 
-Dirk Eddelbuettel, based on earlier work by Wush Wu and with early
-contributions by William Pleasant
+Dirk Eddelbuettel, based on earlier work by Wush Wu and with
+contributions by William Pleasant and Russell Pierce.
 
 ### License
 
