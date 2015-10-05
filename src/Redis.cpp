@@ -42,7 +42,7 @@
 #include <hiredis/hiredis.h>        // we check in configure for this
 
 #include <RApiSerializeAPI.h>   	// provides C API with serialization for R
-
+#include <sys/time.h>               // for struct timeval
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
@@ -54,8 +54,14 @@ private:
     redisContext *prc_;                // private pointer to redis context
 
     // set up a connection to Redis on the given machine and port
-    void init(std::string host="127.0.0.1", int port=6379, std::string auth="")  { 
-        prc_ = redisConnect(host.c_str(), port);
+  void init(std::string host="127.0.0.1", int port=6379, std::string auth="", int timeout=0)  {
+        if (timeout == 0) {
+            prc_ = redisConnect(host.c_str(), port);
+        } else {
+            long microseconds = 0;
+            struct timeval timeoutStruct={timeout, microseconds};
+            prc_ = redisConnectWithTimeout(host.c_str(), port, timeoutStruct);
+        }
         if (prc_->err) {
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
         }
@@ -141,10 +147,11 @@ private:
 
 public:
    
-    Redis(std::string host, int port, std::string auth)  { init(host, port, auth); }
-    Redis(std::string host, int port)                    { init(host, port);       }
-    Redis(std::string host)                              { init(host);             }
-    Redis()                                              { init();                 }
+    Redis(std::string host, int port, std::string auth, int timeout)  { init(host, port, auth, timeout); }
+    Redis(std::string host, int port, std::string auth)               { init(host, port, auth); }
+    Redis(std::string host, int port)                                 { init(host, port);       }
+    Redis(std::string host)                                           { init(host);             }
+    Redis()                                                           { init();                 }
 
     ~Redis() { 
         redisFree(prc_);
@@ -679,7 +686,8 @@ RCPP_MODULE(Redis) {
         .constructor<std::string>("constructor with host port")  
         .constructor<std::string, int>("constructor with host and port")  
         .constructor<std::string, int, std::string>("constructor with host and port and auth")  
-
+        .constructor<std::string, int, std::string, int>("constructor with host and port, auth, and timeout")  
+        
         .method("exec", &Redis::exec,  "execute given redis command and arguments")
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
 
