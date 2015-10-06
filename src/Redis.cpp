@@ -54,12 +54,14 @@ private:
     redisContext *prc_;                // private pointer to redis context
 
     // set up a connection to Redis on the given machine and port
-    void init(std::string host="127.0.0.1", int port=6379, std::string auth="", int timeout=0)  {
+    void init(std::string host="127.0.0.1", int port=6379,
+              std::string auth="", double timeout=0.0)  {
         if (timeout == 0) {
             prc_ = redisConnect(host.c_str(), port);
         } else {
-            long microseconds = 0;
-            struct timeval timeoutStruct={timeout, microseconds};
+            int second = static_cast<int>(timeout);
+            int microseconds = static_cast<int>(1000*(timeout - second));
+            struct timeval timeoutStruct = { timeout, microseconds };
             prc_ = redisConnectWithTimeout(host.c_str(), port, timeoutStruct);
         }
         if (prc_->err) {

@@ -1,6 +1,10 @@
+2015-10-06  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Generalize timeout to fractional seconds
+
 2015-10-06  Russell Pierce  <russell.s.pierce@gmail.com>
 
-  * src/Redis.cpp add additional constructor argument to be used for connecting with timeout
+	* src/Redis.cpp: Add constructor arg for connecting with timeout
 
 2015-10-05  Dirk Eddelbuettel  <edd@debian.org>
 
