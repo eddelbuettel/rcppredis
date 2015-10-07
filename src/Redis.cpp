@@ -35,7 +35,7 @@
 //  
 // We do use 'binary' serialization for faster processing
 //
-// Dirk Eddelbuettel, 2013 - 2014
+// Dirk Eddelbuettel, 2013 - 2015
 
 
 #include <Rcpp.h>
@@ -209,16 +209,21 @@ public:
 
     // redis get -- deserializes from R format
     SEXP get(std::string key) {
+      SEXP obj;
+      redisReply *reply = 
+          static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
 
-        redisReply *reply = 
-            static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
-
-        int nc = reply->len;
-        Rcpp::RawVector res(nc);
-        memcpy(res.begin(), reply->str, nc);
-        freeReplyObject(reply);
-        SEXP obj = unserializeFromRaw(res);
-        return(obj);
+      if (replyTypeToInteger(reply) == replyNil_t) {
+            obj = R_NilValue;
+      } else {
+          int nc = reply->len;
+          Rcpp::RawVector res(nc);
+          memcpy(res.begin(), reply->str, nc);
+          freeReplyObject(reply);
+          obj = unserializeFromRaw(res);
+      }
+      freeReplyObject(reply);
+      return(obj);
     }
 
     // redis set -- serializes to R internal format
