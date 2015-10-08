@@ -325,10 +325,10 @@ public:
                                                   key.c_str(), start, end));
 
         unsigned int len = reply->elements;
-        Rcpp::Rcout << "Seeing " << len << " elements\n";
+        //Rcpp::Rcout << "Seeing " << len << " elements\n";
         Rcpp::List x(len);
         for (unsigned int i = 0; i < len; i++) {
-            Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
+            //Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
             int nc = reply->element[i]->len;
             Rcpp::RawVector res(nc);
             memcpy(res.begin(), reply->element[i]->str, nc);
