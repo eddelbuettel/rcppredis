@@ -56,7 +56,7 @@ private:
     // set up a connection to Redis on the given machine and port
     void init(std::string host="127.0.0.1", int port=6379,
               std::string auth="", double timeout=0.0)  {
-        if (timeout == 0) {
+        if (timeout == 0.0) {   // icky float equality
             prc_ = redisConnect(host.c_str(), port);
         } else {
             int second = static_cast<int>(timeout);
@@ -68,13 +68,13 @@ private:
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
         }
         if (auth != "") {
-            redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
+            redisReply *reply =
+                static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
             if (reply->type == REDIS_REPLY_ERROR) {
                 freeReplyObject(reply);
                 Rcpp::stop(std::string("Redis authentication error."));
-            } else {
-                freeReplyObject(reply);
             }
+            freeReplyObject(reply);
         }
     }
 
