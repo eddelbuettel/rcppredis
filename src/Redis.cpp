@@ -61,7 +61,7 @@ private:
         } else {
             int second = static_cast<int>(timeout);
             int microseconds = static_cast<int>(1000000*(timeout - second));
-            struct timeval timeoutStruct = { timeout, microseconds };
+            struct timeval timeoutStruct = { second, microseconds };
             prc_ = redisConnectWithTimeout(host.c_str(), port, timeoutStruct);
         }
         if (prc_->err) {
