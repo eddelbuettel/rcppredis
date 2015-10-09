@@ -219,7 +219,6 @@ public:
           int nc = reply->len;
           Rcpp::RawVector res(nc);
           memcpy(res.begin(), reply->str, nc);
-          freeReplyObject(reply);
           obj = unserializeFromRaw(res);
       }
       freeReplyObject(reply);
