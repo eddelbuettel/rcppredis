@@ -56,25 +56,25 @@ private:
     // set up a connection to Redis on the given machine and port
     void init(std::string host="127.0.0.1", int port=6379,
               std::string auth="", double timeout=0.0)  {
-        if (timeout == 0) {
+        if (timeout == 0.0) {   // icky float equality
             prc_ = redisConnect(host.c_str(), port);
         } else {
             int second = static_cast<int>(timeout);
             int microseconds = static_cast<int>(1000000*(timeout - second));
-            struct timeval timeoutStruct = { timeout, microseconds };
+            struct timeval timeoutStruct = { second, microseconds };
             prc_ = redisConnectWithTimeout(host.c_str(), port, timeoutStruct);
         }
         if (prc_->err) {
             Rcpp::stop(std::string("Redis connection error: ") + std::string(prc_->errstr));
         }
         if (auth != "") {
-            redisReply *reply = static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
+            redisReply *reply =
+                static_cast<redisReply*>(redisCommand(prc_, ("AUTH " + auth).c_str()));
             if (reply->type == REDIS_REPLY_ERROR) {
                 freeReplyObject(reply);
                 Rcpp::stop(std::string("Redis authentication error."));
-            } else {
-                freeReplyObject(reply);
             }
+            freeReplyObject(reply);
         }
     }
 
@@ -329,10 +329,10 @@ public:
                                                   key.c_str(), start, end));
 
         unsigned int len = reply->elements;
-        Rcpp::Rcout << "Seeing " << len << " elements\n";
+        //Rcpp::Rcout << "Seeing " << len << " elements\n";
         Rcpp::List x(len);
         for (unsigned int i = 0; i < len; i++) {
-            Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
+            //Rcpp::Rcout << "  Seeing size " << reply->element[i]->len << "\n";
             int nc = reply->element[i]->len;
             Rcpp::RawVector res(nc);
             memcpy(res.begin(), reply->element[i]->str, nc);
