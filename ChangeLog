@@ -1,3 +1,7 @@
+2015-10-15  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/NEWS.Rd: Correct URL for GitHub issues
+
 2015-10-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Generalize timeout to fractional seconds
