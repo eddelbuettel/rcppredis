@@ -2,6 +2,8 @@
 
   * src/Redis.cpp:  Add support for exists
   * src/Redis.cpp:  Add support for ltrim
+  * src/Redis.cpp:  Add support for expire
+  * src/Redis.cpp:  Add support for pexpire
   
 2015-10-06  Dirk Eddelbuettel  <edd@debian.org>
 

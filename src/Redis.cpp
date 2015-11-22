@@ -200,11 +200,17 @@ public:
         return(exec("EXISTS " + key));
     }
   
-    // redis expire -- expire key after integer seconds
-    SEXP expire(std::string key, int seconds) {
-        return(exec("EXPIRE " + key + " " + boost::lexical_cast<std::string>(seconds)));
+    // redis expire -- expire key after numeric seconds, use expire and round
+    SEXP expire(std::string key, double seconds) {
+        int i_seconds = (int)(seconds + 0.5);
+        return(exec("EXPIRE " + key + " " + boost::lexical_cast<std::string>(i_seconds)));
     }
   
+    // redis pexpire -- expire key after numeric milliseconds, use pexpire and round
+    SEXP pexpire(std::string key, double milliseconds) {
+        int i_milliseconds = (int)(milliseconds + 0.5);
+        return(exec("PEXPIRE " + key + " " + boost::lexical_cast<std::string>(i_milliseconds)));
+    }
 
     // redis set -- serializes to R internal format
     std::string set(std::string key, SEXP s) {
@@ -723,7 +729,8 @@ RCPP_MODULE(Redis) {
 
         .method("ping", &Redis::ping,  "runs 'PING' command to test server state")
         .method("exists", &Redis::exists,  "runs 'EXISTS' command to count the number of specified keys present")
-        .method("expire", &Redis::expire,  "runs 'EXPIRE' command to expire the key after a set number of seconds")
+        .method("expire", &Redis::expire,  "runs 'EXPIRE' command to expire the key after a given number of seconds")
+        .method("pexpire", &Redis::pexpire,  "runs 'PEXPIRE' command to expire the key after a given number of milliseconds")
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
 
