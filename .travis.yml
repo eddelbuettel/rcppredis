@@ -24,7 +24,7 @@ before_install:
   - sudo apt-get update -q
 
 install:
-  - ./travis-tool.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp
+  - ./travis-tool.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp r-cran-bh
   - ./travis-tool.sh install_r RApiSerialize rredis
 
 script: 
