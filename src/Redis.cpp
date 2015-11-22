@@ -1,3 +1,4 @@
+// [[Rcpp::depends(BH)]]
 // -*- indent-tabs-mode: nil; tab-width: 4; c-indent-level: 4; c-basic-offset: 4; -*-
 //
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
@@ -43,6 +44,8 @@
 
 #include <RApiSerializeAPI.h>   	// provides C API with serialization for R
 #include <sys/time.h>               // for struct timeval
+
+#include <boost/lexical_cast.hpp> 
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
@@ -196,6 +199,12 @@ public:
     SEXP exists(std::string key) {
         return(exec("EXISTS " + key));
     }
+  
+    // redis expire -- expire key after integer seconds
+    SEXP expire(std::string key, int seconds) {
+        return(exec("EXPIRE " + key + " " + boost::lexical_cast<std::string>(seconds)));
+    }
+  
 
     // redis set -- serializes to R internal format
     std::string set(std::string key, SEXP s) {
@@ -714,6 +723,7 @@ RCPP_MODULE(Redis) {
 
         .method("ping", &Redis::ping,  "runs 'PING' command to test server state")
         .method("exists", &Redis::exists,  "runs 'EXISTS' command to count the number of specified keys present")
+        .method("expire", &Redis::expire,  "runs 'EXPIRE' command to expire the key after a set number of seconds")
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
 
