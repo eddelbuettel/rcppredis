@@ -191,6 +191,11 @@ public:
         freeReplyObject(reply);
         return(res);
     }
+  
+    // redis exists -- get the number of keys matching the request
+    SEXP exists(std::string key) {
+        return(exec("EXISTS " + key));
+    }
 
     // redis set -- serializes to R internal format
     std::string set(std::string key, SEXP s) {
@@ -321,6 +326,16 @@ public:
         return(vec);
     }
 
+    // redis ltrim: trim list so that it contains only the range of elements specified
+     SEXP ltrim(std::string key, int start, int end) {
+
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LTRIM %s %d %d", 
+                                                  key.c_str(), start, end));
+        SEXP rep = extract_reply(reply);
+        return(rep);
+    } 
+  
     // redis lrange: get list from start to end -- with R serialization
     Rcpp::List lrange(std::string key, int start, int end) {
 
@@ -698,6 +713,7 @@ RCPP_MODULE(Redis) {
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
 
         .method("ping", &Redis::ping,  "runs 'PING' command to test server state")
+        .method("exists", &Redis::exists,  "runs 'EXISTS' command to count the number of specified keys present")
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
 
@@ -716,6 +732,7 @@ RCPP_MODULE(Redis) {
         .method("keys",     &Redis::keys,     "runs 'KEYS expr', returns character vector")
 
         .method("lrange",   &Redis::lrange,   "runs 'LRANGE key start end' for list")
+        .method("ltrim",    &Redis::ltrim,    "runs 'LTRIM key start end' for list")
 
         // non-R serialization methods below
         .method("setString",  &Redis::setString,   "runs 'SET key obj' without serialization")

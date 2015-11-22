@@ -1,3 +1,8 @@
+2015-11-22  Russell Pierce <russell.s.pierce@gmail.com>
+
+  * src/Redis.cpp:  Add support for exists
+  * src/Redis.cpp:  Add support for ltrim
+  
 2015-10-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Generalize timeout to fractional seconds
