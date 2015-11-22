@@ -25,8 +25,7 @@ before_install:
   - ./travis-tool.sh bootstrap
 
 install:
-  - ./travis-tool.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp r-cran-bh
-  - ./travis-tool.sh install_r RApiSerialize rredis
+  - ./travis-tool.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp r-cran-bh r-cran-rapiserialize r-cran-rredis
 
 script: 
   - ./travis-tool.sh run_tests
