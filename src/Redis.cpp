@@ -230,7 +230,7 @@ public:
       return(obj);
     }
 
-    // redis set -- serializes to R internal format
+    // redis hset -- serializes to R internal format
     int hset(std::string key, std::string field, SEXP s) {
 
         // if raw, use as is else serialize to raw
@@ -247,7 +247,7 @@ public:
         return(res);
     }
 
-    // redis get -- deserializes from R format
+    // redis hget -- deserializes from R format
     SEXP hget(std::string key, std::string field) {
 
         redisReply *reply =
