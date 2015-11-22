@@ -11,6 +11,6 @@ SystemRequirements: The hiredis library (eg via package libhiredis-dev on
   Debian/Ubuntu, hiredis-devel on Fedora/RedHat, or directly from source 
   from https://github.com/redis/hiredis)
 License: GPL (>= 2)
-Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
+Imports: methods, Rcpp (>= 0.11.0), RApiSerialize, BH
 LinkingTo: Rcpp, RApiSerialize
 Suggests: rredis, RUnit
