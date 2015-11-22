@@ -1,13 +1,14 @@
 2015-11-22  Russell Pierce <russell.s.pierce@gmail.com>
 
-  * src/Redis.cpp:  Add support for exists
-  * src/Redis.cpp:  Add support for ltrim
-  * src/Redis.cpp:  Add support for expire
-  * src/Redis.cpp:  Add support for pexpire
-  * src/Redis.cpp:  Return NULL if key empty with serialized get for consistency with lpop and rpop
-  * src/Redis.cpp:  Removed extraneous free from get
-  * src/Redis.cpp:  Minor correction to comments on hget and hset
-  
+	* src/Redis.cpp:  Add support for exists
+	* src/Redis.cpp:  Add support for ltrim
+	* src/Redis.cpp:  Add support for expire
+	* src/Redis.cpp:  Add support for pexpire
+	* src/Redis.cpp: Return NULL if key empty with serialized get for
+	consistency with lpop and rpop
+	* src/Redis.cpp:  Removed extraneous free from get
+	* src/Redis.cpp: Minor correction to comments on hget and hset
+
 2015-10-15  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/NEWS.Rd: Correct URL for GitHub issues
