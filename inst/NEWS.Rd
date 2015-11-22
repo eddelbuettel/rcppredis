@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package \pkg{RcppRedis}}
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
-\newcommand{\ghit}{\href{https://github.com/eddelbuettel/Rcppredis/issue/#1}{##1}}
+\newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
 \section{Changes in version 0.1.7 (2015-12-31)}{
   \itemize{
