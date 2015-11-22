@@ -12,5 +12,5 @@ SystemRequirements: The hiredis library (eg via package libhiredis-dev on
   from https://github.com/redis/hiredis)
 License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
-LinkingTo: Rcpp, RApiSerialize
+LinkingTo: Rcpp, RApiSerialize, BH
 Suggests: rredis, RUnit

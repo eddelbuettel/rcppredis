@@ -1,3 +1,4 @@
+// [[Rcpp::depends(BH)]]
 // -*- indent-tabs-mode: nil; tab-width: 4; c-indent-level: 4; c-basic-offset: 4; -*-
 //
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
@@ -35,7 +36,7 @@
 //  
 // We do use 'binary' serialization for faster processing
 //
-// Dirk Eddelbuettel, 2013 - 2014
+// Dirk Eddelbuettel, 2013 - 2015
 
 
 #include <Rcpp.h>
@@ -43,6 +44,8 @@
 
 #include <RApiSerializeAPI.h>   	// provides C API with serialization for R
 #include <sys/time.h>               // for struct timeval
+
+#include <boost/lexical_cast.hpp> 
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
@@ -191,6 +194,23 @@ public:
         freeReplyObject(reply);
         return(res);
     }
+  
+    // redis exists -- get the number of keys matching the request
+    SEXP exists(std::string key) {
+        return(exec("EXISTS " + key));
+    }
+  
+    // redis expire -- expire key after numeric seconds, use expire and round
+    SEXP expire(std::string key, double seconds) {
+        int i_seconds = (int)(seconds + 0.5);
+        return(exec("EXPIRE " + key + " " + boost::lexical_cast<std::string>(i_seconds)));
+    }
+  
+    // redis pexpire -- expire key after numeric milliseconds, use pexpire and round
+    SEXP pexpire(std::string key, double milliseconds) {
+        int i_milliseconds = (int)(milliseconds + 0.5);
+        return(exec("PEXPIRE " + key + " " + boost::lexical_cast<std::string>(i_milliseconds)));
+    }
 
     // redis set -- serializes to R internal format
     std::string set(std::string key, SEXP s) {
@@ -209,19 +229,23 @@ public:
 
     // redis get -- deserializes from R format
     SEXP get(std::string key) {
+      SEXP obj;
+      redisReply *reply = 
+          static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
 
-        redisReply *reply = 
-            static_cast<redisReply*>(redisCommand(prc_, "GET %s", key.c_str()));
-
-        int nc = reply->len;
-        Rcpp::RawVector res(nc);
-        memcpy(res.begin(), reply->str, nc);
-        freeReplyObject(reply);
-        SEXP obj = unserializeFromRaw(res);
-        return(obj);
+      if (replyTypeToInteger(reply) == replyNil_t) {
+            obj = R_NilValue;
+      } else {
+          int nc = reply->len;
+          Rcpp::RawVector res(nc);
+          memcpy(res.begin(), reply->str, nc);
+          obj = unserializeFromRaw(res);
+      }
+      freeReplyObject(reply);
+      return(obj);
     }
 
-    // redis set -- serializes to R internal format
+    // redis hset -- serializes to R internal format
     int hset(std::string key, std::string field, SEXP s) {
 
         // if raw, use as is else serialize to raw
@@ -238,7 +262,7 @@ public:
         return(res);
     }
 
-    // redis get -- deserializes from R format
+    // redis hget -- deserializes from R format
     SEXP hget(std::string key, std::string field) {
 
         redisReply *reply =
@@ -317,6 +341,16 @@ public:
         return(vec);
     }
 
+    // redis ltrim: trim list so that it contains only the range of elements specified
+     SEXP ltrim(std::string key, int start, int end) {
+
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommand(prc_, "LTRIM %s %d %d", 
+                                                  key.c_str(), start, end));
+        SEXP rep = extract_reply(reply);
+        return(rep);
+    } 
+  
     // redis lrange: get list from start to end -- with R serialization
     Rcpp::List lrange(std::string key, int start, int end) {
 
@@ -694,6 +728,9 @@ RCPP_MODULE(Redis) {
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
 
         .method("ping", &Redis::ping,  "runs 'PING' command to test server state")
+        .method("exists", &Redis::exists,  "runs 'EXISTS' command to count the number of specified keys present")
+        .method("expire", &Redis::expire,  "runs 'EXPIRE' command to expire the key after a given number of seconds")
+        .method("pexpire", &Redis::pexpire,  "runs 'PEXPIRE' command to expire the key after a given number of milliseconds")
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
 
@@ -712,6 +749,7 @@ RCPP_MODULE(Redis) {
         .method("keys",     &Redis::keys,     "runs 'KEYS expr', returns character vector")
 
         .method("lrange",   &Redis::lrange,   "runs 'LRANGE key start end' for list")
+        .method("ltrim",    &Redis::ltrim,    "runs 'LTRIM key start end' for list")
 
         // non-R serialization methods below
         .method("setString",  &Redis::setString,   "runs 'SET key obj' without serialization")

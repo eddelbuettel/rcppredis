@@ -52,7 +52,18 @@ test_07_rpopnull <- function() {
     checkEquals(res, NULL)
 }
 
-test_08_cleanup <- function() {
+test_08_ltrim <- function() {
+    #try to trim a list
+    redis$lpush(key, 1)
+    redis$lpush(key, 2)
+    redis$lpush(key, 3)
+    redis$ltrim(key, 0, 1)
+    res <- redis$lrange(key, 0, 100)
+    checkEquals(res,list(3,2))
+    redis$exec(paste("del", key))
+}
+
+test_09_cleanup <- function() {
     ## delete key
     n <- redis$exec(paste("del", key))
     checkEquals(n, 0)
