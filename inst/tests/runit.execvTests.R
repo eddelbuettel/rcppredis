@@ -1,4 +1,3 @@
-library(assertthat)
 test_01_setup <- function() {
     suppressMessages(library(RcppRedis))
     redis <<- new(Redis)
