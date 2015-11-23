@@ -14,7 +14,9 @@
     consistency with \code{lpop} and \code{rpop} (also PR \ghpr{16} by Russell
     Pierce)
     \item Minor corrections to \code{get} code and \code{hget} and
-    \code{hset} documentation. 
+    \code{hset} documentation (also PR \ghpr{16} by Russell Pierce)
+    \item Error conditions are now properly forwarded as R errors (PR
+    \ghpr{22} by Russell Pierce) 
   }
 }
 
