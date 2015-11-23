@@ -14,7 +14,7 @@ test_02_execv <- function() {
 }
 
 test_03_execvError <- function() {
-  checkException(redis$execv(c("LRANGE mylist 0 elephant")))
+	checkException(redis$execv(c("LRANGE mylist 0 elephant")))
 }
 
 test_04_cleanup <- function() {
