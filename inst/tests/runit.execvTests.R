@@ -1,3 +1,4 @@
+library(assertthat)
 test_01_setup <- function() {
     suppressMessages(library(RcppRedis))
     redis <<- new(Redis)
@@ -13,7 +14,11 @@ test_02_execv <- function() {
     checkEquals(res, val)
 }
 
-test_03_cleanup <- function() {
+test_03_execvError <- function() {
+  checkException(redis$execv(c("LRANGE mylist 0 elephant")))
+}
+
+test_04_cleanup <- function() {
     ## delete set
     n <- redis$execv(c("del", key))
     checkEquals(n, 1)

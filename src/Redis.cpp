@@ -87,8 +87,11 @@ private:
         switch(reply->type) {
         case REDIS_REPLY_STRING:
         case REDIS_REPLY_STATUS: 
-        case REDIS_REPLY_ERROR: {
             return Rcpp::wrap(std::string(reply->str));
+        case REDIS_REPLY_ERROR: {
+            std::string errorMessage = std::string(reply->str);
+            freeReplyObject(reply);
+            Rcpp::stop(errorMessage);
         }
         case REDIS_REPLY_INTEGER: {
             // cast to double to avoid INT_MAX overflow

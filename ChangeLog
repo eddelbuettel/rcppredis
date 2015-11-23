@@ -1,3 +1,7 @@
+2015-11-23  Russell Pierce <russell.s.pierce@gmail.com>
+
+  * src/Redis.cpp:  exec and execv now pass errors forward from redis as errors rather than text strings
+
 2015-11-22  Russell Pierce <russell.s.pierce@gmail.com>
 
   * src/Redis.cpp:  Add support for exists
