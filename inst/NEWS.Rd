@@ -7,6 +7,14 @@
   \itemize{
     \item Added support for \code{timeout} constructor argument (PR \ghpr{14} by
     Russell Pierce)
+    \item Added new commands \code{exists}, \code{ltrim}, \code{expire} and
+    \code{pexpire} along with unit tests (PR \ghpr{16} by Russell
+    Pierce)
+    \item Return \code{NULL} for empty keys in serialized \code{get} for
+    consistency with \code{lpop} and \code{rpop} (also PR \ghpr{16} by Russell
+    Pierce)
+    \item Minor corrections to \code{get} code and \code{hget} and
+    \code{hset} documentation. 
   }
 }
 

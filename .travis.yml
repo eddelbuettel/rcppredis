@@ -17,15 +17,15 @@ services:
   - redis-server
 
 before_install:
+  ## PPA for Rcpp and some other packages
+  - sudo add-apt-repository -y ppa:edd/misc
+  ## r-travis by Craig Citro et al
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  - sudo add-apt-repository -y ppa:edd/misc
-  - sudo apt-get update -q
 
 install:
-  - ./travis-tool.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp r-cran-bh
-  - ./travis-tool.sh install_r RApiSerialize rredis
+  - ./travis-tool.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp r-cran-bh r-cran-rapiserialize r-cran-rredis
 
 script: 
   - ./travis-tool.sh run_tests

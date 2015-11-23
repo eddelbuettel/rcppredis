@@ -2,6 +2,11 @@
 
   * src/Redis.cpp:  exec and execv now pass errors forward from redis as errors rather than text strings
 
+2015-11-22  Dirk Eddelbuettel  <edd@debian.org>
+
+  * .travis.yml: Add r-cran-bh, also add r-cran-rapiserialize (after
+	adding it to my PPA) and r-cran-rredis; all depends are in deb now
+
 2015-11-22  Russell Pierce <russell.s.pierce@gmail.com>
 
   * src/Redis.cpp:  Add support for exists
@@ -11,7 +16,7 @@
   * src/Redis.cpp:  Return NULL if key empty with serialized get for consistency with lpop and rpop
   * src/Redis.cpp:  Removed extraneous free from get
   * src/Redis.cpp:  Minor correction to comments on hget and hset
-  
+
 2015-10-15  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/NEWS.Rd: Correct URL for GitHub issues
