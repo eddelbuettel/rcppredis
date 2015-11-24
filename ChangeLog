@@ -1,5 +1,12 @@
 2015-11-23  Russell Pierce <russell.s.pierce@gmail.com>
 
+  * src/Redis.cpp: minor change to ping to use extract_reply
+  * inst/tests/runit.serverIssues.R: Checks both the AUTH code and the ability
+  to throw and R error rather than a segfault on loss of server
+	* src/Redis.cpp: Added nullReplyCheck, redisCommandNULLSafe, and 
+  redisCommandArgvNULLSafe as internal functions to handle at least some 
+  connection losses more gracefully (produce an R error rather than a 
+  segfault); refactored throughout to use new functions
 	* src/Redis.cpp: exec and execv now pass errors forward from redis as
 	errors rather than text strings
 	* inst/tests/runit.execTests.R: add tests for exec
