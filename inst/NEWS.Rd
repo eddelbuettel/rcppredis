@@ -17,6 +17,9 @@
     \code{hset} documentation (also PR \ghpr{16} by Russell Pierce)
     \item Error conditions are now properly forwarded as R errors (PR
     \ghpr{22} by Russell Pierce) 
+    \item Results from Redis commands are now checked for \code{NULL} (PR
+    \ghpr{23} by Russell Pierce) 
+
   }
 }
 
