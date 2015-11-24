@@ -9,7 +9,8 @@ test_01_setup <- function() {
 
 test_02_testUnauth <- function () {
   redis <<- new(RcppRedis::Redis, "localhost", 7777, auth = "", 10)
-  checkException(redis$ping(), "ERR operation not permitted")
+  # we expect an exception because we haven't send the password
+  checkException(redis$ping())
 }
 
 test_03_testAuth <- function () {
