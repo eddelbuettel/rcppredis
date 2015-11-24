@@ -214,11 +214,11 @@ public:
     }
 
     // redis ping -- see if server is alive and responding
-    std::string ping(void) {
+    SEXP ping(void) {
         redisReply *reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PING"));
-        std::string res(reply->str);
+        SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
-        return(res);
+        return(rep);
     }
   
     // redis exists -- get the number of keys matching the request
