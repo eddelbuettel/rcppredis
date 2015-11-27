@@ -6,6 +6,7 @@
 //  Copyright (C) 2013 - 2015    Dirk Eddelbuettel 
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
+//  Portions Copyright (C) 2015  Russell S. Pierce
 //
 //  This file is part of RcppRedis
 //
