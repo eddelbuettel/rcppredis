@@ -80,7 +80,9 @@ private:
             freeReplyObject(reply);
         }
     }
-
+    
+    // could create new functions to (re-)connect with given host and port etc pp
+    
     void nullReplyCheck(redisReply *reply) {
         if (reply == NULL) {
             Rcpp::stop("Recieved NULL reply; potential connection loss with Redis");
@@ -133,7 +135,7 @@ private:
     }
     
     // for vector results (of any type), fill a list (as a list type can contain
-    // different basuc types and we switch later over these
+    // different basic types and we switch later over these
     Rcpp::List extract_array(redisReply *node) {
         Rcpp::List retlist(node->elements);
         for(unsigned int i = 0;i < node->elements;i++) {
@@ -399,9 +401,6 @@ public:
         freeReplyObject(reply);
         return(x);
     }
-
-
-    // could create new functions to (re-)connect with given host and port etc pp
 
     // Some "R-serialization" functions below
     // redis "lpop from" -- with R serialization
