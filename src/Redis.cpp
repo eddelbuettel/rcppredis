@@ -48,7 +48,9 @@
 
 #include <boost/lexical_cast.hpp> 
 
+#ifdef HAVE_MSGPACK
 #include <msgpack.hpp>
+#endif
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
