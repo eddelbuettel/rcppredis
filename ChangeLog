@@ -1,3 +1,8 @@
+2016-03-30  Dirk Eddelbuettel  <edd@debian.org>
+
+	* configure.ac: Check for RcppMsgPack and set the include path as
+	well as a define if found
+
 2016-02-12  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp (RCPP_MODULE): Basic MsgPack data getter,
