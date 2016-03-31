@@ -1,4 +1,4 @@
-## RcppRedis [![Build Status](https://travis-ci.org/eddelbuettel/rcppredis.svg)](https://travis-ci.org/eddelbuettel/rcppredis) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppRedis)](http://cran.rstudio.com/package=RcppRedis) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppRedis?color=brightgreen)](http://www.r-pkg.org/pkg/RcppRedis)
+## RcppRedis [![Build Status](https://travis-ci.org/eddelbuettel/rcppredis.svg)](https://travis-ci.org/eddelbuettel/rcppredis) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppRedis)](https://cran.r-project.org/package=RcppRedis) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppRedis?color=brightgreen)](http://www.r-pkg.org/pkg/RcppRedis)
 
 RcppRedis is a Rcpp and hiredis based Redis client for R 
 
@@ -19,6 +19,12 @@ in `/usr/local/include` whereas we generally assume a location within a
 `hiredis` directory, eg `/usr/local/include/hiredis/hiredis.h`. This
 [gist](https://gist.github.com/romainfrancois/e70e6c49fdda9172b644) shows a
 successfull OS X installation via homebrew.
+
+MsgPack support is optional. If the [RcppMsgPack](https://github.com/eddelbuettel/rcppmsgpack) package is
+found during compilation, some optional [MessagePack](http://msgpack.org/index.html) functionality is made
+available too. [RcppMsgPack](https://github.com/eddelbuettel/rcppmsgpack) can be installed from the
+[ghrr drat](http://ghrr.github.io/drat/). 
+
 
 ### Getting Started
 

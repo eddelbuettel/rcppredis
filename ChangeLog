@@ -1,7 +1,21 @@
+2016-03-31  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Roll minor version to 0.1.6.5
+
+	* README.md: Mention RcppMsgPack for optional support
+
 2016-03-30  Dirk Eddelbuettel  <edd@debian.org>
 
 	* configure.ac: Check for RcppMsgPack and set the include path as
 	well as a define if found
+
+2016-03-28  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Description): Mention RcppMsgPack
+
+2016-03-23  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: New llen() function to length of lists
 
 2016-02-12  Dirk Eddelbuettel  <edd@debian.org>
 
