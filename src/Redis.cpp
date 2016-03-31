@@ -411,6 +411,16 @@ public:
         return(x);
     }
 
+    // redis llen: get list length
+    double llen(std::string key) {
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LLEN %s", key.c_str()));
+        checkReplyType(reply, replyInteger_t); // ensure we got int
+        double res = static_cast<double>(reply->integer); // a 'long long' would overflow int
+        freeReplyObject(reply);
+        return(res);
+    }
+
     // Some "R-serialization" functions below
     // redis "lpop from" -- with R serialization
     SEXP lpop(std::string key) {
@@ -834,6 +844,7 @@ RCPP_MODULE(Redis) {
         .method("keys",     &Redis::keys,     "runs 'KEYS expr', returns character vector")
 
         .method("lrange",   &Redis::lrange,   "runs 'LRANGE key start end' for list")
+        .method("llen",     &Redis::llen,     "runs 'LLEN key' for list")
         .method("ltrim",    &Redis::ltrim,    "runs 'LTRIM key start end' for list")
 
         // non-R serialization methods below
