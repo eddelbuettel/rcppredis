@@ -1,3 +1,12 @@
+2016-04-24  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Suggests): Add RcppMsgPack
+	(Additional_repositories): Point to ghrr drat repo
+	(Version): Roll minor version
+
+	* configure.ac: Minor tweaks
+	* configure: Ditto
+
 2016-03-31  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Roll minor version to 0.1.6.5

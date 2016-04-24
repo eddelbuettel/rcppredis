@@ -59,19 +59,18 @@ CXXFLAGS="${hiredis_cxxflags} ${CXXFLAGS}"
 ## check for headers Debian has in libhiredis-dev
 hiredis_header=hiredis/hiredis.h
 hiredis_header_cache_var=AS_TR_SH([ac_cv_header_$hiredis_header])
-AC_CHECK_HEADER([$hiredis_header],,
-                [       
-		# If it didn't work, try adding /usr/local directly then trying again
-		AC_MSG_WARN([Hiredis headers not found with via default CXXFLAGS and CPPFLAGS, trying /usr/local/include])
-		CPPFLAGS="${hiredis_cxxflags} ${CPPFLAGS} -I/usr/local/include"
-		CXXFLAGS="${hiredis_cxxflags} ${CXXFLAGS} -I/usr/local/include -L/usr/local/lib"
-		# unset the cache variable for this particular header check
-		# so we can check again with different defaults specified.
-		AC_MSG_WARN([Unsetting $hiredis_header_cache_var])
-		AS_UNSET([$hiredis_header_cache_var])
-		AC_CHECK_HEADER([$hiredis_header],,
-		[AC_MSG_ERROR([ERROR: hiredis headers required; use '-Iincludedir' in CXXFLAGS for unusual locations.])])
-		])
+AC_CHECK_HEADER([$hiredis_header],,[       
+    # If it didn't work, try adding /usr/local directly then trying again
+    AC_MSG_WARN([Hiredis headers not found with via default CXXFLAGS and CPPFLAGS, trying /usr/local/include])
+    CPPFLAGS="${hiredis_cxxflags} ${CPPFLAGS} -I/usr/local/include"
+    CXXFLAGS="${hiredis_cxxflags} ${CXXFLAGS} -I/usr/local/include -L/usr/local/lib"
+    # unset the cache variable for this particular header check
+    # so we can check again with different defaults specified.
+    AC_MSG_WARN([Unsetting $hiredis_header_cache_var])
+    AS_UNSET([$hiredis_header_cache_var])
+    AC_CHECK_HEADER([$hiredis_header],,
+    [AC_MSG_ERROR([ERROR: hiredis headers required; use '-Iincludedir' in CXXFLAGS for unusual locations.])])
+])
 
 ## could check for minimal suitable version here
 
@@ -88,7 +87,7 @@ fi
 AC_MSG_CHECKING([for RcppMsgPack])
 
 ## Check if R has RcppMsgPack, and if so, of sufficient vintage
-$("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.1.4.0" else FALSE)')
+$("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.1.0" else FALSE)')
 if test x"$?" == x"1"; then
     AC_MSG_RESULT([yes])
     msgpackincdir=$("${R_HOME}/bin/Rscript" --vanilla -e 'cat(system.file("include", package="RcppMsgPack"))')
