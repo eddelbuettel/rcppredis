@@ -2,7 +2,7 @@
 //
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2013 - 2015    Dirk Eddelbuettel 
+//  Copyright (C) 2013 - 2016    Dirk Eddelbuettel 
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
 //  Portions Copyright (C) 2015  Russell S. Pierce
@@ -716,7 +716,6 @@ public:
             checkReplyType(reply, replyInteger_t); // ensure we got array
             res[i] = static_cast<double>(reply->integer); // a 'long long' would overflow int
             freeReplyObject(reply);
-            Rcpp::Rcout << key << " -- " << i << " -- " << res[i] << std::endl;
         }
         return(res);
     }
