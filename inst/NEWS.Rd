@@ -3,7 +3,7 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
-\section{Changes in version 0.1.7 (2015-12-31)}{
+\section{Changes in version 0.1.7 (2016-04-27)}{
   \itemize{
     \item Added support for \code{timeout} constructor argument (PR \ghpr{14} by
     Russell Pierce)
@@ -18,8 +18,10 @@
     \item Error conditions are now properly forwarded as R errors (PR
     \ghpr{22} by Russell Pierce) 
     \item Results from Redis commands are now checked for \code{NULL} (PR
-    \ghpr{23} by Russell Pierce) 
-
+    \ghpr{23} by Russell Pierce)
+    \item MessagePack encoding can now be used which requires
+    MessagePackage headers of version 1.0 or later; the (optional)
+    RcppMsgPack package can be used.
   }
 }
 
