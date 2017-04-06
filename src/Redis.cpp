@@ -805,6 +805,43 @@ public:
         return(m);
 
     }
+
+    Rcpp::NumericMatrix msgPackZMatrix(std::string key, double min, double max) {
+        redisReply *reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "ZRANGEBYSCORE %s %f %f", key.c_str(), min, max));
+
+        std::vector<double> row;
+        std::vector<std::vector<double> > vecs;
+        
+        //checkReplyType(reply, replyArray_t); // ensure we got array
+        unsigned int rows = reply->elements;
+        for (unsigned int i = 0; i < rows; i++) {
+            //checkReplyType(reply->element[i], replyString_t); // ensure we got [binary] string 
+            //x[i] = reply->element[i]->str;
+            msgpack::unpacked result;
+            msgpack::unpack(result, (char*)reply->element[i]->str, reply->element[i]->len);
+
+            // deserialized object is valid during the msgpack::unpacked instance alive.
+            msgpack::object deserialized = result.get();
+
+            // msgpack::object supports ostream.
+            //Rcpp::Rcout << deserialized << std::endl;
+
+            deserialized.convert(&row);
+
+            vecs.push_back(row);
+        }
+        unsigned int cols = vecs[0].size();
+        Rcpp::NumericMatrix m(rows, cols);
+        for (unsigned int i=0; i<rows; i++) {
+            for (unsigned int j=0; j<cols; j++) {
+                m(i,j) = vecs[i][j];
+            }
+        }
+        freeReplyObject(reply);
+        return(m);
+
+    }
+    
 #endif    
 };
 
@@ -869,7 +906,8 @@ RCPP_MODULE(Redis) {
         .method("listRangeAsStrings",  &Redis::listRangeAsStrings,   "runs 'LRANGE key start end' for list, returns string vector")
 
 #ifdef HAVE_MSGPACK
-        .method("msgPackMatrix", &Redis::msgPackMatrix, "gets msgPack'ed data as Matrix")
+        .method("msgPackMatrix",  &Redis::msgPackMatrix,  "gets msgPack'ed data as Matrix")
+        .method("msgPackZMatrix", &Redis::msgPackZMatrix, "gets msgPack'ed sorted set as Matrix")
 #endif
         
     ;
