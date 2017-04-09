@@ -2,3 +2,4 @@
 
 ## ensure module gets loaded
 loadModule("Redis", TRUE)
+

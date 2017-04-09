@@ -1,3 +1,9 @@
+2017-04-09  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/init.c: (R_init_RcppRedis): Call R_registerRoutines()
+        and R_useDynamicSymbols()
+        * NAMESPACE: Use .registration=TRUE on useDynLib
+
 2017-04-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp (msgPackZMatrix): New function

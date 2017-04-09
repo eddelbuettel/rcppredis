@@ -33,7 +33,7 @@ Run some of the scripts from the `demo/` directory.
 ### Status
 
 The package works well, is used in production, and has been on
-[CRAN](http://cran.r-project.org) for some time.
+[CRAN](https://cran.r-project.org) for some time.
 
 It is however only providing a subset of the Redis API.
 
