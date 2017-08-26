@@ -1,3 +1,7 @@
+2017-08-26  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Update .travis.yml to use run.sh
+
 2017-04-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/init.c: (R_init_RcppRedis): Call R_registerRoutines()
