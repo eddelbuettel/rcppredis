@@ -8,6 +8,7 @@ dist: trusty
 
 env:
   global:
+    - _R_CHECK_FORCE_SUGGESTS_=FALSE
     - RunRcppRedisTests=yes
 
 services:
