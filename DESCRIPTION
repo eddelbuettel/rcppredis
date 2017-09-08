@@ -1,8 +1,8 @@
 Package: RcppRedis
 Type: Package
 Title: 'Rcpp' Bindings for 'Redis' using the 'hiredis' Library
-Version: 0.1.7.2
-Date: 2017-09-04
+Version: 0.1.8
+Date: 2017-09-08
 Author: Dirk Eddelbuettel <edd@debian.org>
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: Connection to the 'Redis' key/value store using the
@@ -12,10 +12,8 @@ Description: Connection to the 'Redis' key/value store using the
 SystemRequirements: The hiredis library (eg via package libhiredis-dev on
   Debian/Ubuntu, hiredis-devel on Fedora/RedHat, or directly from source 
   from https://github.com/redis/hiredis) is required. MsgPack support is
-  activated if the (optional) RcppMsgPack package is detected; it can be
-  installed from the ghrr drat (see Additional_repositories below).
+  activated if the (optional) RcppMsgPack package is detected.
 License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
 LinkingTo: Rcpp, RApiSerialize, BH
 Suggests: rredis, RUnit, RcppMsgPack
-Additional_repositories: http://ghrr.github.io/drat

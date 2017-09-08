@@ -9,7 +9,7 @@
     \code{R_registerRoutines()} and \code{R_useDynamicSymbols()}
     \item Symbol registration is enabled in \code{useDynLib}
     \item Travis CI was updated to using \code{run.sh}
-    \item The code was updated for MsgPack 2.*
+    \item The (optional MessagePack) code was updated for MsgPack 2.*
   }
 }
 

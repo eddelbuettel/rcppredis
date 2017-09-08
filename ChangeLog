@@ -1,5 +1,8 @@
 2017-09-08  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION: Remove 'Additional_repositories:
+	http://ghrr.github.io/drat' as RcppMsgPack is on CRAN
+
 	* configure.ac: Test for RcppMsgPack (>= 0.2.0)
 	* configure: Idem
 
