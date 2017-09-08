@@ -790,7 +790,7 @@ public:
             // msgpack::object supports ostream.
             //Rcpp::Rcout << deserialized << std::endl;
 
-            deserialized.convert(&row);
+            deserialized.convert(row);
 
             vecs.push_back(row);
         }
@@ -826,7 +826,7 @@ public:
             // msgpack::object supports ostream.
             //Rcpp::Rcout << deserialized << std::endl;
 
-            deserialized.convert(&row);
+            deserialized.convert(row);
 
             vecs.push_back(row);
         }

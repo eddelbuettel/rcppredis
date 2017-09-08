@@ -4,7 +4,7 @@
 ##
 ##  RcppRedis -- R interface to Redis via Rcpp and hiredis
 ##
-##  Copyright (C) 2014 - 2016  Dirk Eddelbuettel 
+##  Copyright (C) 2014 - 2017  Dirk Eddelbuettel 
 ##
 ##  RcppRedis is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 AC_PREREQ(2.61)
 
 # Process this file with autoconf to produce a configure script.
-AC_INIT([RcppRedis], [0.1.7])
+AC_INIT([RcppRedis], [0.1.8])
 
 # We are using C++
 AC_LANG(C++)
@@ -87,7 +87,7 @@ fi
 AC_MSG_CHECKING([for RcppMsgPack])
 
 ## Check if R has RcppMsgPack, and if so, of sufficient vintage
-$("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.1.0" else FALSE)')
+$("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.2.0" else FALSE)')
 if test x"$?" == x"1"; then
     AC_MSG_RESULT([yes])
     msgpackincdir=$("${R_HOME}/bin/Rscript" --vanilla -e 'cat(system.file("include", package="RcppMsgPack"))')
@@ -95,7 +95,7 @@ if test x"$?" == x"1"; then
     AC_MSG_NOTICE([Found RcppMsgPack, using '${msgpack_cxxflags}'])
 else
     AC_MSG_RESULT([no])
-    AC_MSG_NOTICE([Install (optional) RcppMsgPack via 'install.packages("RcppMsgPack", repos="http://ghrr.github.io/drat")'])
+    AC_MSG_NOTICE([Install (optional) RcppMsgPack (>= 0.2.0) from CRAN via 'install.packages("RcppMsgPack")'])
 fi    
 
 

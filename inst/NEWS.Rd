@@ -3,6 +3,16 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.1.8 (2017-09-08)}{
+  \itemize{
+    \item A new file \code{init.c} was added with calls to
+    \code{R_registerRoutines()} and \code{R_useDynamicSymbols()}
+    \item Symbol registration is enabled in \code{useDynLib}
+    \item Travis CI was updated to using \code{run.sh}
+    \item The code was updated for MsgPack 2.*
+  }
+}
+
 \section{Changes in version 0.1.7 (2016-04-27)}{
   \itemize{
     \item Added support for \code{timeout} constructor argument (PR \ghpr{14} by

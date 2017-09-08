@@ -1,3 +1,15 @@
+2017-09-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* configure.ac: Test for RcppMsgPack (>= 0.2.0)
+	* configure: Idem
+
+2017-09-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* src/Redis.cpp (R): Accomodate MsgPack 2.* and switch to
+	call-by-reference in two instances
+
 2017-08-26  Dirk Eddelbuettel  <edd@debian.org>
 
 	* .travis.yml: Update .travis.yml to use run.sh
