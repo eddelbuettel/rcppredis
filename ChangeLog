@@ -1,3 +1,9 @@
+2017-09-09  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.1.8
+
+	* src/Makevars.win: Set CXX_STD=CXX11 here too
+
 2017-09-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Remove 'Additional_repositories:

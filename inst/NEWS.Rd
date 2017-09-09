@@ -3,7 +3,7 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
-\section{Changes in version 0.1.8 (2017-09-08)}{
+\section{Changes in version 0.1.8 (2017-09-09)}{
   \itemize{
     \item A new file \code{init.c} was added with calls to
     \code{R_registerRoutines()} and \code{R_useDynamicSymbols()}

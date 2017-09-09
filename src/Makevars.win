@@ -8,4 +8,6 @@ PKG_CPPFLAGS = -I${LIB_HIREDIS}/include -DSTRICT_R_HEADERS
 ##
 PKG_LIBS = ${LIB_HIREDIS}/lib/${R_ARCH}/libhiredis.a -lws2_32
 
+CXX_STD = CXX11
+
 
