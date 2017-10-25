@@ -6,6 +6,8 @@
 
 	* NAMESPACE: Import RcppMsgPack
 
+	* .travis.yml (install): Add r-cran-rcppmsgpack
+
 2017-09-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.1.8

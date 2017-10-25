@@ -20,7 +20,7 @@ before_install:
   - ./run.sh bootstrap
 
 install:
-  - ./run.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp r-cran-bh r-cran-rapiserialize r-cran-rredis
+  - ./run.sh install_aptget r-cran-runit libhiredis-dev r-cran-rcpp r-cran-bh r-cran-rapiserialize r-cran-rredis r-cran-rcppmsgpack
 
 script:
   - ./run.sh run_tests
