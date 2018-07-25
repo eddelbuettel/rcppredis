@@ -1,10 +1,9 @@
-## -*- mode: autoconf; autoconf-indentation: 4; -*-
 ##
 ##  RcppRedis configure.ac
 ##
 ##  RcppRedis -- R interface to Redis via Rcpp and hiredis
 ##
-##  Copyright (C) 2014 - 2017  Dirk Eddelbuettel 
+##  Copyright (C) 2014 - 2018  Dirk Eddelbuettel 
 ##
 ##  RcppRedis is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by
@@ -25,7 +24,13 @@ AC_PREREQ(2.61)
 # Process this file with autoconf to produce a configure script.
 AC_INIT([RcppRedis], [0.1.8])
 
-# We are using C++
+# Ensure C++ is set up as R expects
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+    AC_MSG_ERROR([Could not determine R_HOME.])   
+fi
+CXX=`"${R_HOME}/bin/R" CMD config CXX`
+CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
 AC_LANG(C++)
 AC_REQUIRE_CPP
 AC_PROG_CXX
@@ -74,11 +79,11 @@ AC_CHECK_HEADER([$hiredis_header],,[
 
 ## could check for minimal suitable version here
 
-## First, set R_HOME, respecting an environment variable if set 
-: ${R_HOME=$(R RHOME)}
-if test -z "${R_HOME}"; then
-    AC_MSG_ERROR([Could not determine R_HOME.])   
-fi
+## First, set R_HOME, respecting an environment variable if set (now above)
+#: ${R_HOME=$(R RHOME)}
+#if test -z "${R_HOME}"; then
+#    AC_MSG_ERROR([Could not determine R_HOME.])   
+#fi
 
 ## look for (optional !!) MsgPack headers
 ## we need MsgPack > 1.0, and Debian/Ubuntu currently only have 0.5.7
@@ -105,5 +110,12 @@ AC_SUBST([PKG_LIBS],["${PKG_LIBS} $hiredis_libs"])
 #AC_SUBST([R_HOME],["${R_HOME}"])
 AC_CONFIG_FILES([src/Makevars])
 AC_OUTPUT
-#echo "Completed configuration and ready to build."
+
+echo "
+${PACKAGE_NAME} ${PACKAGE_VERSION}
+===============
+
+cxxflags: ${PKG_CXXFLAGS} 
+libs:     ${PKG_LIBS}
+"
 

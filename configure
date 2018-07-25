@@ -1980,6 +1980,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # We are using C++
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+    as_fn_error $? "Could not determine R_HOME." "$LINENO" 5
+fi
+CXX=`"${R_HOME}/bin/R" CMD config CXX`
+CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3243,11 +3249,11 @@ fi
 
 ## could check for minimal suitable version here
 
-## First, set R_HOME, respecting an environment variable if set
-: ${R_HOME=$(R RHOME)}
-if test -z "${R_HOME}"; then
-    as_fn_error $? "Could not determine R_HOME." "$LINENO" 5
-fi
+## First, set R_HOME, respecting an environment variable if set (now above)
+#: ${R_HOME=$(R RHOME)}
+#if test -z "${R_HOME}"; then
+#    AC_MSG_ERROR([Could not determine R_HOME.])
+#fi
 
 ## look for (optional !!) MsgPack headers
 ## we need MsgPack > 1.0, and Debian/Ubuntu currently only have 0.5.7
@@ -4436,5 +4442,12 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
-#echo "Completed configuration and ready to build."
+
+echo "
+${PACKAGE_NAME} ${PACKAGE_VERSION}
+===============
+
+cxxflags: ${PKG_CXXFLAGS}
+libs:     ${PKG_LIBS}
+"
 
