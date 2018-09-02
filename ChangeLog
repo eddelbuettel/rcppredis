@@ -1,3 +1,7 @@
+2018-09-02  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Switch Travis CI to R 3.5 repo
+
 2018-07-25  Dirk Eddelbuettel  <edd@debian.org>
 
 	* configure.ac: Set CXX and CXXFLAGS values by calling R to reflect
