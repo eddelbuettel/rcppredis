@@ -1,3 +1,7 @@
+2018-10-18  Whit Armstrong  <armstrong.whit@gmail.com>
+
+	* src/Redis.cpp: add hexists function
+
 2018-09-02  Dirk Eddelbuettel  <edd@debian.org>
 
 	* .travis.yml: Switch Travis CI to R 3.5 repo

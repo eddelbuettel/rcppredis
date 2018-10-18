@@ -7,6 +7,7 @@
   \itemize{
     \item The \code{configure} setup is more robust with respect to the
     C++ setup (CRAN request).
+    \item Function \code{hexists} added.
   }
 }
 
