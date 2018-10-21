@@ -6,12 +6,12 @@ Date: 2018-10-20
 Author: Dirk Eddelbuettel <edd@debian.org>
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: Connection to the 'Redis' key/value store using the
- C-language client library 'hiredis'. 'MsgPack' encoding is added
- if the 'RcppMsgPack' package is detected. 
+ C-language client library 'hiredis' (included as a fallback) with
+ 'MsgPack' encoding provided via 'RcppMsgPack' headers.
 SystemRequirements: An available hiredis library (eg via package
- libhiredis-dev on Debian/Ubuntu, hiredis-devel on Fedora/RedHat,
- or directly from source from <https://github.com/redis/hiredis>)
- is preferred; else it is build on demand. 
+ libhiredis-dev on Debian/Ubuntu, hiredis-devel on Fedora/RedHat, or
+ directly from source from <https://github.com/redis/hiredis>) is
+ preferred but otherwise built on demand.
 License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize, RcppMsgPack
 LinkingTo: Rcpp, RApiSerialize, RcppMsgPack, BH
