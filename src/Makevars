@@ -3,16 +3,16 @@
 ## Configure tells us about locations for
 ## hiredis headers and library via the variables
 ## if MsgPack is seen we add it as well
-PKG_CXXFLAGS = 	@PKG_CXXFLAGS@
+PKG_CXXFLAGS = 	 -D_FILE_OFFSET_BITS=64 -I/usr/include/hiredis 
 #-DMSGPACK_DISABLE_LEGACY_NIL -DMSGPACK_DISABLE_LEGACY_CONVERT
-PKG_LIBS = 	@PKG_LIBS@ 
+PKG_LIBS = 	 -lhiredis 
 
 CXX_STD = 	CXX11
 
-.PHONY: 	all @PKG_TARGET@
+.PHONY: 	all  
 
 all: 		$(SHLIB)
-$(SHLIB): 	@PKG_TARGET@
+$(SHLIB): 	 
 
 libhiredis.a:
 	$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)" \
