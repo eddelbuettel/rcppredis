@@ -2,6 +2,7 @@
 
 rm -rf	autom4te.cache/ config.* src/Makedeps src/Makevars \
     	src/*.o src/*.d src/*.a src/*.dll src/*.so src/*.rc src/symbols.rds \
+        src/hiredis/*.o src/hiredis/*.a \
     	*/*~ *~ \
         inst/examples/readC++
 

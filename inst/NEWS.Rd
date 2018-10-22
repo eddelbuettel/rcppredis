@@ -5,9 +5,15 @@
 
 \section{Changes in version 0.1.9 (2018-xx-yy)}{
   \itemize{
+    \item The \pkg{RcppMsgPack} can now be reliably assumed everywhere,
+    and is now a dependency.
     \item The \code{configure} setup is more robust with respect to the
     C++ setup (CRAN request).
-    \item Function \code{hexists} added.
+    \item The Travis builds was updated to R 3.5 along with all others.
+    \item A new Redis function \code{hexists} was added (Whit in
+    \ghpr{35}).
+    \item The \pkg{hiredis} library source is now included, and built on 
+    all systems unwilling or unable to provide it (\ghpr{36}). 
   }
 }
 

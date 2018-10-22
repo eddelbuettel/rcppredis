@@ -1,3 +1,29 @@
+2018-10-21  Dirk Eddelbuettel  <edd@debian.org>
+
+	* configure.ac: Changed to tickle fallback creation of libhiredis
+	* configure: Idem
+	* src/Makevars.in: Idem
+
+	* src/hiredis/async.c: Added hiredis as a fallback for the mean
+	systems not providing libhiredis. Looking at you, macOS @ CRAN.
+	* src/hiredis/async.h: Idem
+	* src/hiredis/dict.c: Idem
+	* src/hiredis/dict.h: Idem
+	* src/hiredis/fmacros.h: Idem
+	* src/hiredis/hiredis.c: Idem
+	* src/hiredis/hiredis.h: Idem
+	* src/hiredis/net.c: Idem
+	* src/hiredis/net.h: Idem
+	* src/hiredis/read.c: Idem
+	* src/hiredis/read.h: Idem
+	* src/hiredis/sdsalloc.h: Idem
+	* src/hiredis/sds.c: Idem
+	* src/hiredis/sds.h: Idem
+	* src/hiredis/COPYING: Idem
+	* src/hiredis/Makefile: Simpler version of upstream file
+
+	* src/RcppRedis.cpp: RcppMsgPack is now always used
+
 2018-10-18  Whit Armstrong  <armstrong.whit@gmail.com>
 
 	* src/Redis.cpp: add hexists function

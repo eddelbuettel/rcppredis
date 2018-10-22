@@ -3,3 +3,4 @@ LICENSE
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^local
+.*\.tar\.gz$

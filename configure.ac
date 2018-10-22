@@ -35,7 +35,12 @@ AC_LANG(C++)
 AC_REQUIRE_CPP
 AC_PROG_CXX
 
-## check for pkg-config
+## default to building from embedded sources ...
+hiredis_libs=hiredis/libhiredis.a
+hiredis_tgt=libhiredis.a
+hiredis_cxxflags="-I."
+
+## ... but check for pkg-config
 AC_DEFUN([AC_PROG_PKGCONFIG], [AC_CHECK_PROG(PKGCONFIG,pkg-config,yes)])
 AC_PROG_PKGCONFIG
 
@@ -47,14 +52,11 @@ if test x"${PKGCONFIG}" == x"yes"; then
         ## obtain cflags and obtain libs
         hiredis_cxxflags=`pkg-config --cflags hiredis`
         hiredis_libs=`pkg-config --libs hiredis`
+        ## no need to build libhiredis.a
+        hiredis_tgt=""     
     else
-        hiredis_cxxflags=""
-        hiredis_libs="-lhiredis"
+        AC_MSG_WARN([pkg-config exists but hiredis is not available.])
     fi
-else
-    ## Add a reasonable default of -lhiredis if we don't have pkg-config
-    hiredis_cxxflags=""
-    hiredis_libs="-lhiredis"
 fi
 
 ## And make sure these flags are used for the tests below.
@@ -74,7 +76,7 @@ AC_CHECK_HEADER([$hiredis_header],,[
     AC_MSG_WARN([Unsetting $hiredis_header_cache_var])
     AS_UNSET([$hiredis_header_cache_var])
     AC_CHECK_HEADER([$hiredis_header],,
-    [AC_MSG_ERROR([ERROR: hiredis headers required; use '-Iincludedir' in CXXFLAGS for unusual locations.])])
+    [AC_MSG_WARN([hiredis headers not found.])])
 ])
 
 ## could check for minimal suitable version here
@@ -85,29 +87,29 @@ AC_CHECK_HEADER([$hiredis_header],,[
 #    AC_MSG_ERROR([Could not determine R_HOME.])   
 #fi
 
-## look for (optional !!) MsgPack headers
-## we need MsgPack > 1.0, and Debian/Ubuntu currently only have 0.5.7
-## "eventually" the MsgPack 1.4.0 package currently in experimental will get included
-## until then we use RcppMsgPack from the ghrr drat
-AC_MSG_CHECKING([for RcppMsgPack])
-
-## Check if R has RcppMsgPack, and if so, of sufficient vintage
-$("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.2.0" else FALSE)')
-if test x"$?" == x"1"; then
-    AC_MSG_RESULT([yes])
-    msgpackincdir=$("${R_HOME}/bin/Rscript" --vanilla -e 'cat(system.file("include", package="RcppMsgPack"))')
-    msgpack_cxxflags="-I${msgpackincdir} -DHAVE_MSGPACK"
-    AC_MSG_NOTICE([Found RcppMsgPack, using '${msgpack_cxxflags}'])
-else
-    AC_MSG_RESULT([no])
-    AC_MSG_NOTICE([Install (optional) RcppMsgPack (>= 0.2.0) from CRAN via 'install.packages("RcppMsgPack")'])
-fi    
-
+## this is now optional as RcppMsgPack is "everywhere" too
+# ## look for (optional !!) MsgPack headers
+# ## we need MsgPack > 1.0, and Debian/Ubuntu currently only have 0.5.7
+# ## "eventually" the MsgPack 1.4.0 package currently in experimental will get included
+# ## until then we use RcppMsgPack from the ghrr drat
+# AC_MSG_CHECKING([for RcppMsgPack])
+# 
+# ## Check if R has RcppMsgPack, and if so, of sufficient vintage
+# $("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.2.0" else FALSE)')
+# if test x"$?" == x"1"; then
+#     AC_MSG_RESULT([yes])
+#     msgpackincdir=$("${R_HOME}/bin/Rscript" --vanilla -e 'cat(system.file("include", package="RcppMsgPack"))')
+#     msgpack_cxxflags="-I${msgpackincdir} -DHAVE_MSGPACK"
+#     AC_MSG_NOTICE([Found RcppMsgPack, using '${msgpack_cxxflags}'])
+# else
+#     AC_MSG_RESULT([no])
+#     AC_MSG_NOTICE([Install (optional) RcppMsgPack (>= 0.2.0) from CRAN via 'install.packages("RcppMsgPack")'])
+# fi    
 
 ## now use all these
 AC_SUBST([PKG_CXXFLAGS],["${PKG_CXXFLAGS} $hiredis_cxxflags $msgpack_cxxflags"])
 AC_SUBST([PKG_LIBS],["${PKG_LIBS} $hiredis_libs"])
-#AC_SUBST([R_HOME],["${R_HOME}"])
+AC_SUBST([PKG_TARGET], [" $hiredis_tgt"])
 AC_CONFIG_FILES([src/Makevars])
 AC_OUTPUT
 
@@ -115,7 +117,8 @@ echo "
 ${PACKAGE_NAME} ${PACKAGE_VERSION}
 ===============
 
-cxxflags: ${PKG_CXXFLAGS} 
-libs:     ${PKG_LIBS}
+compiler flags: ${PKG_CXXFLAGS} 
+link argument:  ${PKG_LIBS}
+library target: ${PKG_TARGET}
 "
 
