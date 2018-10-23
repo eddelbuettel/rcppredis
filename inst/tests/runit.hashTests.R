@@ -9,9 +9,6 @@ test_01_setup <- function() {
 
     yname <<- "cat"
     ydata <<- rnorm(10)
-
-    ##list.hashname <<- "mylisthash"
-    ##list.data <<- list(green=rnorm(10),eggs=rnorm(3),ham=rnorm(30))
 }
 
 test_02_hset <- function() {
