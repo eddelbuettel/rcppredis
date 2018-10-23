@@ -1,3 +1,8 @@
+2018-10-23  Whit Armstrong  <armstrong.whit@gmail.com>
+
+	* rcppredis/inst/tests/runit.hashTests.R: add tests for hash functions
+	* src/Redis.cpp: add HDEL, HLEN, HKEYS, and HGETALL
+
 2018-10-21  Dirk Eddelbuettel  <edd@debian.org>
 
 	* configure.ac: Changed to tickle fallback creation of libhiredis

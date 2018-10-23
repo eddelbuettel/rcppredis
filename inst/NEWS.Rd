@@ -13,7 +13,8 @@
     \item A new Redis function \code{hexists} was added (Whit in
     \ghpr{35}).
     \item The \pkg{hiredis} library source is now included, and built on 
-    all systems unwilling or unable to provide it (\ghpr{36}). 
+    all systems unwilling or unable to provide it (\ghpr{36}).
+    \item Added hash functions HDEL, HLEN, HKEYS, and HGETALL.
   }
 }
 
