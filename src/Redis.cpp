@@ -335,6 +335,18 @@ public:
         return(res);
     }
 
+    // redis hlen -- returns int
+    int hlen(std::string key) {
+
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "HLEN %s", key.c_str()));
+
+        checkReplyType(reply, replyInteger_t); // ensure we got integer
+        int res = reply->integer;
+        freeReplyObject(reply);
+        return(res);
+    }
+
     // redis sadd -- serializes to R internal format
     SEXP sadd(std::string key, SEXP s) {
 
@@ -891,6 +903,7 @@ RCPP_MODULE(Redis) {
         .method("hget",  &Redis::hget,   "runs 'HGET key field', deserializes internally")
         .method("hexists",  &Redis::hexists,   "runs 'HEXISTS key field', Integer reply, specifically: 1 if the hash contains field. 0 if the hash does not contain field, or key does not exist.")
         .method("hdel", &Redis::hdel, "Delete one or more hash fields")
+        .method("hlen", &Redis::hlen, "Get the number of fields in a hash")
 
         .method("sadd",     &Redis::sadd,     "runs 'SADD key member', serializes internally")
         .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
