@@ -309,7 +309,7 @@ public:
         return(obj);
     }
 
-    // redis hget -- returns int
+    // redis hexists -- returns int
     int hexists(std::string key, std::string field) {
 
         redisReply *reply =
