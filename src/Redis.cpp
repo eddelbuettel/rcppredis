@@ -362,6 +362,31 @@ public:
         return(vec);
     }
 
+    // redis hgetall -- returns a list
+    Rcpp::List hgetall(std::string key) {
+
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "HGETALL %s", key.c_str()));
+
+        unsigned int nc = reply->elements;
+        Rcpp::List vec(nc/2);
+        Rcpp::CharacterVector keys(nc/2);
+        // 0, 2, 4 are names, 1, 3, 5 are values
+        for (unsigned int i = 0; i < nc/2; i++) {
+            keys[i] = reply->element[i*2]->str;
+
+            int valueidx = i*2+1;
+            int vlen = reply->element[valueidx]->len;
+            Rcpp::RawVector res(vlen);
+            memcpy(res.begin(), reply->element[valueidx]->str, vlen);
+            SEXP obj = unserializeFromRaw(res);
+            vec[i] = obj;
+        }
+        vec.names() = keys;
+        freeReplyObject(reply);
+        return(vec);
+    }
+
     // redis sadd -- serializes to R internal format
     SEXP sadd(std::string key, SEXP s) {
 
@@ -920,6 +945,7 @@ RCPP_MODULE(Redis) {
         .method("hdel", &Redis::hdel, "Delete one or more hash fields")
         .method("hlen", &Redis::hlen, "Get the number of fields in a hash")
         .method("hkeys", &Redis::hkeys, "Get all the fields in a hash")
+        .method("hgetall", &Redis::hgetall, "Get all the fields and values in a hash")
 
         .method("sadd",     &Redis::sadd,     "runs 'SADD key member', serializes internally")
         .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
