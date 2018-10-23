@@ -347,6 +347,21 @@ public:
         return(res);
     }
 
+    // redis hkeys -- returns character vector
+    SEXP hkeys(std::string key) {
+
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "HKEYS %s", key.c_str()));
+
+        unsigned int nc = reply->elements;
+        Rcpp::CharacterVector vec(nc);
+        for (unsigned int i = 0; i < nc; i++) {
+            vec[i] = reply->element[i]->str;
+        }
+        freeReplyObject(reply);
+        return(vec);
+    }
+
     // redis sadd -- serializes to R internal format
     SEXP sadd(std::string key, SEXP s) {
 
@@ -904,6 +919,7 @@ RCPP_MODULE(Redis) {
         .method("hexists",  &Redis::hexists,   "runs 'HEXISTS key field', Integer reply, specifically: 1 if the hash contains field. 0 if the hash does not contain field, or key does not exist.")
         .method("hdel", &Redis::hdel, "Delete one or more hash fields")
         .method("hlen", &Redis::hlen, "Get the number of fields in a hash")
+        .method("hkeys", &Redis::hkeys, "Get all the fields in a hash")
 
         .method("sadd",     &Redis::sadd,     "runs 'SADD key member', serializes internally")
         .method("srem",     &Redis::srem,     "runs 'SREM key member', serializes internally")
