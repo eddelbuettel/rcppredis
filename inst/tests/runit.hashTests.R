@@ -3,7 +3,7 @@ test_01_setup <- function() {
     redis <<- new(Redis)
 
     hashname <<- "myhash"
-    
+
     xname <<- "hat"
     xdata <<- rnorm(10)
 
@@ -36,25 +36,27 @@ test_05_setup <- function() {
 }
 
 test_06_hlen <- function() {
-    ## check 
+    ## check for two keys
     n <- redis$hlen(hashname)
     checkEquals(n, 2)
 }
 
 test_07_hkeys <- function() {
-    ## check 
+    ## check for values hash keys: sort order not given
     res <- redis$hkeys(hashname)
-    checkEquals(res, c(xname,yname))
+    checkEquals(sort(res), sort(c(xname,yname)))
 }
 
 test_08_hgetall <- function() {
-    ## check 
+    ## check for all data
     res <- redis$hgetall(hashname)
-    checkEquals(res,  structure(list(xdata,ydata),names=c(xname,yname)))
+    checkEquals(sort(names(res)), sort(c(xname,yname)))
+    checkEquals(res[[xname]], xdata)
+    checkEquals(res[[yname]], ydata)
 }
 
 test_09_hdel <- function() {
-    ## check 
+    ## check
     n <- redis$hdel(hashname,yname)
     checkEquals(n, 1)
 }
