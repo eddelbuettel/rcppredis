@@ -1,12 +1,14 @@
 
 test_01_setup <- function() {
-    suppressMessages(library(datasets))
-    suppressMessages(library(rredis))
-    suppressMessages(library(RcppRedis))
+    suppressMessages({
+        library(datasets)
+        library(rredis)
+        library(RcppRedis)
+    })
 
     rredis::redisConnect(nodelay=FALSE) 	# rredis connection object, but no tcpdelay
                                                 # as our use of hiredis seesm to interfere
-   
+
     redis <<- new(Redis)                	# RcppRedis object
 
     data(trees)
@@ -28,7 +30,7 @@ test_02_treesExternalSerialize <- function() {
 }
 
 test_03_treesInternalSerialize <- function() {
-    ## or serialize an object internally 
+    ## or serialize an object internally
     key <- "RcppRedis:test:foo2"
     redis$set(key, fit)
 
@@ -43,7 +45,7 @@ test_04_treesRRedis <- function() {
     ## retrieve with rredis
     key <- "RcppRedis:test:foo2"
     fit4 <- redis$get(key)
-    
+
     ## check
     checkEquals(fit, fit4)
 }
