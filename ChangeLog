@@ -1,3 +1,10 @@
+2018-10-26  Dirk Eddelbuettel  <edd@debian.org>
+
+	* tests/runUnitTests.R: Rewritten matching other packages; tests
+	for optional rredis package only used for test comparison
+
+	* inst/tests/runit.basicRtests.R: Some edits as well
+
 2018-10-23  Whit Armstrong  <armstrong.whit@gmail.com>
 
 	* rcppredis/inst/tests/runit.hashTests.R: add tests for hash functions
