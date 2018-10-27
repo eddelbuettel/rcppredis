@@ -48,7 +48,9 @@
 
 #include <boost/lexical_cast.hpp> 
 
+#ifdef HAVE_MSGPACK
 #include <msgpack.hpp>
+#endif
 
 // A simple and lightweight class -- with just a simple private member variable 
 // We could add some more member variables to cache the last call, status, ...
@@ -842,6 +844,7 @@ public:
         return(x);
     }
 
+#ifdef HAVE_MSGPACK    
     Rcpp::NumericMatrix msgPackMatrix(std::string key, int start, int end) {
         redisReply *reply = 
             static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LRANGE %s %d %d", 
@@ -916,9 +919,9 @@ public:
         return(m);
 
     }
+#endif
     
 };
-
 
 RCPP_MODULE(Redis) {
     Rcpp::class_<Redis>("Redis")   
@@ -984,8 +987,9 @@ RCPP_MODULE(Redis) {
 
         .method("listRangeAsStrings",  &Redis::listRangeAsStrings,   "runs 'LRANGE key start end' for list, returns string vector")
 
+#ifdef HAVE_MSGPACK    
         .method("msgPackMatrix",  &Redis::msgPackMatrix,  "gets msgPack'ed data as Matrix")
         .method("msgPackZMatrix", &Redis::msgPackZMatrix, "gets msgPack'ed sorted set as Matrix")
-        
+#endif        
     ;
 }

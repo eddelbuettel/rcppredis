@@ -35,7 +35,7 @@ AC_LANG(C++)
 AC_REQUIRE_CPP
 AC_PROG_CXX
 
-## default to building from embedded sources ...
+## default to building from embedded sources ... unless hiredis found
 hiredis_libs=hiredis/libhiredis.a
 hiredis_tgt=libhiredis.a
 hiredis_cxxflags="-I."
@@ -87,24 +87,20 @@ AC_CHECK_HEADER([$hiredis_header],,[
 #    AC_MSG_ERROR([Could not determine R_HOME.])   
 #fi
 
-## this is now optional as RcppMsgPack is "everywhere" too
-# ## look for (optional !!) MsgPack headers
-# ## we need MsgPack > 1.0, and Debian/Ubuntu currently only have 0.5.7
-# ## "eventually" the MsgPack 1.4.0 package currently in experimental will get included
-# ## until then we use RcppMsgPack from the ghrr drat
-# AC_MSG_CHECKING([for RcppMsgPack])
-# 
-# ## Check if R has RcppMsgPack, and if so, of sufficient vintage
-# $("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.2.0" else FALSE)')
-# if test x"$?" == x"1"; then
-#     AC_MSG_RESULT([yes])
-#     msgpackincdir=$("${R_HOME}/bin/Rscript" --vanilla -e 'cat(system.file("include", package="RcppMsgPack"))')
-#     msgpack_cxxflags="-I${msgpackincdir} -DHAVE_MSGPACK"
-#     AC_MSG_NOTICE([Found RcppMsgPack, using '${msgpack_cxxflags}'])
-# else
-#     AC_MSG_RESULT([no])
-#     AC_MSG_NOTICE([Install (optional) RcppMsgPack (>= 0.2.0) from CRAN via 'install.packages("RcppMsgPack")'])
-# fi    
+## look for (optional !!) MsgPack headers
+## RcppMsgPack on CRAN fits the bill -- but is a soft dependency
+AC_MSG_CHECKING([for RcppMsgPack])
+## Check if R has RcppMsgPack
+$("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.2.0" else FALSE)')
+if test x"$?" == x"1"; then
+    AC_MSG_RESULT([yes])
+    msgpackincdir=$("${R_HOME}/bin/Rscript" --vanilla -e 'cat(system.file("include", package="RcppMsgPack"))')
+    msgpack_cxxflags="-I${msgpackincdir} -DHAVE_MSGPACK"
+    AC_MSG_NOTICE([Found RcppMsgPack, using '${msgpack_cxxflags}'])
+else
+    AC_MSG_RESULT([no])
+    AC_MSG_NOTICE([Install (optional) RcppMsgPack (>= 0.2.0) from CRAN via 'install.packages("RcppMsgPack")'])
+fi    
 
 ## now use all these
 AC_SUBST([PKG_CXXFLAGS],["${PKG_CXXFLAGS} $hiredis_cxxflags $msgpack_cxxflags"])
