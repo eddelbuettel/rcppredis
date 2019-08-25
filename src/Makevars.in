@@ -5,7 +5,7 @@
 ## if MsgPack is seen we add it as well
 PKG_CXXFLAGS = 	@PKG_CXXFLAGS@
 #-DMSGPACK_DISABLE_LEGACY_NIL -DMSGPACK_DISABLE_LEGACY_CONVERT
-PKG_LIBS = 	@PKG_LIBS@ 
+PKG_LIBS = 	@PKG_LIBS@
 
 CXX_STD = 	CXX11
 
@@ -15,5 +15,5 @@ all: 		$(SHLIB)
 $(SHLIB): 	@PKG_TARGET@
 
 libhiredis.a:
-	$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)" \
-		--directory=hiredis libhiredis.a
+		$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)" \
+			--directory=hiredis libhiredis.a

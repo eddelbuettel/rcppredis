@@ -3,7 +3,7 @@ Type: Package
 Title: 'Rcpp' Bindings for 'Redis' using the 'hiredis' Library
 Version: 0.1.9
 Date: 2018-10-27
-Author: Dirk Eddelbuettel <edd@debian.org>
+Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: Connection to the 'Redis' key/value store using the
  C-language client library 'hiredis' (included as a fallback) with
