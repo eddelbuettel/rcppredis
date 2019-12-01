@@ -15,4 +15,4 @@ SystemRequirements: An available hiredis library (eg via package
 License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
 LinkingTo: Rcpp, RApiSerialize, BH
-Suggests: RcppMsgPack, rredis, tinytest, RUnit
+Suggests: RcppMsgPack, rredis, tinytest

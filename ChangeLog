@@ -6,6 +6,9 @@
 
 	* inst/tinytest/*: Converted from RUnit tests
 
+	* tests/runUnitTests.R: Removed
+	* inst/tests/*: Idem
+
 2019-08-24  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Author): Use name without email as in other packages
