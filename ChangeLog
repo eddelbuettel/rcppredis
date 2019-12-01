@@ -4,7 +4,7 @@
 	* tests/tinytest.R: Idem
 	* .travis.yml (install): Idem
 
-	* inst/tinytest/*: Converted from RUnit
+	* inst/tinytest/*: Converted from RUnit tests
 
 2019-08-24  Dirk Eddelbuettel  <edd@debian.org>
 
