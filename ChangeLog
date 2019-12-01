@@ -1,3 +1,11 @@
+2019-12-01  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Suggests): Add tinytest
+	* tests/tinytest.R: Idem
+	* .travis.yml (install): Idem
+
+	* inst/tinytest/*: Converted from RUnit
+
 2019-08-24  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Author): Use name without email as in other packages

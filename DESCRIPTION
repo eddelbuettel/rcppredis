@@ -1,8 +1,8 @@
 Package: RcppRedis
 Type: Package
 Title: 'Rcpp' Bindings for 'Redis' using the 'hiredis' Library
-Version: 0.1.9
-Date: 2018-10-27
+Version: 0.1.9.1
+Date: 2019-12-01
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: Connection to the 'Redis' key/value store using the
@@ -15,4 +15,4 @@ SystemRequirements: An available hiredis library (eg via package
 License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
 LinkingTo: Rcpp, RApiSerialize, BH
-Suggests: RcppMsgPack, rredis, RUnit
+Suggests: RcppMsgPack, rredis, tinytest, RUnit
