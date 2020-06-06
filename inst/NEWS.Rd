@@ -3,6 +3,12 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.1.10 (2020-01-16)}{
+  \itemize{
+    \item The package now uses \pkg{tinytest} for unit tests (Dirk in \ghpr{41}).
+  }
+}
+
 \section{Changes in version 0.1.9 (2018-10-27)}{
   \itemize{
     \item The \code{configure} setup is more robust with respect to the

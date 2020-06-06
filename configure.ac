@@ -3,7 +3,7 @@
 ##
 ##  RcppRedis -- R interface to Redis via Rcpp and hiredis
 ##
-##  Copyright (C) 2014 - 2018  Dirk Eddelbuettel 
+##  Copyright (C) 2014 - 2020  Dirk Eddelbuettel
 ##
 ##  RcppRedis is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 AC_PREREQ(2.61)
 
 # Process this file with autoconf to produce a configure script.
-AC_INIT([RcppRedis], [0.1.9])
+AC_INIT([RcppRedis], [0.1.10])
 
 # Ensure C++ is set up as R expects
 : ${R_HOME=`R RHOME`}
@@ -111,7 +111,7 @@ AC_OUTPUT
 
 echo "
 ${PACKAGE_NAME} ${PACKAGE_VERSION}
-===============
+================
 
 compiler flags: ${PKG_CXXFLAGS} 
 link argument:  ${PKG_LIBS}
