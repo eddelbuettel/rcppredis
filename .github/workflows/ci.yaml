@@ -9,7 +9,7 @@ on:
 env:
   USE_BSPM: "true"
   _R_CHECK_FORCE_SUGGESTS_: "false"
-  RunRcppRedisTests: "yes"
+  RunRcppRedisTests: "no"
 
 jobs:
   ci:
@@ -33,7 +33,7 @@ jobs:
       - name: Dependencies
         run: |
           ./run.sh install_aptget libhiredis-dev
-          ./run.sh install_all
+          ./run.sh install_deps
 
       - name: Test
         run: ./run.sh run_tests
