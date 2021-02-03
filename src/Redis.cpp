@@ -2,7 +2,7 @@
 //
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2013 - 2016    Dirk Eddelbuettel 
+//  Copyright (C) 2013 - 2021    Dirk Eddelbuettel
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
 //  Portions Copyright (C) 2015  Russell S. Pierce
@@ -36,7 +36,7 @@
 //  
 // We do use 'binary' serialization for faster processing
 //
-// Dirk Eddelbuettel, 2013 - 2018
+// Dirk Eddelbuettel, 2013 - 2021
 
 // [[Rcpp::depends(BH)]]
 
@@ -920,14 +920,23 @@ public:
 
     }
 #endif
-    
+
+    // redis quit -- exit the server
+    SEXP quit(void) {
+        redisReply *reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "QUIT"));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
+
+
 };
 
 RCPP_MODULE(Redis) {
     Rcpp::class_<Redis>("Redis")   
         
         .constructor("default constructor")  
-        .constructor<std::string>("constructor with host port")  
+        .constructor<std::string>("constructor with host")
         .constructor<std::string, int>("constructor with host and port")  
         .constructor<std::string, int, std::string>("constructor with host and port and auth")  
         .constructor<std::string, int, std::string, int>("constructor with host and port, auth, and timeout")  
@@ -986,6 +995,8 @@ RCPP_MODULE(Redis) {
         .method("listToMatrix",  &Redis::listToMatrix,  "convert list of vectors into matrix")
 
         .method("listRangeAsStrings",  &Redis::listRangeAsStrings,   "runs 'LRANGE key start end' for list, returns string vector")
+
+        .method("quit", &Redis::quit,  "runs 'QUIT' to close connection")
 
 #ifdef HAVE_MSGPACK    
         .method("msgPackMatrix",  &Redis::msgPackMatrix,  "gets msgPack'ed data as Matrix")
