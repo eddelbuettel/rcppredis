@@ -12,6 +12,8 @@ SystemRequirements: An available hiredis library (eg via package
  libhiredis-dev on Debian/Ubuntu, hiredis-devel on Fedora/RedHat, or
  directly from source from <https://github.com/redis/hiredis>) is
  preferred but otherwise built on demand.
+URL: https://github.com/eddelbuettel/rcppredis, https://dirk.eddelbuettel.com/code/rcpp.redis.html
+BugReports: https://github.com/eddelbuettel/rcppredis/issues
 License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
 LinkingTo: Rcpp, RApiSerialize, BH
