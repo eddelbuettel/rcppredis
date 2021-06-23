@@ -1,13 +1,12 @@
 ## -*- mode: Makefile; -*-
 ##
-## The LIB_HIREDIS variable points to the library which was kindly
-## built by John Buonagurio, and the -DSTRICT_R_HEADERS flag avoids a
-## conflict with macro redefinitions
-##
-PKG_CPPFLAGS = -I${LIB_HIREDIS}/include -DSTRICT_R_HEADERS
-##
-PKG_LIBS = ${LIB_HIREDIS}/lib/${R_ARCH}/libhiredis.a -lws2_32
+RWINLIB=../windows/hiredis-1.0.0
+PKG_CPPFLAGS = -I${RWINLIB}/include -DSTRICT_R_HEADERS
+PKG_LIBS = -L${RWINLIB}/lib${R_ARCH}${CRT} -lhiredis -lws2_32
 
 CXX_STD = CXX11
 
+all: winlibs
 
+winlibs:
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
