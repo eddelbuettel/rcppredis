@@ -3,9 +3,21 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.1.11 (2021-xx-yy)}{
+  \itemize{
+    \item The CI setup was updated to use \code{run.sh} from
+    \href{https://eddelbuettel.github.io/r-ci/}{r-ci} (Dirk).
+    \item A new function \code{quit} can be used to close a connection
+    (Dirk).
+    \item The windows build was updated to libhiredis 1.0.0, and UCRT
+    support was added (Jeroen in \ghpr{42}).
+  }
+}
+
 \section{Changes in version 0.1.10 (2020-01-16)}{
   \itemize{
-    \item The package now uses \pkg{tinytest} for unit tests (Dirk in \ghpr{41}).
+    \item The package now uses \pkg{tinytest} for unit tests (Dirk in
+    \ghpr{41}).
   }
 }
 

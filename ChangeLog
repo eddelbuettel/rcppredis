@@ -1,3 +1,9 @@
+2021-06-23  Jeroen Ooms  <jeroenooms@gmail.com>
+
+	* tools/winlibs.R: Update to libhiredis 1.0.0, support UCRT build
+	* src/Makevars.win: Update to libhiredis 1.0.0
+	* src/Makevars.ucrt: Support UCRT build
+
 2021-05-24  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (URL, BugReports): Added to DESCRIPTION
