@@ -3,7 +3,7 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
-\section{Changes in version 0.1.11 (2021-xx-yy)}{
+\section{Changes in version 0.1.11 (2021-06-26)}{
   \itemize{
     \item The CI setup was updated to use \code{run.sh} from
     \href{https://eddelbuettel.github.io/r-ci/}{r-ci} (Dirk).

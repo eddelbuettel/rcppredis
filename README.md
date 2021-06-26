@@ -5,7 +5,7 @@
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
 [![CRAN](http://www.r-pkg.org/badges/version/RcppRedis)](https://cran.r-project.org/package=RcppRedis) 
 [![Dependencies](https://tinyverse.netlify.com/badge/RcppRedis)](https://cran.r-project.org/package=RcppRedis) 
-[![Downloads](http://cranlogs.r-pkg.org/badges/RcppRedis?color=brightgreen)](http://www.r-pkg.org/pkg/RcppRedis)
+[![Downloads](http://cranlogs.r-pkg.org/badges/RcppRedis?color=brightgreen)](https://www.r-pkg.org:443/pkg/RcppRedis)
 [![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/rcppredis)](https://github.com/eddelbuettel/rcppredis)
 
 ### Dependencies
