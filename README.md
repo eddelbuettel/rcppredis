@@ -1,6 +1,5 @@
 ## RcppRedis: RcppRedis is a Rcpp and hiredis-based Redis client for R 
 
-[![Build Status](https://travis-ci.org/eddelbuettel/rcppredis.svg)](https://travis-ci.org/eddelbuettel/rcppredis) 
 [![CI](https://github.com/eddelbuettel/rcppredis/workflows/ci/badge.svg)](https://github.com/eddelbuettel/rcppredis/actions?query=workflow%3Aci)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
 [![CRAN](http://www.r-pkg.org/badges/version/RcppRedis)](https://cran.r-project.org/package=RcppRedis) 
