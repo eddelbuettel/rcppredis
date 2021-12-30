@@ -1,5 +1,7 @@
 2021-12-30  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Roll minor version
+
 	* R/pubsub.R: Imported from packaged 'rredis' to support pub/sub
 	* R/internal.R: Idem
 	* src/libsock.c: Idem
@@ -11,6 +13,10 @@
 
 	* DESCRIPTION: Bryan Lewis is now a co-author of the package
 
+	* LICENSE: Added explicit license statement for added files which
+	remain under Apache License 2.0 while the remainder of the package
+	as well as the aggregation continues to be licensed under GPL (>= 2)
+	
 2021-12-18  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Remove unused continuous integration artifact and badge
