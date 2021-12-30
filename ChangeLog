@@ -1,3 +1,16 @@
+2021-12-30  Dirk Eddelbuettel  <edd@debian.org>
+
+	* R/pubsub.R: Imported from packaged 'rredis' to support pub/sub
+	* R/internal.R: Idem
+	* src/libsock.c: Idem
+	* man/redisPublish.Rd: Documentation for pub/sub and support
+	* man/redisSubscribe.Rd: Idem
+	* man/redisUnsubscribe.Rd: Idem
+	* man/redisMonitorChannels.Rd: Idem
+	* man/redisCmd.Rd: Idem
+
+	* DESCRIPTION: Bryan Lewis is now a co-author of the package
+
 2021-12-18  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Remove unused continuous integration artifact and badge
