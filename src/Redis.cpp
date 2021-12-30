@@ -46,8 +46,6 @@
 #include <RApiSerializeAPI.h>   	// provides C API with serialization for R
 #include <sys/time.h>               // for struct timeval
 
-#include <boost/lexical_cast.hpp> 
-
 #ifdef HAVE_MSGPACK
 #include <msgpack.hpp>
 #endif
@@ -236,14 +234,14 @@ public:
   
     // redis expire -- expire key after numeric seconds, use expire and round
     SEXP expire(std::string key, double seconds) {
-        int i_seconds = (int)(seconds + 0.5);
-        return(exec("EXPIRE " + key + " " + boost::lexical_cast<std::string>(i_seconds)));
+        std::string secs = std::to_string(static_cast<int32_t>(std::round(seconds)));
+        return(exec("EXPIRE " + key + " " + secs));
     }
   
     // redis pexpire -- expire key after numeric milliseconds, use pexpire and round
     SEXP pexpire(std::string key, double milliseconds) {
-        int i_milliseconds = (int)(milliseconds + 0.5);
-        return(exec("PEXPIRE " + key + " " + boost::lexical_cast<std::string>(i_milliseconds)));
+        std::string ms = std::to_string(static_cast<int32_t>(std::round(milliseconds)));
+        return(exec("EXPIRE " + key + " " + ms));
     }
 
     // redis set -- serializes to R internal format
