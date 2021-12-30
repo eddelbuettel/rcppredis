@@ -16,6 +16,7 @@ The files
   man/redisUnsubscribe.Rd
   man/redisMonitorChannels.Rd
   man/redisCmd.Rd
+  tests/pubsub.R
 
 are included from the rredis package, and have been licensed under the
 Apache License, Version 2, and remain under the Apache License.
