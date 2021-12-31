@@ -3,6 +3,17 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.1.12 (2022-01-xx)}{
+  \itemize{
+    \item Two simple C++11 feature remove needs for \pkg{BH} and \code{lexical_cast()}
+    (Dirk in \ghpr{45} addressing \ghit{44})
+    \item Redis pub/sub is now supported by importing the R functions
+    and C underpinning from \pkg{rredis} (Dirk in \ghpr{43})
+    \item Bryan Lewis is now a coauthor; the imported functions remain
+    licenced under the Apache License 2.0.
+  }
+}
+
 \section{Changes in version 0.1.11 (2021-06-26)}{
   \itemize{
     \item The CI setup was updated to use \code{run.sh} from

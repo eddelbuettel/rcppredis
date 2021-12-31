@@ -10,12 +10,17 @@ The files
 
   R/pubsub.R
   R/internal.R
+  R/rredis-misc.R: Idem
   src/libsock.c
   man/redisPublish.Rd
   man/redisSubscribe.Rd
   man/redisUnsubscribe.Rd
   man/redisMonitorChannels.Rd
   man/redisCmd.Rd
+  man/redisAuth.Rd
+  man/redisClose.Rd
+  man/redisConnect.Rd
+  man/redisZAdd.Rd
   tests/pubsub.R
 
 are included from the rredis package, and have been licensed under the

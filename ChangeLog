@@ -1,15 +1,27 @@
+2021-12-31  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/libsock.c (_OPEN_FD, _SOCK_NAGLE): Register as symbols, but use
+	not-exported-by-default name starting with an underscore
+	* src/init.c: Idem
+
+
 2021-12-30  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
 
 	* R/pubsub.R: Imported from packaged 'rredis' to support pub/sub
 	* R/internal.R: Idem
+	* R/rredis-misc.R: Idem
 	* src/libsock.c: Idem
 	* man/redisPublish.Rd: Documentation for pub/sub and support
 	* man/redisSubscribe.Rd: Idem
 	* man/redisUnsubscribe.Rd: Idem
 	* man/redisMonitorChannels.Rd: Idem
 	* man/redisCmd.Rd: Idem
+        * man/redisAuth.Rd: Idem
+        * man/redisClose.Rd: Idem
+        * man/redisConnect.Rd: Idem
+        * man/redisZAdd.Rd: Idem
 	* tests/pubsub.R: Idem
 
 	* DESCRIPTION: Bryan Lewis is now a co-author of the package
@@ -17,6 +29,9 @@
 	* LICENSE: Added explicit license statement for added files which
 	remain under Apache License 2.0 while the remainder of the package
 	as well as the aggregation continues to be licensed under GPL (>= 2)
+
+	* src/Redis.cpp: Use C++11 instead of lexical_cast for double -> string
+	* DESCRIPTION: Remove LinkingTo: on BH
 
 2021-12-18  Dirk Eddelbuettel  <edd@debian.org>
 
