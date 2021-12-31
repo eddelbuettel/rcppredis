@@ -25,17 +25,17 @@
   fd = NULL
   if(nodelay)
   {
-    fds <- .Call("OPEN_FD", PACKAGE="RcppRedis")
+    fds <- .Call(`_OPEN_FD`)
   }
   con <- socketConnection(host, port, open="a+b",
                           blocking=TRUE, timeout=timeout)
   if(nodelay)
   {
-    fd <- as.integer(setdiff(.Call("OPEN_FD", PACKAGE="RcppRedis"),fds))
+    fd <- as.integer(setdiff(.Call(`_OPEN_FD`),fds))
   }
   if(length(fd) > 0 && nodelay)
   {
-    Nagle <- vapply(fd, function(j) tryCatch(.Call("SOCK_NAGLE",j,1L,PACKAGE="RcppRedis"), error=function(e) 0L), 1L)
+    Nagle <- vapply(fd, function(j) tryCatch(.Call(`_SOCK_NAGLE`, j, 1L), error=function(e) 0L), 1L)
     if(!(any(Nagle==1)))
     {
       nodelay <- FALSE

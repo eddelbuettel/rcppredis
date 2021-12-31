@@ -43,7 +43,7 @@
  * provisional approach. In the next package version, we'll define a new
  * R_new_custom_connection object for rredis instead.
  */
-SEXP OPEN_FD()
+SEXP _OPEN_FD()
 {
 #ifdef WIN32
   return R_NilValue;
@@ -75,7 +75,7 @@ SEXP OPEN_FD()
 /* Set the Nagle socket option for socket S to an integer value VAL,
  * returning the set value.
  */
-SEXP SOCK_NAGLE(SEXP S, SEXP VAL)
+SEXP _SOCK_NAGLE(SEXP S, SEXP VAL)
 {
   socklen_t len;
   int val = INTEGER(VAL)[0];
