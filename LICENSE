@@ -1,3 +1,49 @@
+
+The RcppRedis package is released under the GNU GPL, Version 2 or later.
+
+This covers all files in the package, as well as the package
+aggregation, with the exception of the files listed explicitly below
+which were already licensed under the Apache License, Version 2.0, and
+continue to be licensed under the Apache License, Version 2.0.
+
+The files
+
+  R/pubsub.R
+  R/internal.R
+  R/rredis-misc.R: Idem
+  src/libsock.c
+  man/redisPublish.Rd
+  man/redisSubscribe.Rd
+  man/redisUnsubscribe.Rd
+  man/redisMonitorChannels.Rd
+  man/redisCmd.Rd
+  man/redisAuth.Rd
+  man/redisClose.Rd
+  man/redisConnect.Rd
+  man/redisZAdd.Rd
+  tests/pubsub.R
+
+are included from the rredis package, and have been licensed under the
+Apache License, Version 2, and remain under the Apache License.
+
+
+The typical Apache License, Version 2.0, statement follows.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      https://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+
+The full text of the GNU GPL, Version 2, follows.
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
 
