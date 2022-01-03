@@ -194,14 +194,22 @@ public:
         prc_ = NULL;                // just to be on the safe side
     }
 
-    // cf. hiredis redisGetReply
+    // cf. hiredis redisGetReply, also see 'get' below.
     SEXP getreply() {
+        SEXP obj;
         redisReply *reply;
         redisGetReply(prc_, (void **)&reply);
-        nullReplyCheck(reply);
-        SEXP rep = extract_reply(reply);
+
+        unsigned int nc = reply->elements;
+        Rcpp::List vec(nc);
+        for (unsigned int i = 0; i < nc; i++) {
+            int vlen = reply->element[i]->len;
+            Rcpp::RawVector res(vlen);
+            memcpy(res.begin(), reply->element[i]->str, vlen);
+            vec[i] = res;
+        }
         freeReplyObject(reply);
-        return(rep);
+        return(vec);
     }
 
     // redis publish -- serializes to R internal format
