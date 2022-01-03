@@ -194,6 +194,32 @@ public:
         prc_ = NULL;                // just to be on the safe side
     }
 
+    // cf. hiredis redisGetReply
+    SEXP getreply() {
+        redisReply *reply;
+        redisGetReply(prc_, (void **)&reply);
+        nullReplyCheck(reply);
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
+
+    // redis publish -- serializes to R internal format
+    SEXP publish(std::string channel, SEXP s) {
+
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply = 
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %b", 
+                                                          channel.c_str(), x.begin(), x.size()));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
+
+
     // execute given string
     SEXP exec(std::string cmd) {
         redisReply *reply =
@@ -941,6 +967,9 @@ RCPP_MODULE(Redis) {
         
         .method("exec", &Redis::exec,  "execute given redis command and arguments")
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
+
+        .method("publish", &Redis::publish,  "runs 'SET channel message', serializes message internally")
+        .method("getreply", &Redis::getreply,  "get a redis message")
 
         .method("ping", &Redis::ping,  "runs 'PING' command to test server state")
         .method("exists", &Redis::exists,  "runs 'EXISTS' command to count the number of specified keys present")
