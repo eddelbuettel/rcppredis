@@ -4,7 +4,7 @@
 
 	* src/Redis.cpp: Minor edit, removed one unused var, renamed getreply
 	to getReply for consistency
-	* R/pubsub.R: Use getReply()
+	* R/pubsub.R: Use getReply(), minor whitespace edit
 
 	* README.md: Add Bryan to Authors here too
 	* inst/NEWS.md: Updated
