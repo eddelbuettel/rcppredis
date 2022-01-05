@@ -1,11 +1,11 @@
-// -*- indent-tabs-mode: nil; tab-width: 4; c-indent-level: 4; c-basic-offset: 4; -*-
-//
+
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2013 - 2021    Dirk Eddelbuettel
+//  Copyright (C) 2013 - 2022    Dirk Eddelbuettel
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
 //  Portions Copyright (C) 2015  Russell S. Pierce
+//  Portions Copyright (C) 2022  Bryan W. Lewis
 //
 //  This file is part of RcppRedis
 //
@@ -193,40 +193,6 @@ public:
         redisFree(prc_);
         prc_ = NULL;                // just to be on the safe side
     }
-
-    // cf. hiredis redisGetReply, also see 'get' below.
-    SEXP getreply() {
-        SEXP obj;
-        redisReply *reply;
-        redisGetReply(prc_, (void **)&reply);
-
-        unsigned int nc = reply->elements;
-        Rcpp::List vec(nc);
-        for (unsigned int i = 0; i < nc; i++) {
-            int vlen = reply->element[i]->len;
-            Rcpp::RawVector res(vlen);
-            memcpy(res.begin(), reply->element[i]->str, vlen);
-            vec[i] = res;
-        }
-        freeReplyObject(reply);
-        return(vec);
-    }
-
-    // redis publish -- serializes to R internal format
-    SEXP publish(std::string channel, SEXP s) {
-
-        // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
-
-        // uses binary protocol, see hiredis doc at github
-        redisReply *reply = 
-            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %b", 
-                                                          channel.c_str(), x.begin(), x.size()));
-        SEXP rep = extract_reply(reply);
-        freeReplyObject(reply);
-        return(rep);
-    }
-
 
     // execute given string
     SEXP exec(std::string cmd) {
@@ -961,6 +927,37 @@ public:
         return(rep);
     }
 
+    // cf. hiredis redisGetReply, also see 'get' below.
+    SEXP getReply() {
+        redisReply *reply;
+        redisGetReply(prc_, (void **)&reply);
+
+        unsigned int nc = reply->elements;
+        Rcpp::List vec(nc);
+        for (unsigned int i = 0; i < nc; i++) {
+            int vlen = reply->element[i]->len;
+            Rcpp::RawVector res(vlen);
+            memcpy(res.begin(), reply->element[i]->str, vlen);
+            vec[i] = res;
+        }
+        freeReplyObject(reply);
+        return(vec);
+    }
+
+    // redis publish -- serializes to R internal format
+    SEXP publish(std::string channel, SEXP s) {
+
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %b",
+                                                          channel.c_str(), x.begin(), x.size()));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
 
 };
 
@@ -975,9 +972,6 @@ RCPP_MODULE(Redis) {
         
         .method("exec", &Redis::exec,  "execute given redis command and arguments")
         .method("execv", &Redis::execv,  "execute given a vector of redis command and arguments")
-
-        .method("publish", &Redis::publish,  "runs 'SET channel message', serializes message internally")
-        .method("getreply", &Redis::getreply,  "get a redis message")
 
         .method("ping", &Redis::ping,  "runs 'PING' command to test server state")
         .method("exists", &Redis::exists,  "runs 'EXISTS' command to count the number of specified keys present")
@@ -1032,6 +1026,9 @@ RCPP_MODULE(Redis) {
         .method("listRangeAsStrings",  &Redis::listRangeAsStrings,   "runs 'LRANGE key start end' for list, returns string vector")
 
         .method("quit", &Redis::quit,  "runs 'QUIT' to close connection")
+
+        .method("publish", &Redis::publish,  "runs 'SET channel message', serializes message internally")
+        .method("getReply", &Redis::getReply,  "get a redis message")
 
 #ifdef HAVE_MSGPACK    
         .method("msgPackMatrix",  &Redis::msgPackMatrix,  "gets msgPack'ed data as Matrix")

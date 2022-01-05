@@ -1,7 +1,7 @@
 listen <- function(context)
 {
   if(!inherits(context, "Rcpp_Redis")) stop("context must be a valid Redis context")
-  ans <- context$getreply()
+  ans <- context$getReply()
   if(length(ans)!=3) {
     warning("invalid subscription response, raw data returned")
     return(ans)

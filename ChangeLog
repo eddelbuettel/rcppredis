@@ -2,6 +2,10 @@
 
 	* DESCRIPTION (Version, Date): Roll minor version
 
+	* src/Redis.cpp: Minor edit, removed one unused var, renamed getreply
+	to getReply for consistency
+	* R/pubsub.R: Use getReply()
+
 	* README.md: Add Bryan to Authors here too
 	* inst/NEWS.md: Updated
 
