@@ -52,10 +52,10 @@ This package was derived from an initial fork of an earlier attempt named
 ways. William Pleasant provided some early patches. Whit Armstrong and
 Russell Pierce contributed extensions.
 
-### Author
+### Authors
 
-Dirk Eddelbuettel, based on earlier work by Wush Wu and with contributions by
-William Pleasant, Russell Pierce and Whit Armstrong.
+Dirk Eddelbuettel and Bryan W. Lewis, based on earlier work by Wush Wu and
+with contributions by William Pleasant, Russell Pierce and Whit Armstrong.
 
 ### License
 

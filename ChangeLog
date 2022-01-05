@@ -1,3 +1,38 @@
+2022-01-05  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* README.md: Add Bryan to Authors here too
+	* inst/NEWS.md: Updated
+
+	* DESCRIPTION: Rever back to just GPL (>= 2)
+	* LICENSE: Idem
+
+2022-01-04  Bryan W. Lewis <blewis@illposed.net>
+
+	* man/redisMonitorChannels.Rd: Improved minimal example
+	* man/listen.Rd: Idem
+
+2022-01-03  Bryan W. Lewis <blewis@illposed.net>
+
+	* R/pubsub.R: Simplified yet improved direct pub/sub support
+	* src/Redis.cpp: Idem
+	* man/redisMonitorChannels.Rd: Idem
+	* man/listen.Rd: Idem
+
+	* src/init.c: Removed now unneeded more direct import from rredis
+	* src/libsock.c: Idem
+	* R/internal.R: Idem
+	* R/rredis-misc.R: Idem
+	* man/redisAuth.Rd: Idem
+	* man/redisClose.Rd: Idem
+	* man/redisCmd.Rd: Idem
+	* man/redisConnect.Rd: Idem
+	* man/redisPublish.Rd: Idem
+	* man/redisSubscribe.Rd: Idem
+	* man/redisUnsubscribe.Rd: Idem
+	* man/redisZAdd.Rd: Idem
+
 2021-12-31  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/libsock.c (_OPEN_FD, _SOCK_NAGLE): Register as symbols, but use

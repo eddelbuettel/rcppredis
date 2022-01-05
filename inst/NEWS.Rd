@@ -7,10 +7,8 @@
   \itemize{
     \item Two simple C++11 feature remove needs for \pkg{BH} and \code{lexical_cast()}
     (Dirk in \ghpr{45} addressing \ghit{44})
-    \item Redis pub/sub is now supported by importing the R functions
-    and C underpinning from \pkg{rredis} (Dirk in \ghpr{43})
-    \item Bryan Lewis is now a coauthor; the imported functions remain
-    licenced under the Apache License 2.0.
+    \item Redis pub/sub is now supported (Dirk in \ghpr{43}, Bryan in \ghpr{46})
+    \item Bryan Lewis is now a coauthor
   }
 }
 
