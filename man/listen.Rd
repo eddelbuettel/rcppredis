@@ -46,4 +46,3 @@ listen(x)
 x$exec("UNSUBSCRIBE channel1")
 }
 }
-

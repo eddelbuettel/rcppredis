@@ -63,7 +63,8 @@ y$publish("channel2", pi)
 redisMonitorChannels(x)
 
 # Unsubscribe
-x$exec("UNSUBSCRIBE channel1 channel2")
+x$exec("UNSUBSCRIBE channel1")
+x$exec("UNSUBSCRIBE channel2")
 }
 }
 
