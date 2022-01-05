@@ -1,12 +1,14 @@
 \name{redisMonitorChannels}
 \alias{redisMonitorChannels}
 \title{redisMonitorChannels}
-\description{Subscribe to one or more Redis message channels.}
+\description{Listen for messages on subscribed Redis message channels.}
 \usage{
-redisMonitorChannels()
+redisMonitorChannels(context)
+}
+\arguments{
+  \item{context}{ A valid Redis context (see example).  }
 }
 \details{(From the Redis.io documentation):
-\code{redisSubscribe}, \code{redisUnsubscribe} and \code{redisPublish}
 implement the Publish/Subscribe messaging paradigm where (citing Wikipedia)
 senders (publishers) are not programmed to send their messages to specific
 receivers (subscribers). Rather, published messages are characterized into
@@ -25,7 +27,7 @@ of the message format.
 WARNING: The \code{redisMonitorChannels} function blocks indefinitely until a 
 message is received.
 
-Use the lower-level \code{redisGetResponse} function to simply poll channels
+Use the lower-level \code{listen} function to simply poll channels
 for messages without evaluating function callbacks.
 }
 \value{The result of an evaluated function callback message, or if
@@ -37,14 +39,13 @@ http://redis.io/commands
 B. W. Lewis
 }
 \seealso{
-\code{\link{redisSubscribe}}
-\code{\link{redisPublish}}
-\code{\link{redisUnsubscribe}}
-\code{\link{redisMonitorChannels}}
+\code{\link{listen}}
 }
 \examples{
 \dontrun{
-redisConnect()
+x <- new(Redis)
+y <- new(Redis)
+
 # Define a callback function to process messages from channel 1:
 channel1 <- function(x) {
   cat("Message received from channel 1: ",x,"\n")
@@ -53,15 +54,17 @@ channel1 <- function(x) {
 channel2 <- function(x) {
   cat("Message received from channel 2: ",x,"\n")
 }
-redisSubscribe(c('channel1','channel2'))
-# Monitor channels for at least 1 minute:
-t1 <- proc.time()[[3]]
-while(proc.time()[[3]] - t1 < 60)
-{
-  redisMonitorChannels()
-  Sys.sleep(0.05)
-}
-redisUnsubscribe(c('channel1','channel2'))
+
+# Subscribe to the channels...
+x$exec("SUBSCRIBE channel1")
+x$exec("SUBSCRIBE channel2")
+y$publish("channel2", pi)
+
+redisMonitorChannels(x)
+
+# Unsubscribe
+x$exec("UNSUBSCRIBE channel1")
+x$exec("UNSUBSCRIBE channel2")
 }
 }
 

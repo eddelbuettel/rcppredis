@@ -1,46 +1,23 @@
-`redisSubscribe` <- function(channels, pattern=FALSE)
+listen <- function(context)
 {
-  cmd <- 'SUBSCRIBE'
-  channels <- as.list(channels)
-  channels <- lapply(channels, charToRaw)
-  if(pattern) {
-    cmd <- 'PSUBSCRIBE'
-    if(length(channels)>1)
-      warning("Pattern subscription with multiple arguments")
+  if(!inherits(context, "Rcpp_Redis")) stop("context must be a valid Redis context")
+  ans <- context$getreply()
+  if(length(ans)!=3) {
+    warning("invalid subscription response, raw data returned")
+    return(ans)
   }
-  x <- do.call('.redisCmd', c(list(.raw(cmd)),channels))
-  len <- length(channels) - 1L
-  if(len > 0L)
-    x <- c(x, replicate(len, .getResponse(), simplify=FALSE))
-  x
+  ans[[1]] <- rawToChar(ans[[1]])
+  ans[[2]] <- rawToChar(ans[[2]])
+  ans[[3]] <- tryCatch(unserialize(ans[[3]]), error=function(e) rawToChar(ans[[3]]))
+  ans
 }
 
-`redisUnsubscribe` <- function(channels, pattern=FALSE)
-{
-  cmd <- 'UNSUBSCRIBE'
-  channels <- as.list(channels)
-  channels <- lapply(channels, charToRaw)
-  if(pattern){
-    cmd <- 'PUNSUBSCRIBE'
-    if(length(channels)>1) warning("Pattern subscription with multiple arguments")
-  }
-  x <- do.call('.redisCmd', c(list(.raw(cmd)),channels))
-  len <- length(channels) - 1L
-  if(len > 0L)
-    x <- c(x, replicate(len, .getResponse(), simplify=FALSE))
-  x
-}
 
-`redisPublish` <- function(channel, message)
+# Callback handler for convenience
+redisMonitorChannels <- function(context)
 {
-  do.call('.redisCmd', list(.raw('PUBLISH'),.raw(channel),message))
-}
-
-# Callback handler
-`redisMonitorChannels` <- function()
-{
-  x <- .getResponse()
-  if(length(x)!=3 && x[[1]] != "message") return(x)
+  x <- listen(context)
+  if(length(x)!=3 || x[[1]] != "message") return(x)
   if(exists(x[[2]],mode="function")) {
     return(do.call(x[[2]],as.list(x[[3]])))
   }
