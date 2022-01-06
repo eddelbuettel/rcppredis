@@ -56,15 +56,13 @@ channel2 <- function(x) {
 }
 
 # Subscribe to the channels...
-x$exec("SUBSCRIBE channel1")
-x$exec("SUBSCRIBE channel2")
+x$subscribe(c("channel1", "channel2"))
 y$publish("channel2", pi)
 
 redisMonitorChannels(x)
 
 # Unsubscribe
-x$exec("UNSUBSCRIBE channel1")
-x$exec("UNSUBSCRIBE channel2")
+x$unsubscribe(c("channel1", "channel2"))
 }
 }
 

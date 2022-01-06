@@ -35,14 +35,14 @@ B. W. Lewis
 x <- new(Redis)
 y <- new(Redis)
 
-# Subscribe to the channels...
-x$exec("SUBSCRIBE channel1")
+# Subscribe to two example channels...
+x$subscribe(c("channel1", "channel2"))
 y$publish("channel1", pi)
 
 # Receive a message (warning, can block indefinitely)...
 listen(x)
 
 # Unsubscribe...
-x$exec("UNSUBSCRIBE channel1")
+x$unsubscribe(c("channel1", "channel2"))
 }
 }

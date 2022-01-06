@@ -944,6 +944,39 @@ public:
         return(vec);
     }
 
+    // redis subscribe to one or more channels
+    SEXP subscribe_proto(Rcpp::CharacterVector channels, const char * type) {
+
+        int n = channels.size();
+        Rcpp::List vec(n);
+        for (int i=0; i<n; i++) {
+            std::string key(channels[i]);
+            
+            redisReply *reply = 
+                static_cast<redisReply*>(redisCommandNULLSafe(prc_, 
+                                                              "%s %s", 
+                                                              type, key.c_str()));
+            vec[i] = extract_reply(reply);
+            freeReplyObject(reply);
+        }
+        return(vec);
+    }
+
+    SEXP subscribe(Rcpp::CharacterVector channels) {
+
+      return(subscribe_proto(channels, "SUBSCRIBE"));
+    }
+
+    SEXP psubscribe(Rcpp::CharacterVector channels) {
+
+      return(subscribe_proto(channels, "PSUBSCRIBE"));
+    }
+
+    SEXP unsubscribe(Rcpp::CharacterVector channels) {
+
+      return(subscribe_proto(channels, "UNSUBSCRIBE"));
+    }
+
     // redis publish -- serializes to R internal format
     SEXP publish(std::string channel, SEXP s) {
 
@@ -1027,7 +1060,10 @@ RCPP_MODULE(Redis) {
 
         .method("quit", &Redis::quit,  "runs 'QUIT' to close connection")
 
-        .method("publish", &Redis::publish,  "runs 'SET channel message', serializes message internally")
+        .method("publish", &Redis::publish,  "runs 'PUBLISH channel message', serializes message internally")
+        .method("subscribe", &Redis::subscribe,  "runs 'SUBSCRIBE channel(s)', subscribe to one or more channels specified as a character vector")
+        .method("psubscribe", &Redis::subscribe,  "runs 'PSUBSCRIBE channel(s)', subscribe to one or more channel patterns specified as a character vector")
+        .method("unsubscribe", &Redis::subscribe,  "runs 'UNSUBSCRIBE channel(s)', unsubscribe one or more channels specified as a character vector")
         .method("getReply", &Redis::getReply,  "get a redis message")
 
 #ifdef HAVE_MSGPACK    
