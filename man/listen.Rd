@@ -16,7 +16,7 @@ channels, without knowledge of what (if any) subscribers there may be.
 Subscribers express interest in one or more channels, and only receive messages
 that are of interest, without knowledge of what (if any) publishers there are.
 
-WARNING: The \code{listen} function blocks indefinitely until a 
+WARNING: The \code{listen} function blocks indefinitely until a
 message is received.
 }
 \value{A three element list or an error, with elements "subscribe",
