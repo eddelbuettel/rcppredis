@@ -4,13 +4,16 @@
 
 	* src/Redis.cpp: Minor edit, removed one unused var, renamed getreply
 	to getReply for consistency
-	* R/pubsub.R: Use getReply()
+	* R/pubsub.R: Use getReply(), minor whitespace edit
 
 	* README.md: Add Bryan to Authors here too
 	* inst/NEWS.md: Updated
 
 	* DESCRIPTION: Rever back to just GPL (>= 2)
 	* LICENSE: Idem
+
+	* .editorconfig: Added standard settings file
+	* .Rbuildignore: Idem
 
 2022-01-04  Bryan W. Lewis <blewis@illposed.net>
 
