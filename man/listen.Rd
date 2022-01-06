@@ -28,7 +28,7 @@ http://redis.io/commands
 B. W. Lewis
 }
 \seealso{
-\code{\link{redisMontorChannels}}
+\code{\link{redisMonitorChannels}}
 }
 \examples{
 \dontrun{
