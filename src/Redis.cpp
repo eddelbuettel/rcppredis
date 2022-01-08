@@ -927,21 +927,68 @@ public:
         return(rep);
     }
 
-    // cf. hiredis redisGetReply, also see 'get' below.
-    SEXP getReply() {
+    // cf. hiredis redisGetReply, blocking read of pub/sub message
+    SEXP listen(std::string type) {
         redisReply *reply;
         redisGetReply(prc_, (void **)&reply);
 
         unsigned int nc = reply->elements;
         Rcpp::List vec(nc);
         for (unsigned int i = 0; i < nc; i++) {
-            int vlen = reply->element[i]->len;
-            Rcpp::RawVector res(vlen);
-            memcpy(res.begin(), reply->element[i]->str, vlen);
-            vec[i] = res;
+            if(i < 2) {
+                vec[i] = extract_reply(reply->element[i]);
+            } else
+            {
+              if(type == "string") {
+                  vec[i] = Rcpp::wrap(std::string(reply->element[i]->str));
+                  goto end;
+              }
+              int vlen = reply->element[i]->len;
+              Rcpp::RawVector res(vlen);
+              memcpy(res.begin(), reply->element[i]->str, vlen);
+              if(type == "raw") {
+                  vec[i] = res;
+              } else {
+                  vec[i] = unserializeFromRaw(res);
+              }
+            }
         }
+end:
         freeReplyObject(reply);
         return(vec);
+    }
+
+    // redis subscribe to one or more channels
+    SEXP subscribe_proto(Rcpp::CharacterVector channels, const char * type) {
+
+        int n = channels.size();
+        Rcpp::List vec(n);
+        for (int i=0; i<n; i++) {
+            std::string key(channels[i]);
+            
+            redisReply *reply = 
+                static_cast<redisReply*>(redisCommandNULLSafe(prc_, 
+                                                              "%s %s", 
+                                                              type, key.c_str()));
+            vec[i] = extract_reply(reply);
+            freeReplyObject(reply);
+        }
+        return(vec);
+    }
+
+    SEXP subscribe(Rcpp::CharacterVector channels) {
+
+      return(subscribe_proto(channels, "SUBSCRIBE"));
+    }
+
+    SEXP psubscribe(Rcpp::CharacterVector channels) {
+
+      return(subscribe_proto(channels, "PSUBSCRIBE"));
+    }
+
+    SEXP unsubscribe(Rcpp::CharacterVector channels) {
+
+      return(subscribe_proto(channels, "UNSUBSCRIBE"));
     }
 
     // redis publish -- serializes to R internal format
@@ -1027,8 +1074,11 @@ RCPP_MODULE(Redis) {
 
         .method("quit", &Redis::quit,  "runs 'QUIT' to close connection")
 
-        .method("publish", &Redis::publish,  "runs 'SET channel message', serializes message internally")
-        .method("getReply", &Redis::getReply,  "get a redis message")
+        .method("publish", &Redis::publish,  "runs 'PUBLISH channel message', serializes message internally")
+        .method("subscribe", &Redis::subscribe,  "runs 'SUBSCRIBE channel(s)', subscribe to one or more channels specified as a character vector")
+        .method("psubscribe", &Redis::subscribe,  "runs 'PSUBSCRIBE channel(s)', subscribe to one or more channel patterns specified as a character vector")
+        .method("unsubscribe", &Redis::subscribe,  "runs 'UNSUBSCRIBE channel(s)', unsubscribe one or more channels specified as a character vector")
+        .method("listen", &Redis::listen,  "listen for a redis pub/sub message (blocking)")
 
 #ifdef HAVE_MSGPACK    
         .method("msgPackMatrix",  &Redis::msgPackMatrix,  "gets msgPack'ed data as Matrix")

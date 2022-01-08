@@ -3,10 +3,11 @@
 \title{redisMonitorChannels}
 \description{Listen for messages on subscribed Redis message channels.}
 \usage{
-redisMonitorChannels(context)
+redisMonitorChannels(context, type=c("rdata", "raw", "string"))
 }
 \arguments{
   \item{context}{ A valid Redis context (see example).  }
+  \item{type}{ The expected message value type.  }
 }
 \details{(From the Redis.io documentation):
 implement the Publish/Subscribe messaging paradigm where (citing Wikipedia)
@@ -27,7 +28,7 @@ of the message format.
 WARNING: The \code{redisMonitorChannels} function blocks indefinitely until a 
 message is received.
 
-Use the lower-level \code{listen} function to simply poll channels
+Use the lower-level \code{listen} context method to simply poll channels
 for messages without evaluating function callbacks.
 }
 \value{The result of an evaluated function callback message, or if
@@ -37,9 +38,6 @@ http://redis.io/commands
 }
 \author{
 B. W. Lewis
-}
-\seealso{
-\code{\link{listen}}
 }
 \examples{
 \dontrun{
@@ -56,15 +54,13 @@ channel2 <- function(x) {
 }
 
 # Subscribe to the channels...
-x$exec("SUBSCRIBE channel1")
-x$exec("SUBSCRIBE channel2")
+x$subscribe(c("channel1", "channel2"))
 y$publish("channel2", pi)
 
 redisMonitorChannels(x)
 
 # Unsubscribe
-x$exec("UNSUBSCRIBE channel1")
-x$exec("UNSUBSCRIBE channel2")
+x$unsubscribe(c("channel1", "channel2"))
 }
 }
 
