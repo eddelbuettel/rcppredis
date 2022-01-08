@@ -7,6 +7,14 @@ This directory contains a pair of files to gather and display "live" (_i.e._
 delayed by the usual amount as is common for non-subscribers to generally
 expensive live market data) futures data.
 
+### What Does It Look Like?
+
+Here is a screenshot from a few months ago. The plotting logic and details have not changed. Displayed are two days worth of price snapshots every ten seconds.
+
+![](example_screenshot.png)
+
+### Give Me More Details
+
 One file uses package [quantmod](https://cloud.r-project.org/package=quantmod)
 to gather the data. It collects the data points in [Redis](https://redis.io) to
 build a history, but also publishes the on a channel by the name of the symbol.
