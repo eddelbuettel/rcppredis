@@ -51,6 +51,7 @@ redis <- new(Redis, host)
 if (redis$ping() != "PONG") stop("No Redis server?", call. = FALSE)
 x <- get_all_data(symbol, host)
 x <- most_recent_n_days(x,ndays)
+show_plot(symbol, x)
 
 ## This is the callback function assigned to a symbol
 .data2xts <- function(x) {
