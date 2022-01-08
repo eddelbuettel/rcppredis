@@ -5,6 +5,7 @@
 	* inst/pubsub/README.md: Describe pub/sub example
 	* inst/pubsub/intraday-ES-to-Redis.r: Collect and publish
 	* inst/pubsub/intraday-ES-from-Redis.r: Subscribe and plot
+	* inst/pubsub/pruneRedis.r: Shrinks history to last month
 
 2022-01-06  Bryan W. Lewis  <blewis@illposed.net>
 

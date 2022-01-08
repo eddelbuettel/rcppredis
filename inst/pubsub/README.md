@@ -19,6 +19,11 @@ graphics device to plot (also via package
 [littler](https://cloud.r-project.org/package=quantmod) leads to plotting to pdf
 instead).
 
+The third file should be invoked weekly or daily from `crontab` and prunes the
+history down to just the last months.  All three files could be generalized to
+read more than one symbol, or host, or ... from config files.  For now, and for
+simplicity, just the front ES contract is monitored.
+
 ### Acknowledgements
 
 These files owes their basic structure to a [gist by Josh Ulrich](## cf
