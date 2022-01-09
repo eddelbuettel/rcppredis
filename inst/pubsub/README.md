@@ -9,7 +9,8 @@ expensive live market data) futures data.
 
 ### What Does It Look Like?
 
-Here is a screenshot from a few months ago. The plotting logic and details have not changed. Displayed are two days worth of price snapshots every ten seconds.
+Here is a screenshot from a few months ago. The plotting logic and details have
+not changed. Displayed are two days worth of price snapshots every ten seconds.
 
 ![](example_screenshot.png)
 
@@ -23,9 +24,10 @@ The second file retrieves the recent history, and subscribes to the channel to
 receive updates which it displays as it gets them.  Because it uses an R
 graphics device to plot (also via package
 [quantmod](https://cloud.r-project.org/package=quantmod)) it is easiest to
-`source()` the file in an R session as using `Rscript` or `r` (from
-[littler](https://cloud.r-project.org/package=quantmod) leads to plotting to pdf
-instead).
+`source()` the file in an R session. (`Rscript` defaults to setting
+`interactive` to FALSE; otherwise R can be used with `--interactive`, or `r`
+from [littler](https://cloud.r-project.org/package=quantmod) can be used with
+its `-i` switch).
 
 The third file should be invoked weekly or daily from `crontab` and prunes the
 history down to just the last months.  All three files could be generalized to
