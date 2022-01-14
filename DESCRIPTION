@@ -1,8 +1,8 @@
 Package: RcppRedis
 Type: Package
 Title: 'Rcpp' Bindings for 'Redis' using the 'hiredis' Library
-Version: 0.1.11.3
-Date: 2022-01-08
+Version: 0.1.11.4
+Date: 2022-01-14
 Author: Dirk Eddelbuettel and Bryan W. Lewis
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: Connection to the 'Redis' key/value store using the
@@ -11,8 +11,8 @@ Description: Connection to the 'Redis' key/value store using the
  includes the pub/sub functions from the 'rredis' package.
 SystemRequirements: An available hiredis library (eg via package
  libhiredis-dev on Debian/Ubuntu, hiredis-devel on Fedora/RedHat, or
- directly from source from <https://github.com/redis/hiredis>) is
- preferred but otherwise built on demand.
+ directly from source from <https://github.com/redis/hiredis>) can be
+ used but version 1.0.2 is also included and built on demand if needed.
 URL: https://github.com/eddelbuettel/rcppredis, https://dirk.eddelbuettel.com/code/rcpp.redis.html
 BugReports: https://github.com/eddelbuettel/rcppredis/issues
 License: GPL (>= 2)

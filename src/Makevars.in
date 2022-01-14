@@ -15,5 +15,4 @@ all: 		$(SHLIB)
 $(SHLIB): 	@PKG_TARGET@
 
 libhiredis.a:
-		$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)" \
-			--directory=hiredis libhiredis.a
+		$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)" --directory=hiredis libhiredis.a
