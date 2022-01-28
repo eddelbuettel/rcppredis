@@ -1,3 +1,9 @@
+2022-01-28  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/pubsub/intraday-GLOBEX-to-Redis.r: Add generalisation of
+	pub/sub example to handle multiple symbols at once in gatherer
+	* inst/pubsub/intraday-GLOBEX-from-Redis.r: Ditto for plotter
+
 2022-01-14  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
