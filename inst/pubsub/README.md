@@ -34,10 +34,18 @@ history down to just the last months.  All three files could be generalized to
 read more than one symbol, or host, or ... from config files.  For now, and for
 simplicity, just the front ES contract is monitored.
 
+### Going Further
+
+The second set of files generalizes the approach to subscribe to a set of
+symbols---where we use a set of symbols from CME Globex, an electronic trading
+system with extended hours.
+Data for each symbols is cached, and published, in the 'to-Redis' file.  
+The corresponding 'from-Redis' file consumes and plots the data, again using a
+single process to cover multiple symbols and subscriptions.
+
 ### Acknowledgements
 
-These files owes their basic structure to a [gist by Josh Ulrich](## cf
-https://gist.github.com/joshuaulrich/ee11ef67b1461df399b84efd3c8f9f67#file-intraday-sp500-r)
+These files owes their basic structure to a [gist by Josh Ulrich](https://gist.github.com/joshuaulrich/ee11ef67b1461df399b84efd3c8f9f67#file-intraday-sp500-r)
 which also contained the basic subscription loop (and which is also the basis of
 this [extended and documented version in package
 dang](https://github.com/eddelbuettel/dang/blob/master/R/intradayMarketMonitor.R). This

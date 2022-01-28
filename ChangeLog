@@ -8,6 +8,8 @@
 
 	* inst/pubsub/pruneRedis.r: Generalize data pruner to multiple symbols
 
+	* inst/pubsub/README.md: Added brief paragraph on multi-symbol
+
 2022-01-14  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
