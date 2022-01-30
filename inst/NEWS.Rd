@@ -3,12 +3,14 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
-\section{Changes in version 0.1.12 (2022-01-xx)}{
+\section{Changes in version 0.xx.xx (2022-01-xx)}{
   \itemize{
-    \item Two simple C++11 feature remove needs for \pkg{BH} and \code{lexical_cast()}
-    (Dirk in \ghpr{45} addressing \ghit{44})
+    \item Two simple C++11 features remove needs for \pkg{BH} and
+    \code{lexical_cast()} (Dirk in \ghpr{45} addressing \ghit{44})
     \item Redis pub/sub is now supported (Dirk in \ghpr{43}, Bryan in \ghpr{46})
     \item Bryan Lewis is now a coauthor
+    \item Added pub/sub examples for single and multiple Globex symbols
+    \item The included hiredis sources have been updated to release 1.0.2
   }
 }
 
