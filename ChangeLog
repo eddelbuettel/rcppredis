@@ -1,3 +1,8 @@
+2022-01-30  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/examples/readPython.py: Updated
+	* inst/examples/writePython.py: Idem
+
 2022-01-28  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
