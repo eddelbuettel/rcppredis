@@ -1,0 +1,243 @@
+---
+title: A Very Brief Redis Introduction
+
+# Use letters for affiliations
+author:
+  - name: Dirk Eddelbuettel
+    affiliation: 1
+address:
+  - code: 1
+    address: Department of Statistics, University of Illinois, Urbana-Champaign, IL, USA
+
+# For footer text  TODO(fold into template, allow free form two-authors)
+lead_author_surname: Eddelbuettel
+
+# Place DOI URL or CRAN Package URL here
+doi: "https://cran.r-project.org/package=RcppRedis"
+
+# Abstract
+abstract: |
+  This note provides a very brief introduction to Redis highlighting its
+  usefulness in multi-lingual statistical computing.
+
+# Font size of the document, values of 9pt (default), 10pt, 11pt and 12pt
+fontsize: 9pt
+
+# Optional: Force one-column layout, default is two-column
+two_column: true
+
+# Optional: Enables lineno mode, but only if one_column mode is also true
+#lineno: true
+
+# Optional: Enable one-sided layout, default is two-sided
+#one_sided: true
+
+# Optional: Enable section numbering, default is unnumbered
+#numbersections: true
+
+# Optional: Specify the depth of section number, default is 5
+#secnumdepth: 5
+
+# Optional: Skip inserting final break between acknowledgements, default is false
+skip_final_break: true
+
+# Optional: Bibliography
+#bibliography: anytime
+
+# Optional: Enable a 'Draft' watermark on the document
+watermark: false
+
+# Customize footer, eg by referencing the vignette
+footer_contents: "RcppRedis Intro"
+
+# Produce a pinp document
+output:
+  pinp::pinp:
+    collapse: true
+    keep_tex: false
+
+header-includes: >
+  \newcommand{\proglang}[1]{\textsf{#1}}
+  \newcommand{\pkg}[1]{\textbf{#1}}
+
+# Required: Vignette metadata for inclusion in a package.
+vignette: >
+  %\VignetteIndexEntry{Brief Redis Introduction}
+  %\VignettePackage{RcppRedis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r initialsetup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+
+# Overview and Introduction
+
+[Redis][redis] is an very popular, very powerful, and very widely-used 'in-memory database-structure
+store'. It runs as a background process (a "daemon" in Unix lingo) and can be accessed locally or
+across a network making it very popular choice for 'data caches'. There is more to say about
+[Redis][redis] than we possibly could in a _short_ vignette introducing it, and other places already
+do so. The [Little Redis Book](https://www.openmymind.net/2012/1/23/The-Little-Redis-Book/), while a
+decade old (!!) is a fabulous _short_ start.  The [official site][redis] is very good as well (but
+by now a little overwhelming as so many features got added).
+
+This vignette aims highlight two aspects: how easy it is to use [Redis][redis] on simple examples,
+and also to stress how [Redis][redis] enables easy _multi-lingual_ computing as it can act as a
+'middle-man' between any set of languages capable of speaking the [Redis][redis] protocol -- which
+may cover most if not all common languages one may want to use!
+
+# Examples One: Key-Value Setter and Getter
+
+We will show several simple examples for the
+
+- `redis-cli` command used directly or via shell scripts
+- \proglang{Python} via the standard \proglang{Python} package for [Redis][redis]
+- \proglang{C} / \proglang{C++} via the [hiredis][hiredis] library
+- \proglang{R} via \pkg{RcppRedis} utilising the [hiredis][hiredis] library
+
+to demonstrate how different languages all can write to and read from [Redis][redis].  Our first example will
+use the simplest possibly data structure, a simple `SET` and `GET` of a key-value pair.
+
+## Command-Line
+
+`redis-cli` is command-line client.  Use is straightforward as shown an simply key-value getter and
+setter. We show use in 'shell script' form here, but the same commands also work interactively.
+
+```{bash cliGetSet}
+## note that document processing will show all
+## three results at once as opposed to one at time
+redis-cli SET ice-cream chocolate
+redis-cli GET ice-cream
+redis-cli GET ice-cream
+```
+
+Here, as in general, we will omit hostname and authentication arguments: on the same machine,
+`redis-cli` and the background `redis` process should work 'as is'. For access across a (local or
+remote) network, the configuration will have to be altered to permit access at given network
+interfaces and IP address ranges.
+
+We show the [redis][redis] commands used in uppercase notation, this is in line with the
+documentation. Note, however, that [Redis][redis] itself is case-insensitive here so `set` is equivalent to
+`SET`.
+
+## Python
+
+[Redis][redis] does have bindings for most, if not all, languages to
+computing with data. Here is a simple \proglang{Python} example.
+
+```{python pyGetSet}
+import redis
+
+redishost = "localhost"
+redisserver = redis.StrictRedis(redishost)
+
+key = "ice-cream"
+val = "strawberry"
+res = redisserver.set(key, val)
+print("Set", val, "under", key, "with result", res)
+
+key = "ice-cream"
+val = redisserver.get(key)
+print("Got", val, "from", key)
+```
+
+For \proglang{Python}, the redis commands are generally mapped to (lower-case named) member functions of the
+instantiated redis connection object, here `redisserver`.
+
+## C / C++
+
+Compiled languages work similarly. For \proglang{C} and \proglang{C++}, the [hiredis][hiredis] 'minimalistic' library from
+the [Redis][redis] project can be used---as it is by \pkg{RcppRedis}. Here we only show the code without executing
+it. This example is included in the package are as the preceding ones. \proglang{C} and \proglang{C++} work similarly to
+the interactive or \proglang{Python} commands. A simplified (and incomplete, see the `examples/`
+directory of the package for more) example of writing to [Redis][redis] would be
+
+```c++
+redisContext *prc;    // pointer to redis context
+
+std::string host = "127.0.0.1";
+int port = 6379;
+
+prc = redisConnect(host.c_str(), port);
+// should check error here
+redisReply *reply = (redisReply*)
+    redisCommand(prc, "SET ice-cream %s", value);
+// should check reply here
+```
+
+Reading is done by submitting for example a `GET` command for a key after which the `redisReply`
+contains the reply string.
+
+## R
+
+The \pkg{RcppRedis} packages uses the \pkg{Rcpp} Modules mechanism along with \pkg{Rcpp} to connect
+the [hiredis][hiredis] library to \proglang{R}.  A simple \proglang{R} example inline with above
+follows
+
+```{r RexSetGet}
+library(RcppRedis)
+redis <- new(Redis, "localhost")
+redis$set("ice-cream", "hazelnut")
+redis$get("ice-cream")
+```
+
+# Example Two: Hashes
+
+[Redis][redis] has support for a number of standard data structures. One of these is hashes.
+The official documentation list [sixteen commands](https://redis.io/commands#hash) in the
+corresponding group covering writing (`hset`), reading (`hget`), checking for key (`hexists`),
+deleting a key (`hdel`) and more.
+
+```{bash cliHash}
+## note that document processing will show all
+## three results at once as opposed to one at time
+redis-cli HSET myhash abc 42
+redis-cli HSET myhash def "some text"
+```
+
+We can illustrate reading and checking from Python:
+
+```{python pyHash}
+print(redisserver.hget("myhash", "abc"))
+print(redisserver.hget("myhash", "def"))
+print(redisserver.hexists("myhash", "xyz"))
+```
+
+For historical reasons, \pkg{RcppRedis} converts to/from \proglang{R} internal serialization on
+hash operations so it cannot _directly_ interoperate with these examples as they not deploy
+\proglang{R}-internal representation. The package has however a 'catch-all' command `exec` (which
+excutes a given \proglang{Redis} command string) which can be used here:
+
+```{r rHash}
+redis$exec("HGET myhash abc")
+redis$exec("HGET myhash def")
+redis$exec("HEXISTS myhash xyz")
+```
+
+# Example Three: Lists
+
+So far we have looked at setters and getters for values, as well as for hashes. All of these
+covered only one value per key. But \proglang{Redis} has support for many more types.
+
+```{bash cliList}
+## note that document processing will show all
+## three results at once as opposed to one at time
+redis-cli LPUSH mylist chocolate
+redis-cli LPUSH mylist strawberry vanilla
+redis-cli LLEN mylist
+```
+
+
+# Cleanup
+
+```{bash cleanup, include=TRUE}
+redis-cli hdel myhash abc
+redis-cli hdel myhash def
+redis-cli del ice-cream
+```
+
+[redis]: https://redis.io
+[hiredis]: https://github.com/redis/hiredis

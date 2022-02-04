@@ -4,6 +4,14 @@ rm -rf	autom4te.cache/ config.* src/Makedeps src/Makevars \
     	src/*.o src/*.d src/*.a src/*.dll src/*.so src/*.rc src/symbols.rds \
         src/hiredis/*.o src/hiredis/*.a \
     	*/*~ *~ \
-        inst/examples/readC++
-
-
+        inst/examples/readC++ \
+        vignettes/rmd/auto/ \
+        vignettes/rmd/*.log \
+        vignettes/rmd/*.aux \
+        vignettes/rmd/*.out \
+        vignettes/rmd/*.tex \
+        vignettes/rmd/*.blg \
+        vignettes/rmd/*.bbl \
+        vignettes/rmd/*.xwm \
+        vignettes/rmd/pinp.cls \
+        vignettes/rmd/jss.bst

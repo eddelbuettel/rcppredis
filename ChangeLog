@@ -1,3 +1,7 @@
+2022-02-03  Dirk Eddelbuettel  <edd@debian.org>
+
+	* vignettes/rmd/redis-intro.Rmd: First steps towards intro vignette
+
 2022-01-30  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/examples/readPython.py: Updated
@@ -676,4 +680,3 @@
 2013-07-22  Dirk Eddelbuettel  <edd@debian.org>
 
         * Initial version
-
