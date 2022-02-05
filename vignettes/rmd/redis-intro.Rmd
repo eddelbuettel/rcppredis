@@ -59,6 +59,9 @@ output:
 header-includes: >
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
+  \newcommand{\R}{\proglang{R}}
+  \newcommand{\Py}{\proglang{Py}}
+  \newcommand{\Redis}{\proglang{Redis}}
 
 # Required: Vignette metadata for inclusion in a package.
 vignette: >
@@ -70,7 +73,7 @@ vignette: >
 ---
 
 ```{r initialsetup, include=FALSE}
-knitr::opts_chunk$set(cache=TRUE)
+knitr::opts_chunk$set(cache=FALSE)
 ```
 
 
@@ -94,9 +97,9 @@ may cover most if not all common languages one may want to use!
 We will show several simple examples for the
 
 - `redis-cli` command used directly or via shell scripts
-- \proglang{Python} via the standard \proglang{Python} package for [Redis][redis]
+- \Py via the standard \Py package for [Redis][redis]
 - \proglang{C} / \proglang{C++} via the [hiredis][hiredis] library
-- \proglang{R} via \pkg{RcppRedis} utilising the [hiredis][hiredis] library
+- \R via \pkg{RcppRedis} utilising the [hiredis][hiredis] library
 
 to demonstrate how different languages all can write to and read from [Redis][redis].  Our first example will
 use the simplest possibly data structure, a simple `SET` and `GET` of a key-value pair.
@@ -144,7 +147,7 @@ val = redisserver.get(key)
 print("Got", val, "from", key)
 ```
 
-For \proglang{Python}, the redis commands are generally mapped to (lower-case named) member functions of the
+For \Py, the redis commands are generally mapped to (lower-case named) member functions of the
 instantiated redis connection object, here `redisserver`.
 
 ## C / C++
@@ -152,7 +155,7 @@ instantiated redis connection object, here `redisserver`.
 Compiled languages work similarly. For \proglang{C} and \proglang{C++}, the [hiredis][hiredis] 'minimalistic' library from
 the [Redis][redis] project can be used---as it is by \pkg{RcppRedis}. Here we only show the code without executing
 it. This example is included in the package are as the preceding ones. \proglang{C} and \proglang{C++} work similarly to
-the interactive or \proglang{Python} commands. A simplified (and incomplete, see the `examples/`
+the interactive or \Py commands. A simplified (and incomplete, see the `examples/`
 directory of the package for more) example of writing to [Redis][redis] would be
 
 ```c++
@@ -174,7 +177,7 @@ contains the reply string.
 ## R
 
 The \pkg{RcppRedis} packages uses the \pkg{Rcpp} Modules mechanism along with \pkg{Rcpp} to connect
-the [hiredis][hiredis] library to \proglang{R}.  A simple \proglang{R} example inline with above
+the [hiredis][hiredis] library to \R.  A simple \R example inline with above
 follows
 
 ```{r RexSetGet}
@@ -208,8 +211,8 @@ print(redisserver.hexists("myhash", "xyz"))
 
 For historical reasons, \pkg{RcppRedis} converts to/from \proglang{R} internal serialization on
 hash operations so it cannot _directly_ interoperate with these examples as they not deploy
-\proglang{R}-internal representation. The package has however a 'catch-all' command `exec` (which
-excutes a given \proglang{Redis} command string) which can be used here:
+\R-internal representation. The package has however a 'catch-all' command `exec` (which
+excutes a given \Redis command string) which can be used here:
 
 ```{r rHash}
 redis$exec("HGET myhash abc")
@@ -217,10 +220,40 @@ redis$exec("HGET myhash def")
 redis$exec("HEXISTS myhash xyz")
 ```
 
-# Example Three: Lists
+# Example Three: Sets
 
-So far we have looked at setters and getters for values, as well as for hashes. All of these
-covered only one value per key. But \proglang{Redis} has support for many more types.
+Sets are another basic data structure that is well-understood. In sets, elements can be added (once),
+removed (if present), and sets can be joined, intersected and differenced.
+
+```{bash cliSet}
+## note that document processing will show all
+## three results at once as opposed to one at time
+redis-cli SADD myset puppy
+redis-cli SADD myset kitten
+redis-cli SADD otherset birdie
+redis-cli SADD otherset kitten
+redis-cli SINTER myset otherset
+```
+
+We can do the same in \Py. Here we showing only the final intersect command, the set-addition
+commands are equivalent across implementations as are most other [Redis] command.
+
+```{python pySet}
+import redis
+redisserver = redis.StrictRedis("localhost")
+print(redisserver.sinter("myset", "otherset"))
+```
+
+And similarly in \R where `exec` returns a list:
+
+```{r rSet}
+redis$exec("SINTER myset otherset")
+```
+
+# Example Four: Lists
+
+So far we have looked at setters and getters for values, hashes, and sets. All of these
+covered only one value per key. But \Redis has support for many more types.
 
 ```{bash cliList}
 ## note that document processing will show all
@@ -234,9 +267,10 @@ redis-cli LLEN mylist
 # Cleanup
 
 ```{bash cleanup, include=TRUE}
+redis-cli del ice-cream
 redis-cli hdel myhash abc
 redis-cli hdel myhash def
-redis-cli del ice-cream
+redis-cli del mylist
 ```
 
 [redis]: https://redis.io
