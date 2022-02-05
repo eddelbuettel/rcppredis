@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteIndexEntry{Introduction to Redis}
+%\VignettePackage{RcppRedis}
+%\VignetteEncoding{UTF-8}
+
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{redis-intro.pdf}
+\end{document}

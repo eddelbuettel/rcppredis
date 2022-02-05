@@ -6,3 +6,4 @@ LICENSE
 .*\.tar\.gz$
 ^\.github
 ^\.editorconfig$
+^vignettes/rmd

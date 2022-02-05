@@ -1,3 +1,8 @@
+2022-02-05  Dirk Eddelbuettel  <edd@debian.org>
+
+	* vignettes/rcppredis-introduction.Rnw: Sweave wrapper
+	* vignettes/rcppredis-intro.pdf: Intro Vignette
+
 2022-02-03  Dirk Eddelbuettel  <edd@debian.org>
 
 	* vignettes/rmd/redis-intro.Rmd: First steps towards intro vignette
