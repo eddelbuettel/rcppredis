@@ -1,7 +1,9 @@
 2022-02-05  Dirk Eddelbuettel  <edd@debian.org>
 
-	* vignettes/rcppredis-introduction.Rnw: Sweave wrapper
+	* DESCRIPTION (Version, Date): Roll minor version
+
 	* vignettes/rcppredis-intro.pdf: Intro Vignette
+	* vignettes/rcppredis-introduction.Rnw: Sweave wrapper
 
 2022-02-03  Dirk Eddelbuettel  <edd@debian.org>
 
