@@ -60,7 +60,7 @@ header-includes: >
   \newcommand{\proglang}[1]{\textsf{#1}}
   \newcommand{\pkg}[1]{\textbf{#1}}
   \newcommand{\R}{\proglang{R}}
-  \newcommand{\Py}{\proglang{Py}}
+  \newcommand{\Py}{\proglang{Python}}
   \newcommand{\Redis}{\proglang{Redis}}
 
 # Required: Vignette metadata for inclusion in a package.
@@ -235,12 +235,14 @@ redis-cli SADD otherset kitten
 redis-cli SINTER myset otherset
 ```
 
-We can do the same in \Py. Here we showing only the final intersect command, the set-addition
+We can do the same in \Py. Here we showi only the final intersect command---the set-addition
 commands are equivalent across implementations as are most other [Redis] command.
 
-```{python pySet}
+```{python, pySetPre, include=FALSE}
 import redis
 redisserver = redis.StrictRedis("localhost")
+```
+```{python, pySet}
 print(redisserver.sinter("myset", "otherset"))
 ```
 
@@ -263,14 +265,51 @@ redis-cli LPUSH mylist strawberry vanilla
 redis-cli LLEN mylist
 ```
 
+We can access the list in \Py. Here we show access by index. Note that the index is zero-based, so
+'one' accesses the middle element in a list of length three.
 
-# Cleanup
 
-```{bash cleanup, include=TRUE}
+```{python, pyList}
+print(redisserver.lindex("mylist", 1))
+```
+
+In \R, using the 'list range' command for elements 0 to 1:
+
+```{r rList}
+redis$exec("LRANGE mylist 0 1")
+```
+
+The \pkg{RcppRedis} list commands (under the 'standard' names) work on serialized R objects so we
+once again utilize the `exec` command to execute this using the 'standard' name. As access to
+unserialized data is useful, the package also two alternates for numeric and string return data:
+
+```{r rList2}
+redis$listRangeAsStrings("mylist", 0, 1)
+```
+
+# Application Example: Hash R Objects
+
+The ability to serialize R object makes it particularly to store R objects directly.  This can be
+useful for data sets, and well as generated data
+
+```{r treesEx}
+fit <- lm(Volume ~ . - 1, data=trees)
+redis$hset("myhash", "data", trees)
+redis$hset("myhash", "fit", fit)
+fit2 <- redis$hget("myhash", "fit")
+all.equal(fit, fit2)
+```
+
+The retrieved model fit is equal to the one we stored in [Redis].
+
+<!--# Cleanup-->
+```{bash cleanup, include=FALSE}
 redis-cli del ice-cream
 redis-cli hdel myhash abc
 redis-cli hdel myhash def
 redis-cli del mylist
+redis-cli del myset
+redis-cli del otherset
 ```
 
 [redis]: https://redis.io
