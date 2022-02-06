@@ -42,7 +42,7 @@ two_column: true
 skip_final_break: true
 
 # Optional: Bibliography
-#bibliography: anytime
+bibliography: redis
 
 # Optional: Enable a 'Draft' watermark on the document
 watermark: false
@@ -79,11 +79,11 @@ knitr::opts_chunk$set(cache=FALSE)
 
 # Overview and Introduction
 
-[Redis][redis] is an very popular, very powerful, and very widely-used 'in-memory database-structure
+[Redis][redis] \citep{Redis} is an very popular, very powerful, and very widely-used 'in-memory database-structure
 store'. It runs as a background process (a "daemon" in Unix lingo) and can be accessed locally or
 across a network making it very popular choice for 'data caches'. There is more to say about
 [Redis][redis] than we possibly could in a _short_ vignette introducing it, and other places already
-do so. The [Little Redis Book](https://www.openmymind.net/2012/1/23/The-Little-Redis-Book/), while a
+do so. The [Little Redis Book](https://www.openmymind.net/2012/1/23/The-Little-Redis-Book/) \citep{Seguin:2021:Redis}, while a
 decade old (!!) is a fabulous _short_ start.  The [official site][redis] is very good as well (but
 by now a little overwhelming as so many features got added).
 
@@ -92,14 +92,14 @@ and also to stress how [Redis][redis] enables easy _multi-lingual_ computing as 
 'middle-man' between any set of languages capable of speaking the [Redis][redis] protocol -- which
 may cover most if not all common languages one may want to use!
 
-# Examples One: Key-Value Setter and Getter
+# Data Structure Example One: Key-Value Setter and Getter
 
 We will show several simple examples for the
 
 - `redis-cli` command used directly or via shell scripts
 - \Py via the standard \Py package for [Redis][redis]
 - \proglang{C} / \proglang{C++} via the [hiredis][hiredis] library
-- \R via \pkg{RcppRedis} utilising the [hiredis][hiredis] library
+- \R via \pkg{RcppRedis} \citep{CRAN:RcppRedis} utilising the [hiredis][hiredis] library
 
 to demonstrate how different languages all can write to and read from [Redis][redis].  Our first example will
 use the simplest possibly data structure, a simple `SET` and `GET` of a key-value pair.
@@ -176,9 +176,9 @@ contains the reply string.
 
 ## R
 
-The \pkg{RcppRedis} packages uses the \pkg{Rcpp} Modules mechanism along with \pkg{Rcpp} to connect
-the [hiredis][hiredis] library to \R.  A simple \R example inline with above
-follows
+The \pkg{RcppRedis} packages uses \pkg{Rcpp} Modules along with \pkg{Rcpp}
+\citep{CRAN:Rcpp,TAS:Rcpp} to connect the [hiredis][hiredis] library to \R.  A simple \R example
+follows.
 
 ```{r RexSetGet}
 library(RcppRedis)
@@ -187,7 +187,7 @@ redis$set("ice-cream", "hazelnut")
 redis$get("ice-cream")
 ```
 
-# Example Two: Hashes
+# Data Structure Example Two: Hashes
 
 [Redis][redis] has support for a number of standard data structures. One of these is hashes.
 The official documentation list [sixteen commands](https://redis.io/commands#hash) in the
@@ -220,7 +220,7 @@ redis$exec("HGET myhash def")
 redis$exec("HEXISTS myhash xyz")
 ```
 
-# Example Three: Sets
+# Data Structure Example Three: Sets
 
 Sets are another basic data structure that is well-understood. In sets, elements can be added (once),
 removed (if present), and sets can be joined, intersected and differenced.
@@ -252,7 +252,7 @@ And similarly in \R where `exec` returns a list:
 redis$exec("SINTER myset otherset")
 ```
 
-# Example Four: Lists
+# Data Structure Example Four: Lists
 
 So far we have looked at setters and getters for values, hashes, and sets. All of these
 covered only one value per key. But \Redis has support for many more types.
@@ -301,6 +301,13 @@ all.equal(fit, fit2)
 ```
 
 The retrieved model fit is equal to the one we stored in [Redis].
+
+# Summary
+
+This vignettet introduces the [Redis][redis] data structure engine, and demonstrates how reading
+and writing differently data types from different programming languages including \R, \Py and shell
+is concise and effective.  A final example of storing an \R dataset and model fit further
+illustrates the versatility of \Redis.
 
 <!--# Cleanup-->
 ```{bash cleanup, include=FALSE}
