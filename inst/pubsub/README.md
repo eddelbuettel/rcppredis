@@ -1,5 +1,5 @@
 
-## Pub/Sub Example with 'Life' Intra-Daily Market Data
+## Pub/Sub Example with 'Live' Intra-Daily Market Data
 
 ### What Is This?
 
@@ -39,7 +39,7 @@ simplicity, just the front ES contract is monitored.
 The second set of files generalizes the approach to subscribe to a set of
 symbols---where we use a set of symbols from CME Globex, an electronic trading
 system with extended hours.
-Data for each symbols is cached, and published, in the 'to-Redis' file.  
+Data for each symbols is cached, and published, in the 'to-Redis' file.
 The corresponding 'from-Redis' file consumes and plots the data, again using a
 single process to cover multiple symbols and subscriptions.
 
