@@ -17,7 +17,7 @@ doi: "https://cran.r-project.org/package=RcppRedis"
 
 # Abstract
 abstract: |
-  This note provides a very brief introduction to Redis highlighting its
+  This note provides a brief introduction to Redis highlighting its
   usefulness in multi-lingual statistical computing.
 
 # Font size of the document, values of 9pt (default), 10pt, 11pt and 12pt
@@ -48,7 +48,7 @@ bibliography: redis
 watermark: false
 
 # Customize footer, eg by referencing the vignette
-footer_contents: "RcppRedis Intro"
+footer_contents: "Redis Intro"
 
 # Produce a pinp document
 output:
@@ -79,7 +79,7 @@ knitr::opts_chunk$set(cache=FALSE)
 
 # Overview and Introduction
 
-[Redis][redis] \citep{Redis} is an very popular, very powerful, and very widely-used 'in-memory database-structure
+[Redis][redis] \citep{Redis} is a very popular, very powerful, and very widely-used 'in-memory database-structure
 store'. It runs as a background process (a "daemon" in Unix lingo) and can be accessed locally or
 across a network making it very popular choice for 'data caches'. There is more to say about
 [Redis][redis] than we possibly could in a _short_ vignette introducing it, and other places already
