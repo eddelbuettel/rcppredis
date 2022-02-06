@@ -1,0 +1,150 @@
+---
+title: Redis for Market Monitoring
+
+# Use letters for affiliations
+author:
+  - name: Dirk Eddelbuettel
+    affiliation: 1
+address:
+  - code: 1
+    address: Department of Statistics, University of Illinois, Urbana-Champaign, IL, USA
+
+# For footer text  TODO(fold into template, allow free form two-authors)
+lead_author_surname: Eddelbuettel
+
+# Place DOI URL or CRAN Package URL here
+doi: "https://cran.r-project.org/package=RcppRedis"
+
+# Abstract
+abstract: |
+  This note show how to use Redis cache (near-)real-time market data, and
+  utilise its publish/subscribe ("pub/sub") facility to distribute the data.
+
+# Font size of the document, values of 9pt (default), 10pt, 11pt and 12pt
+fontsize: 9pt
+
+# Optional: Force one-column layout, default is two-column
+two_column: true
+
+# Optional: Enables lineno mode, but only if one_column mode is also true
+#lineno: true
+
+# Optional: Enable one-sided layout, default is two-sided
+#one_sided: true
+
+# Optional: Enable section numbering, default is unnumbered
+#numbersections: true
+
+# Optional: Specify the depth of section number, default is 5
+#secnumdepth: 5
+
+# Optional: Skip inserting final break between acknowledgements, default is false
+skip_final_break: true
+
+# Optional: Bibliography
+bibliography: redis
+
+# Optional: Enable a 'Draft' watermark on the document
+watermark: false
+
+# Customize footer, eg by referencing the vignette
+footer_contents: "Redis Market Monitoring"
+
+# Produce a pinp document
+output:
+  pinp::pinp:
+    collapse: true
+    keep_tex: false
+
+header-includes: >
+  \newcommand{\proglang}[1]{\textsf{#1}}
+  \newcommand{\pkg}[1]{\textbf{#1}}
+  \newcommand{\R}{\proglang{R}}
+  \newcommand{\Py}{\proglang{Python}}
+  \newcommand{\Redis}{\proglang{Redis}}
+
+# Required: Vignette metadata for inclusion in a package.
+vignette: >
+  %\VignetteIndexEntry{Redis Market Monitoring}
+  %\VignettePackage{RcppRedis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r initialsetup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE)
+```
+
+
+# Overview
+
+[Redis][redis] \citep{Redis} is a very popular, very powerful, and very
+widely-used 'in-memory database-structure store' or server.  We provide a brief
+introduction to it in a sibbling vignette.
+
+This note describes an interesting use case and illustrates both the ability
+of \Redis to act as a (short-term) data cache (for which [Redis][redis] is
+very frequently used) but also rely on its ability to act as "pub/sub"
+message broker. The "pub/sub" (short for "publish/subscribe") framework is
+common to distribute data in a context where (possibly a large number of)
+"subscribers" consume data provided by one or a few services, often on a
+local network.  Entire libraries and application frameworks such as
+[ZeroMQ](https://zeromq.org/) (and literally hundreds more) have pub/sub at
+its core. But as this note shows, one may not need anything apart from a
+(possibly already existing) [Redis][redis] client.
+
+# Use Case: Market Data
+
+## Basics
+
+Monitoring financial market data is a very common application. In package
+\pkg{dang} we provide a function `intradayMarketMonitor()` (based on and
+extending an earlier version by Josh Ulrich publish in [this
+gist](https://gist.github.com/joshuaulrich/ee11ef67b1461df399b84efd3c8f9f67#file-intraday-sp500-r))
+which does just that for the SP500 index and its symbol ^GSPC (at Yahoo!
+Finance). For non-tradeable index symbols such as ^GSPC one can retrieve
+near-"real-time" updates which is nice. We put "real-time" in quotes here as
+there are of course delays in the transmission from the exchange or index
+provide to a service such as Yahoo! and then down a retail broadband line to
+a consumer. Yet it is "close" to real-time---as opposed to explicitly delayed
+data that we cover below. So `intradayMarketMonitor()` runs in an endless
+loop, updates the symbol and plot, and after market close once writes its
+history into an RDS file so that a restart can access some history. It is
+nicely minimal and self-contained design.
+
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=3.4in]{gspc_2022-02.png}
+    \caption{Intray Market Monitoring Example}
+    \label{fig:intraday-market-monitoring}
+  \end{center}
+\end{figure}
+
+Figure \ref{fig:intraday-market-monitoring} shows plot resulting from calling
+the function on a symbol, here again ^GSPC, when two days of history have
+been accumulated. (The plot was generated on a weekend with the preceding
+Friday close providing the last data point.)
+
+## Possible Shortcomings
+
+Some of the short-comings of the approach in `intradayMarketMonitor()` are
+
+- use of one R process per symbol
+- same process used for monitoring and plotting
+- no persistence until end of day
+
+Moreover, the 'real-time' symbol for the main market index is available only
+during (New York Stock Exchange) market hours.  Yet sometimes one wants to
+gauge a market reaction or 'mood' at off-market hours.
+
+So with this, idea arose to decouple market data _acquisition and caching_
+from actual _visualization_ or other monitoring.  This would also permit
+distributing the tasks over several machines: for example an 'always-on'
+monitoring machine could always track the data and store it for other
+'on-demand' machines or applications to access it.  And as we have seen,
+[Redis][redis] makes for a fine data 'caching' mechanism.
+
+[redis]: https://redis.io
+[hiredis]: https://github.com/redis/hiredis
