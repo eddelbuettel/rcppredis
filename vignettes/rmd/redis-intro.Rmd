@@ -287,6 +287,56 @@ unserialized data is useful, the package also two alternates for numeric and str
 redis$listRangeAsStrings("mylist", 0, 1)
 ```
 
+# Data Structure Example Five: Sorted Sets
+
+[Redis][redis] offers another data structure that can be of interest to us for use in time series.
+Recall how packages \pkg{zoo} and \pkg{xts} are, essentially, indexed containers around (numeric)
+matrices with a sorting index. This is commonly the `Date` type in \R for daily data, or a `POSIXct`
+datimetime type for intra-daily data at approximately a microsecond resolution. One can then index
+by day or datetime, subset, merge, ...  We can store such data in \Redis using sorted sets using the
+index as the first column.  A quick \R example illustrates.
+
+```{r sortedSet1}
+m1 <- matrix(c(100, 1, 2, 3), 1)
+redis$zadd("myz", m1) # add m1 indexed at 100
+m2 <- matrix(c(105, 2, 2, 4), 1)
+redis$zadd("myz", m2) # add m1 indexed at 105
+```
+
+In this first example we insert two matrices (with three values each) index at 100 and 105,
+respectively, to the sorted set under key `myz`. We will then ask for a range of data over the range
+from 90 to 120 which will include both sets of observations.
+
+```{r sortedSet2}
+res <- redis$zrangebyscore("myz", 90, 120)
+res
+```
+
+
+# Communication Example: Publish/Subscribe
+
+We have seen above that writen a _value_ to a particular _key_ into a list, set, or sorted set is
+straightforward.  So is publishing into a _channel_. \Redis keeps track of the current subscribers
+to a channel and dispatches the published content.
+
+Subscribers can join, and leave, anytime. Data is accessible via the publish/subscribe (or
+"pub/sub") mechanism while being subscribe. There is no mechanism _within pub/sub_ to obtain 'older'
+values, or to re-request values. Such services can however be provided by \Redis is its capacity of
+a data store.
+
+As subscription is typically blocking, we cannnot show a simple example in the vignette. But an
+illustration (without running code) follows.
+
+```r
+ch1 <- function(x) { cat("Got", x, "in ch1\n") }
+redis$subscribe("ch1")
+```
+
+Here we declare a callback function which by our convention uses the same name as the channel. So in
+the next when the subscription is activated, the callback function is registered with the current
+\Redis object. Once another process or entity publishes to the channel, the callback function will
+be invoked along with the value published on the channel.
+
 # Application Example: Hash R Objects
 
 The ability to serialize R object makes it particularly to store R objects directly.  This can be
@@ -299,13 +349,21 @@ redis$hset("myhash", "fit", fit)
 fit2 <- redis$hget("myhash", "fit")
 all.equal(fit, fit2)
 ```
+The retrieved model fit is equal to the one we stored in [Redis]. We can also re-fit on the
+retrieved data and obtain the same coefficient.  (The fit object stores information about the data
+set which differs here for technical reason internal to \R; the values are the same.)
 
-The retrieved model fit is equal to the one we stored in [Redis].
+```{r treesEx2}
+data2 <- redis$hget("myhash", "data")
+fit2 <- redis$hget("myhash", "fit")
+fit3 <- lm(Volume ~ . - 1, data=data2)
+all.equal(coef(fit2), coef(fit3))
+```
 
 # Summary
 
 This vignettet introduces the [Redis][redis] data structure engine, and demonstrates how reading
-and writing differently data types from different programming languages including \R, \Py and shell
+and writing different data types from different programming languages including \R, \Py and shell
 is concise and effective.  A final example of storing an \R dataset and model fit further
 illustrates the versatility of \Redis.
 
@@ -317,6 +375,7 @@ redis-cli hdel myhash def
 redis-cli del mylist
 redis-cli del myset
 redis-cli del otherset
+redis-cli del myz
 ```
 
 [redis]: https://redis.io
