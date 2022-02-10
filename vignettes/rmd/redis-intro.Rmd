@@ -1,5 +1,5 @@
 ---
-title: A Very Brief Redis Introduction
+title: A Brief Introduction to Redis
 
 # Use letters for affiliations
 author:
@@ -189,14 +189,12 @@ redis$get("ice-cream")
 
 # Data Structure Example Two: Hashes
 
-[Redis][redis] has support for a number of standard data structures. One of these is hashes.
+[Redis][redis] has support for a number of standard data structures including hashes.
 The official documentation list [sixteen commands](https://redis.io/commands#hash) in the
 corresponding group covering writing (`hset`), reading (`hget`), checking for key (`hexists`),
 deleting a key (`hdel`) and more.
 
 ```{bash cliHash}
-## note that document processing will show all
-## three results at once as opposed to one at time
 redis-cli HSET myhash abc 42
 redis-cli HSET myhash def "some text"
 ```
@@ -226,8 +224,6 @@ Sets are another basic data structure that is well-understood. In sets, elements
 removed (if present), and sets can be joined, intersected and differenced.
 
 ```{bash cliSet}
-## note that document processing will show all
-## three results at once as opposed to one at time
 redis-cli SADD myset puppy
 redis-cli SADD myset kitten
 redis-cli SADD otherset birdie
@@ -258,8 +254,6 @@ So far we have looked at setters and getters for values, hashes, and sets. All o
 covered only one value per key. But \Redis has support for many more types.
 
 ```{bash cliList}
-## note that document processing will show all
-## three results at once as opposed to one at time
 redis-cli LPUSH mylist chocolate
 redis-cli LPUSH mylist strawberry vanilla
 redis-cli LLEN mylist
