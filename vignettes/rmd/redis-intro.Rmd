@@ -290,11 +290,12 @@ redis$listRangeAsStrings("mylist", 0, 1)
 # Data Structure Example Five: Sorted Sets
 
 [Redis][redis] offers another data structure that can be of interest to us for use in time series.
-Recall how packages \pkg{zoo} and \pkg{xts} are, essentially, indexed containers around (numeric)
-matrices with a sorting index. This is commonly the `Date` type in \R for daily data, or a `POSIXct`
-datimetime type for intra-daily data at approximately a microsecond resolution. One can then index
-by day or datetime, subset, merge, ...  We can store such data in \Redis using sorted sets using the
-index as the first column.  A quick \R example illustrates.
+Recall how packages \pkg{zoo} \citep{CRAN:zoo} and \pkg{xts} \citep{CRAN:xts} are, essentially,
+indexed containers around (numeric) matrices with a sorting index. This is commonly the `Date` type
+in \R for daily data, or a `POSIXct` datimetime type for intra-daily data at approximately a
+microsecond resolution. One can then index by day or datetime, subset, merge, ...  We can store such
+data in \Redis using sorted sets using the index as the first column.  A quick \R example
+illustrates.
 
 ```{r sortedSet1}
 m1 <- matrix(c(100, 1, 2, 3), 1)
