@@ -77,10 +77,10 @@ repeat {
         errored <- FALSE
         msg(curr_t, "...recovered")
     }
-    v <- res[2, "Volume"]
+    v <- res[3, "Volume"]
     if (v != prevVol) {
         store_data(res)
-        msg(curr_t, "Storing data from", format(anytime::anytime(res[2,"Time"]))) #, "for", paste(rownames(res)[1], res[1, "Change"], rownames(res)[2], res[2, "Change"], collapse=","))
+        msg(curr_t, "Storing data from", format(anytime::anytime(res[3,"Time"]))) #, "for", paste(rownames(res)[1], res[1, "Change"], rownames(res)[2], res[2, "Change"], collapse=","))
     }
     prevVol <- v
     Sys.sleep(10)
