@@ -6,7 +6,7 @@ suppressMessages({
 })
 
 defaultTZ <- "America/Chicago"
-symbols <- c("CL=F", "ES=F", "GC=F")
+symbols <- c("BTC=F", "CL=F", "ES=F", "GC=F")
 
 get_data <- function(symbols) {
     quotes <- getQuote(symbols)

@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteIndexEntry{Redis for Market Monitoring}
+%\VignettePackage{RcppRedis}
+%\VignetteEncoding{UTF-8}
+
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{redis-monitoring.pdf}
+\end{document}
