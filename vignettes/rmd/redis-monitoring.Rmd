@@ -81,7 +81,8 @@ knitr::opts_chunk$set(cache=TRUE)
 
 [Redis][redis] \citep{Redis} is a popular, powerful, and widely-used
 'in-memory database-structure store' or server.  We provide a brief
-introduction to it in a sibbling vignette \citep{Eddelbuettel:2022:Redis}.
+introduction to it in a sibbling vignette \citep{Eddelbuettel:2022:Redis}
+that is also included in package \pkg{RcppRedis} \citep{CRAN:RcppRedis}.
 
 This note describes an interesting use case and illustrates both the ability
 of \Redis to act as a (short-term) data cache (for which [Redis][redis] is
@@ -116,7 +117,7 @@ nicely minimal and self-contained design.
 
 \begin{figure}[htb]
   \begin{center}
-    \includegraphics[width=3.4in]{gspc_2022-02.png}
+    \includegraphics[width=3.5in,height=4.75in]{gspc_2022-02.png}
     \caption{Intraday Market Monitoring Example}
     \label{fig:intraday-market-monitoring}
   \end{center}
@@ -150,14 +151,15 @@ monitoring machine could always track the data and store it for other
 
 ## Data
 
-The \pkg{quantmod} package provides a function `getQuote()` we can
-use to obtain data snapshots. We will look at ^GSPC as before but also ES=F,
-the Yahoo! Finance symbol for the 'rolling front contract' for the SP500
-Futures trading at CME Globex under symbol ES. (We will not get into details
-on futures contracts here as the topic is extensively covered elsewhere. We
-will just add that equity futures tend to trade in only one contract ("no
-curve") and roll to the next quarterly expiration at particular dates well
-established and known by market practice.)
+The \pkg{quantmod} package by \cite{CRAN:quantmod} provides a function
+`getQuote()` we can use to obtain data snapshots. We will look at ^GSPC as
+before but also ES=F, the Yahoo! Finance symbol for the 'rolling front
+contract' for the SP500 Futures trading at CME Globex under symbol ES. (We
+will not get into details on futures contracts here as the topic is
+extensively covered elsewhere. We will just add that equity futures tend to
+trade in only one contract ("no curve") and roll to the next quarterly
+expiration at particular dates well established and known by market
+practice.)
 
 ```{r quantmodDataEx}
 suppressMessages(library(quantmod))
@@ -201,7 +203,8 @@ symbol. Here the numeric data is simply concatenated with a `;` as separator
 and sent as text.
 
 The remainder of the 'acquiring data and storing in \Redis' code is similar
-to the non-\Redis varian `intradayMarketMonitor()` in \pkg{dang} \cite{CRAN:dang}.
+to the non-\Redis varian `intradayMarketMonitor()` in \pkg{dang}
+\citep{CRAN:dang}.
 
 ## Retrieving and Subscribing
 
@@ -286,7 +289,7 @@ running, they are included in the full file.)
 
 \begin{figure}[htb]
   \begin{center}
-    \includegraphics[width=3.4in]{four-symbols.png}
+    \includegraphics[width=3.5in,height=4.75in]{four-symbols.png}
     \caption{Multi-Symbol Market Monitoring Example}
     \label{fig:multi-symbols-market-monitoring}
   \end{center}
@@ -430,5 +433,20 @@ data element.
 
 Finally, the plot function simply plots for all symbols in the `symbols`
 vector.
+
+# Summary
+
+We describe a simple yet efficient mechanism to capture and publish 'live'
+market data by relying on \Redis via the \pkg{RcppRedis} package.
+
+# Acknowledgements
+
+Josh Ulrich provided a first useable monotoring loop for a life symbol which
+is gratefully acknowledged, as are numerous discussions about \pkg{quantmod}
+and other packages. Bryan Lewis not only put an elegant and working pub/sub
+mechanism in his \pkg{rredis}, but also ported it into a very elegant
+solution in package \pkg{RcppRedis}.  These features, and this monitoring
+application, would not exists without the help of either Josh or Bryan.
+
 [redis]: https://redis.io
 [hiredis]: https://github.com/redis/hiredis
