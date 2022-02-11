@@ -448,5 +448,14 @@ mechanism in his \pkg{rredis}, but also ported it into a very elegant
 solution in package \pkg{RcppRedis}.  These features, and this monitoring
 application, would not exists without the help of either Josh or Bryan.
 
+# Appendix
+
+## Data Growth
+
+The scripts do not write the data to \Redis with a 'time-to-live' (TTL)
+expiry. This means the database is growing. A simple way to limit the growth
+is to invoke a pruning script from `cron` once a week. We include a simple
+script in the `pub-sub/` directory of the package.
+
 [redis]: https://redis.io
 [hiredis]: https://github.com/redis/hiredis
