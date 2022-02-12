@@ -163,9 +163,14 @@ practice.)
 
 ```{r quantmodDataEx}
 suppressMessages(library(quantmod))
-res <- getQuote(c("^GSPC", "ES=F"))
+res <- getQuote(c("^GSPC", "ES=F", "SPY"))
 res[,1:3] # omitting chg, OHL, Vol
 ```
+
+The preceding code display shows how the \pkg{quantmod} \citep{CRAN:quantmod}
+funtion `getQuote()` can access index data (symbol '^GSPC'), futures data
+(symbol 'ES=F' as the rolling front contract) as well as equity / ETF data
+(symbol 'SPY').
 
 ## Storing and Publishing
 
