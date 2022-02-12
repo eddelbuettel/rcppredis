@@ -91,19 +91,18 @@ message broker. The "pub/sub" (short for "publish/subscribe") framework is
 common to distribute data in a context where (possibly a large number of)
 "subscribers" consume data provided by one or a few services, often on a
 local network.  Entire libraries and application frameworks such as
-[ZeroMQ](https://zeromq.org/) (and literally hundreds more) have pub/sub at
-its core. But as this note shows, one may not need anything apart from a
-(possibly already existing) [Redis][redis] client.
+[ZeroMQ](https://zeromq.org/) by \cite{ZeroMQ} (and literally hundreds more)
+have pub/sub at its core. But as this note shows, one may not need anything
+apart from a (possibly already existing) [Redis][redis] client.
 
 # Use Case: Market Data
 
 ## Basics
 
-Monitoring financial market data is a very common application. In package
-\pkg{dang} we provide a function `intradayMarketMonitor()` (based on and
-extending an earlier version by Josh Ulrich published in [this
-gist](https://gist.github.com/joshuaulrich/ee11ef67b1461df399b84efd3c8f9f67#file-intraday-sp500-r))
-which does just that for the SP500 index and its symbol ^GSPC (at Yahoo!
+Monitoring financial market data is a very common task, and many applications
+address it. In package \pkg{dang} we provide a function
+`intradayMarketMonitor()` which extends earlier work by \cite{Ulrich:2021:gist}
+and does just that for the SP500 index and its symbol ^GSPC (at Yahoo!
 Finance). For non-tradeable index symbols such as ^GSPC one can retrieve
 near-"real-time" updates which is nice. We put "real-time" in quotes here as
 there are of course delays in the transmission from the exchange or index
@@ -123,14 +122,15 @@ nicely minimal and self-contained design.
   \end{center}
 \end{figure}
 
-Figure \ref{fig:intraday-market-monitoring} shows plot resulting from calling
-the function on a symbol, here again ^GSPC, when two days of history have
-been accumulated. (The plot was generated on a weekend with the preceding
-Friday close providing the last data point.)
+Figure \ref{fig:intraday-market-monitoring} shows a plot resulting from
+calling the function on a symbol, here again ^GSPC, when two days of history
+have been accumulated. (The plot was generated on a weekend with the
+preceding Friday close providing the last data point.)
 
 ## Possible Shortcomings
 
-Some of the short-comings of the approach in `intradayMarketMonitor()` are
+Some of the short-comings of the approach in `intradayMarketMonitor()` and
+\cite{Ulrich:2021:gist} are
 
 - use of one R process per symbol
 - same process used for monitoring and plotting
@@ -140,12 +140,12 @@ Moreover, the 'real-time' symbol for the main market index is available only
 during (New York Stock Exchange) market hours.  Yet sometimes one wants to
 gauge a market reaction or 'mood' at off-market hours.
 
-So with this, idea arose to decouple market data _acquisition and caching_
-from actual _visualization_ or other monitoring.  This would also permit
-distributing the tasks over several machines: for example an 'always-on'
-monitoring machine could always track the data and store it for other
-'on-demand' machines or applications to access it.  And as we have seen,
-[Redis][redis] makes for a fine data 'caching' mechanism.
+So with this, the idea arose to decouple market data _acquisition and
+caching_ from actual _visualization_ or other monitoring.  This would also
+permit distributing the tasks over several machines: for example an
+'always-on' monitoring machine could always track the data and store it for
+other 'on-demand' machines or applications to access it.  And as we have
+seen, [Redis][redis] makes for a fine data 'caching' mechanism.
 
 # Building A Market Monitor
 
