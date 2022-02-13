@@ -85,7 +85,7 @@ across a network making it very popular choice for 'data caches'. There is more 
 [Redis][redis] than we possibly could in a _short_ vignette introducing it, and other places already
 do so. The [Little Redis Book](https://www.openmymind.net/2012/1/23/The-Little-Redis-Book/) \citep{Seguin:2021:Redis}, while a
 decade old (!!) is a fabulous _short_ start.  The [official site][redis] is very good as well (but
-by now a little overwhelming as so many features got added).
+by now a little overwhelming as so many features have been added).
 
 This vignette aims highlight two aspects: how easy it is to use [Redis][redis] on simple examples,
 and also to stress how [Redis][redis] enables easy _multi-lingual_ computing as it can act as a
