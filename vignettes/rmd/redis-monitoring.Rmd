@@ -174,12 +174,11 @@ funtion `getQuote()` can access index data (symbol '^GSPC'), futures data
 
 ## Storing and Publishing
 
-Given such a per-security row of data, we can use [Redis][redis] to store the
-data (given the timestamp as a sorting criterion) in a per-symbol stack. The
-Sorted Set data structure is very appropriate for this.   Similarly, given
-the symbol we can publish a datum with the current values and timestamp. In
-the example application included with \pkg{Redis}, this is done by the
-following function:
+Given per-security rows of data as shown in the preceding example, we can use
+[Redis][redis] to store the data using the timestamp as a sorting criterion in a
+per-symbol stack. The 'sorted set' data structure is very appropriate for
+this. The function `get_data()` transforms the result of `getQuote()` into a
+named numeric vector suitable for our use of 'sorted sets'.
 
 ```r
 get_data <- function(symbol) {
@@ -191,34 +190,75 @@ get_data <- function(symbol) {
              Volume = quote$Volume)
     vec
 }
+```
 
+Similarly, given the symbol, we can also 'publish' a datum with the current
+values and timestamp. In the example application included with \pkg{Redis}, this
+is done by relying on the following short function which receives the current data
+record and then stores and publish it.
+
+```r
 store_data <- function(vec, symbol) {
     redis$zadd(symbol, matrix(vec, 1))
     redis$publish(symbol, paste(vec,collapse=";"))
 }
 ```
 
-Here the `redis` instance is global, it could also be passed into the
-function.  `vec` is simply vector of observation procured by `getQuote()` as
-discussed in the preceding code exampled. The timestamp is transformed into a
-numeric value making the vector all-numeric which the format used by `zadd()`
-to added a 'sorted' (by the timestamp) numeric one-row matrix.  Beside
-storing the data, we also publish it via \Redis on channel named as the
-symbol. Here the numeric data is simply concatenated with a `;` as separator
-and sent as text.
+In this example, the `redis` instance is a script-level global symbol. This
+could easily be rewritten where it is also be passed into the function, and
+`vec` is a simple vector of observations procured by `getQuote()` as discussed
+in the preceding code example. The timestamp is transformed into a numeric value
+making the vector all-numeric which the format used by `zadd()` to added a
+'sorted' (by the timestamp) numeric one-row matrix.  Beside storing the data, we
+also publish it via \Redis on channel named as the symbol. Here the numeric data
+is simply concatenated with a `;` as separator and sent as text.
+
+The core functionality in the main loop is then as follows below where we also
+omitted some of the error or status messaging for brevity.
+
+In that example, the change is volume is used as a 'tell' for actual new
+data. This works reliably for the (main futures) markets we follow here which
+have essentially constant trading activity.  When some tranquil periods occur,
+the gaps between stored and published data points may be longer than the default
+sleep period of ten seconds used here.
+
+```r
+    y <- try(get_data(symbol), silent = TRUE)
+    if (inherits(y, "try-error")) {
+        msg(curr_t, "Error ...") # rest omitted
+        errored <- TRUE
+        Sys.sleep(15)
+        next
+    } else if (errored) {
+        errored <- FALSE
+        msg(curr_t, "...recovered")
+    }
+    v <- y["Volume"]
+    if (v != prevVol) {
+        store_data(y, symbol)
+        msg(curr_t, "Storing ...") # same
+    }
+    prevVol <- v
+    Sys.sleep(10)
+```
+
 
 The remainder of the 'acquiring data and storing in \Redis' code is similar
-to the non-\Redis varian `intradayMarketMonitor()` in \pkg{dang}
-\citep{CRAN:dang}.
+to the non-\Redis using variant `intradayMarketMonitor()` in \pkg{dang}
+\citep{CRAN:dang} that is based on the earlier work by \cite{Ulrich:2021:gist}.
 
 ## Retrieving and Subscribing
 
-The sibbling routine to receive data from \Redis to plot both reads recent
-stored data once at startup, and then grows the this data set via
-a subscription to the updates published to the channel.
+Two core routines to receive data from \Redis to plot both read the most recent
+stored data at startup, and then grow this data set via a subscription to the
+updates published to the channel.
 
-We first show the initial request of all data, which is then subset to the
-$n$ most recent days:
+We first show the initial request for all data, which is then subset to the
+$n$ most recent days.  We can request 'all' data as we also deploy a helper
+script referenced in the appendix to keep the overall data volume that is stored
+at 'manageable' and finite levels.  Adding such a step is important for a
+process such as this which continually appends data which, if unchecked, would
+'eventually' exhaust system resources.
 
 ```r
 most_recent_n_days <- function(x, n=2,
