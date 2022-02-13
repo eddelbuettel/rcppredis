@@ -1,6 +1,3 @@
-require(rredis)
-checkEquals <- function(x, y) if(!isTRUE(all.equal(x, y, check.attributes=FALSE))) stop()
-
 # redusMonitorChannels blocks forever until a message is received. We
 # use a background R process to send us some test messages.
 publisher <- function()
@@ -12,8 +9,11 @@ publisher <- function()
   system(paste(c(Rbin, args), collapse=" "), intern=FALSE, wait=FALSE)
 }
 
-if(Sys.getenv("RunRRedisTests") == "yes")
+if(Sys.getenv("RunRRedisTests") == "yes" && requireNamespce("rredis"))
 {
+  require(rredis)
+  checkEquals <- function(x, y) if(!isTRUE(all.equal(x, y, check.attributes=FALSE))) stop()
+
   redisConnect()
   redisFlushAll()
   redisPublish("channel1", charToRaw("A raw charachter data message example"))
@@ -22,12 +22,12 @@ if(Sys.getenv("RunRRedisTests") == "yes")
   # Define a callback function to process messages from channel 1:
   channel1 <- function(x) {
     cat("Message received from channel 1: ",x,"\n")
-    checkEquals("1", x);
+    checkEquals("1", x)
   }
   # Define a callback function to process messages from channel 2:
   channel2 <- function(x) {
     cat("Message received from channel 2: ",x,"\n")
-    checkEquals("2", x);
+    checkEquals("2", x)
   }
   redisSubscribe(c('channel1','channel2'))
   # Monitor channels for a few seconds until the background R process sends us

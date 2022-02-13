@@ -6,3 +6,4 @@ src/*.so
 src/*.dll
 ^\.Rproj\.user$
 vignettes/rmd/redis-intro.pdf
+vignettes/rmd/redis-monitoring.pdf

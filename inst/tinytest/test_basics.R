@@ -1,4 +1,6 @@
 
+if (!requireNamespace("rredis", quietly=TRUE)) exit_file("Skip this test")
+
 #test_01_setup <- function() {
 suppressMessages({
     library(datasets)
