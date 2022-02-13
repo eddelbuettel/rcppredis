@@ -1,3 +1,17 @@
+2022-02-13  Dirk Eddelbuettel  <edd@debian.org>
+
+	* vignettes/redis-monitoring.pdf: More polish
+
+2022-02-12  Dirk Eddelbuettel  <edd@debian.org>
+
+	* vignettes/rcppredis-intro.pdf: More polish on vignette
+	* vignettes/redis-monitoring.pdf: Ditto
+
+2022-02-07  Dirk Eddelbuettel  <edd@debian.org>
+
+	* vignettes/redis-monitoring.pdf: Market Monitor Vignette
+	* vignettes/market-monitoring.Rnw: Sweave wrapper
+
 2022-02-05  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version

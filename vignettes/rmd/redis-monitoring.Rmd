@@ -321,14 +321,17 @@ which is what is done in the main loop:
     show_plot(symbol, x)
 ```
 
-The `redisMonitorChannels(redis)` is key to the pub/sub mechanism.
-Subscriptions are stored in the `redis` instance, along with any optional
-callbacks. The function will listen to (one or more) channels and consume the
-next message, which it returns processed via the callbacl. This means that
-variable `y` above is standard `xts` object which `rbind` efficiently appends
-to an existing object which is how we grow `x` here. (For brevity we have
-omitted two statements messaging data upgrade process to the console when
-running, they are included in the full file.)
+The `redisMonitorChannels(redis)` is key to our pub/sub mechanism here.  The
+subscriptions are stored in the `redis` instance, along with any optional
+callbacks. The function will listen to (one or more) channels using the key
+\Redis function `listen()` and consume the next message. The key here is our
+addition of an optional per-symbol callback which, if present, is used to
+process the returned data. This means that in our application with the
+`.data2xts()` function used as a per-symbol callback, the returned variable `y`
+above is a standard `xts` object which `rbind` efficiently appends to an
+existing object which is how we grow `x` here. (For brevity we have omitted two
+statements messaging data upgrade process to the console when running, they are
+included in the full source file included in the package.)
 
 # Extending to Multiple Symbol
 
@@ -386,7 +389,7 @@ store_data <- function(res) {
 }
 ```
 
-It is use in the main loop in a `try()` statement and error handler.
+It is used in the main loop inside a `try()` statement and error handler.
 
 ```r
     res <- try(get_data(symbols), silent = TRUE)
@@ -409,10 +412,10 @@ It is use in the main loop in a `try()` statement and error handler.
     Sys.sleep(10)
 ```
 
-## Retrieving
+## Retrieving data
 
-The receiving side works similarly. We need to subscribe to multiple
-channels:
+The receiving side of the application works similarly. First, we need to
+subscribe to multiple channels:
 
 ```r
 env <- new.env() # local environment for callbacks
@@ -479,6 +482,14 @@ data element.
 Finally, the plot function simply plots for all symbols in the `symbols`
 vector.
 
+Overall, this setup is robust to data 'surprises' as the `try()` mechanism
+implements an error recovery in cases of temporary network or remote server
+issues.  The overall design is simple: each of the two files for, respectively,
+receiving-and-storing data and accessing-and-visualizing, contains only a few
+short helper functions (most of which where shown above) and a core `while()`
+loop. We have had these running uninterrupted and without issues for months on
+end.
+
 # Summary
 
 We describe a simple yet efficient mechanism to capture and publish 'live'
@@ -486,12 +497,13 @@ market data by relying on \Redis via the \pkg{RcppRedis} package.
 
 # Acknowledgements
 
-Josh Ulrich provided a first useable monotoring loop for a life symbol which
-is gratefully acknowledged, as are numerous discussions about \pkg{quantmod}
-and other packages. Bryan Lewis not only put an elegant and working pub/sub
+Joshua Ulrich provided a first useable monotoring loop for a life symbol which
+is gratefully acknowledged, as are numerous discussions about \pkg{quantmod} and
+other packages. Bryan Lewis not only put an elegant and working pub/sub
 mechanism in his \pkg{rredis}, but also ported it into a very elegant
-solution in package \pkg{RcppRedis}.  These features, and this monitoring
-application, would not exists without the help of either Josh or Bryan.
+callback-based solution in package \pkg{RcppRedis}.  These features, and this
+monitoring application, would not exists without the help of either Josh or
+Bryan.
 
 # Appendix
 
