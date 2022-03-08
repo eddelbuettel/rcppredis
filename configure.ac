@@ -3,7 +3,7 @@
 ##
 ##  RcppRedis -- R interface to Redis via Rcpp and hiredis
 ##
-##  Copyright (C) 2014 - 2021  Dirk Eddelbuettel
+##  Copyright (C) 2014 - 2022  Dirk Eddelbuettel
 ##
 ##  RcppRedis is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by
@@ -22,12 +22,12 @@
 AC_PREREQ(2.61)
 
 # Process this file with autoconf to produce a configure script.
-AC_INIT([RcppRedis],  m4_esyscmd_s([awk -e '/^Version:/ {print $2}' DESCRIPTION]))
+AC_INIT([RcppRedis],[0.2.0],[edd@debian.org])
 
 # Ensure C++ is set up as R expects
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
-    AC_MSG_ERROR([Could not determine R_HOME.])   
+    AC_MSG_ERROR([Could not determine R_HOME.])
 fi
 CXX=`"${R_HOME}/bin/R" CMD config CXX`
 CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
@@ -53,7 +53,7 @@ if test x"${PKGCONFIG}" == x"yes"; then
         hiredis_cxxflags=`pkg-config --cflags hiredis`
         hiredis_libs=`pkg-config --libs hiredis`
         ## no need to build libhiredis.a
-        hiredis_tgt=""     
+        hiredis_tgt=""
     else
         AC_MSG_WARN([pkg-config exists but hiredis is not available.])
     fi
@@ -66,7 +66,7 @@ CXXFLAGS="${hiredis_cxxflags} ${CXXFLAGS}"
 ## check for headers Debian has in libhiredis-dev
 hiredis_header=hiredis/hiredis.h
 hiredis_header_cache_var=AS_TR_SH([ac_cv_header_$hiredis_header])
-AC_CHECK_HEADER([$hiredis_header],,[       
+AC_CHECK_HEADER([$hiredis_header],,[
     # If it didn't work, try adding /usr/local directly then trying again
     AC_MSG_WARN([Hiredis headers not found with via default CXXFLAGS and CPPFLAGS, trying /usr/local/include])
     CPPFLAGS="${hiredis_cxxflags} ${CPPFLAGS} -I/usr/local/include"
@@ -84,7 +84,7 @@ AC_CHECK_HEADER([$hiredis_header],,[
 ## First, set R_HOME, respecting an environment variable if set (now above)
 #: ${R_HOME=$(R RHOME)}
 #if test -z "${R_HOME}"; then
-#    AC_MSG_ERROR([Could not determine R_HOME.])   
+#    AC_MSG_ERROR([Could not determine R_HOME.])
 #fi
 
 ## look for (optional !!) MsgPack headers
@@ -100,7 +100,7 @@ if test x"$?" == x"1"; then
 else
     AC_MSG_RESULT([no])
     AC_MSG_NOTICE([Install (optional) RcppMsgPack (>= 0.2.0) from CRAN via 'install.packages("RcppMsgPack")'])
-fi    
+fi
 
 ## now use all these
 AC_SUBST([PKG_CXXFLAGS],["${PKG_CXXFLAGS} $hiredis_cxxflags $msgpack_cxxflags"])
@@ -113,8 +113,7 @@ echo "
 ${PACKAGE_NAME} ${PACKAGE_VERSION}
 ================
 
-compiler flags: ${PKG_CXXFLAGS} 
+compiler flags: ${PKG_CXXFLAGS}
 link argument:  ${PKG_LIBS}
 library target: ${PKG_TARGET}
 "
-

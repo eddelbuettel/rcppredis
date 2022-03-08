@@ -1,4 +1,15 @@
+2022-03-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.2.0
+	* configure.ac: Idem
+	* configure: Regenerated
+
+	* src/Makevars.ucrt: Updated as suggested by Tomas
+
 2022-02-13  Dirk Eddelbuettel  <edd@debian.org>
+
+	* tests/pubsub.R: Make 'rredis' use conditional
+	* inst/tinytest/test_basics.R: Idem
 
 	* vignettes/redis-monitoring.pdf: More polish
 
