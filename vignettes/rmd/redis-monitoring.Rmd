@@ -17,7 +17,7 @@ doi: "https://cran.r-project.org/package=RcppRedis"
 
 # Abstract
 abstract: |
-  This note show how to use Redis cache (near-)real-time market data, and
+  This note shows how to use Redis cache (near-)real-time market data, and
   utilise its publish/subscribe ("pub/sub") facility to distribute the data.
 
 # Font size of the document, values of 9pt (default), 10pt, 11pt and 12pt
