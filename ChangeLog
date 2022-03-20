@@ -1,3 +1,11 @@
+2022-03-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Additional_repositories): Add ghrr drat
+	(SystemRequirements): Mention rredis use via ghrr drat
+
+	* tests/pubsub.R (checkEquals): Updated to support both rredis and
+	RcppRedis
+
 2022-03-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.0
