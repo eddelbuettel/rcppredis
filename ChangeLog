@@ -6,7 +6,7 @@
 	(SystemRequirements): Mention rredis use via ghrr drat
 
 	* tests/pubsub.R (checkEquals): Updated to support both rredis and
-	RcppRedis
+	RcppRedis, standardize on env.var. RunRcppRedisTests to activate
 
 2022-03-08  Dirk Eddelbuettel  <edd@debian.org>
 

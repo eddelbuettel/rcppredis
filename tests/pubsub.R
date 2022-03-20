@@ -1,6 +1,6 @@
 
 ## Version 1 using rredis
-if (Sys.getenv("RunRRedisTests") == "yes" && requireNamespace("rredis", quietly=TRUE)) {
+if (Sys.getenv("RunRcppRedisTests") == "yes" && requireNamespace("rredis", quietly=TRUE)) {
     suppressMessages(require(rredis))
     ## redusMonitorChannels blocks forever until a message is received. We
     ## use a background R process to send us some test messages.
@@ -40,7 +40,7 @@ if (Sys.getenv("RunRRedisTests") == "yes" && requireNamespace("rredis", quietly=
 }
 
 ## Version 2 using RcppRedis
-if (Sys.getenv("RunRRedisTests") == "yes") {
+if (Sys.getenv("RunRcppRedisTests") == "yes") {
     suppressMessages(library(RcppRedis))
     publisher_rcppredis <- function() {
         Rscript <- paste(R.home(component="bin"), "Rscript", sep="/")
