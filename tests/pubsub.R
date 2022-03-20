@@ -13,7 +13,6 @@ if (Sys.getenv("RunRcppRedisTests") == "yes" && requireNamespace("rredis", quiet
     checkEquals <- function(x, y) if (!isTRUE(all.equal(x, y, check.attributes=FALSE))) stop()
 
     redisConnect()
-    redisFlushAll()
     redisPublish("channel1", charToRaw("A raw charachter data message example"))
     redisPublish("channel2", charToRaw("A raw charachter data message example"))
 
@@ -33,8 +32,6 @@ if (Sys.getenv("RunRcppRedisTests") == "yes" && requireNamespace("rredis", quiet
     redisMonitorChannels()
     redisMonitorChannels()
     redisUnsubscribe(c('channel1','channel2'))
-
-    redisFlushAll()
 
     cat("Done rredis\n")
 }
