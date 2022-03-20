@@ -1,5 +1,7 @@
 2022-03-20  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Roll minor version
+
 	* DESCRIPTION (Additional_repositories): Add ghrr drat
 	(SystemRequirements): Mention rredis use via ghrr drat
 
