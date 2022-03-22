@@ -16,14 +16,18 @@ get_data <- function(symbols) {
     quotes
 }
 
-store_data <- function(res) {
+store_data <- function(curr_t, res) {
     symbols <- rownames(res)
     res <- as.matrix(res)
     for (symbol in symbols) {
         vec <- res[symbol,,drop=FALSE]
         #print(vec)
-        redis$zadd(symbol, vec)
-        redis$publish(symbol, paste(vec,collapse=";"))
+        if (redis$ping() == "PONG") {
+            redis$zadd(symbol, vec)
+            redis$publish(symbol, paste(vec,collapse=";"))
+        } else {
+            msg(curr_t, "skipping update, no redis ?")
+        }
     }
 }
 
@@ -55,7 +59,7 @@ repeat {
         nres <- res
         for (symbol in symbols)
             nres[symbol,] <- vec
-        store_data(nres)
+        store_data(curr_t, nres)
         tgt <- as.POSIXct(paste(format(as.Date(curr_t)), "17:09:59.999"))
         dt <- max(1L,round(as.numeric(difftime(tgt, curr_t, units="secs")),0))
         msg(index(now_t), "after close; setting NA, sleeping", dt, "seconds")
@@ -63,7 +67,7 @@ repeat {
         market_closed <- TRUE
         next
     } else if ((now >= 1710 || now < 1526) && market_closed) {
-        msg(index(now_t), "market open")
+        msg(curr_t, "market open")
         market_closed <- FALSE
         #prevVol <- 0
     }
@@ -79,7 +83,7 @@ repeat {
     }
     v <- res[3, "Volume"]
     if (v != prevVol) {
-        store_data(res)
+        store_data(curr_t, res)
         msg(curr_t, "Storing data from", format(anytime::anytime(res[3,"Time"]))) #, "for", paste(rownames(res)[1], res[1, "Change"], rownames(res)[2], res[2, "Change"], collapse=","))
     }
     prevVol <- v

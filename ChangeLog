@@ -1,3 +1,9 @@
+2022-03-22  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/pubsub/intraday-GLOBEX-from-Redis.r: Updated to four symbols
+	and faster (though still 'flickering') plot routine
+	* inst/pubsub/intraday-GLOBEX-to-Redis.r: Small improvements
+
 2022-03-20  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version

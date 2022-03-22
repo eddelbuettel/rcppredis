@@ -10,7 +10,7 @@ suppressMessages({
 
 ## Parameters
 defaultTZ <- "America/Chicago"
-symbols <- c("CL=F", "ES=F", "GC=F")
+symbols <- c("BTC=F", "CL=F", "ES=F", "GC=F")
 host <- "localhost"
 ndays <- 2
 
@@ -41,13 +41,16 @@ get_all_data <- function(symbols, host) {
     rl <- sapply(symbols, simplify=FALSE, FUN=function(symbol) {
         m <- redis$zrange(symbol, 0, -1)
         colnames(m) <- c("Time", "Close", "Change", "PctChange", "Volume")
-        y <- xts(m[,-1], order.by=anytime(as.numeric(m[,1])))
+        y <- xts(m[,-1,drop=FALSE], order.by=anytime(as.numeric(m[,1,drop=FALSE])))
         y
     })
 }
 
+## using a trick from the BioConductor slack from 2022-02-15
 show_plot_base <- function(symbols, rl) {
+    pdf(NULL)
     op <- par(no.readonly=TRUE)
+    dev.control(displaylist = "enable")
     par(mfrow=c(length(symbols), 1))
     res <- lapply(symbols, function(symbol) {
         x <- rl[[symbol]]
@@ -58,6 +61,8 @@ show_plot_base <- function(symbols, rl) {
                        round(lastx[,"PctChange"], 5),
                        format(Sys.time(), "%H:%M:%S"),
                        sep = "   ")
+        ##print(dim(x))
+        ##if (nrow(x) > 1)
         cs <- quantmod::chart_Series(x[,"Close"], name = cname)
         ## cf issue 270
         ##    chart_Series(IBM, name=NULL)
@@ -65,6 +70,9 @@ show_plot_base <- function(symbols, rl) {
         plot(cs)
     })
     par(op)
+    p <- grDevices::recordPlot()
+    invisible(dev.off())
+    print(p)
 }
 
 ## alternate using ggplot and patchwork
@@ -140,7 +148,7 @@ repeat {
         sym <- rl[["symbol"]]
         x[[sym]] <- rbind(x[[sym]], rl[["data"]])
         z <- tail(x[[sym]],1)
-        if (sym == symbols[2]) msg(Sys.time(), "data", format(index(z)), "close", z[1,"Close"], "change", z[1, "PctChange"])
+        if (sym == symbols[3]) msg(Sys.time(), "data", format(index(z)), "close", z[1,"Close"], "change", z[1, "PctChange"])
     } else {
         msg(index(now_t), "null data in y")
     }
