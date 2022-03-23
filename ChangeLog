@@ -7,6 +7,9 @@
 	* demo/spDemo.R: Idem
 	* inst/pubsub/README.md: Idem
 
+	* src/hiredis/GNUmakefile (#WARNINGS): Alter upstream Makefile
+	because CRAN is CRAN
+
 2022-03-22  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/pubsub/intraday-GLOBEX-from-Redis.r: Updated to four symbols
