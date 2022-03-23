@@ -4,7 +4,7 @@ suppressMessages({
     ## use install.packages("rredis", repos=c("https://ghrr.github.io/drat", getOption("repos")))
     library(rredis)
     library(rbenchmark)
-}
+})
 
 data(trees)
 fit <- lm(log(Volume) ~ log(Girth) + log(Height), data=trees)
