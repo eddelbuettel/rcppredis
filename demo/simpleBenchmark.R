@@ -1,6 +1,6 @@
 
 library(RcppRedis)
-library(rredis)
+library(rredis)			# use install.packages("rredis", repos=c("https://ghrr.github.io/drat", getOption("repos")))
 library(rbenchmark)
 
 data(trees)
@@ -46,5 +46,3 @@ abcList <- lapply(1:101,function(x) abc)
 
 all.equal(abc1, abcList)
 all.equal(abc1, abc2)
-
-

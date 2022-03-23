@@ -1,6 +1,9 @@
 
-suppressMessages(library(RcppRedis))
-suppressMessages(library(rredis))
+suppressMessages({
+    library(RcppRedis)
+    ## use install.packages("rredis", repos=c("https://ghrr.github.io/drat", getOption("repos")))
+    library(rredis)
+})
 
 data(trees)
 fit <- lm(log(Volume) ~ log(Girth) + log(Height), data=trees)
@@ -20,7 +23,7 @@ fit2 <- rredis::redisGet(key)
 all.equal(fit, fit2)
 
 
-## or serialize an object internally 
+## or serialize an object internally
 key <- "foo2"
 redis$set(key, fit)
 
@@ -35,10 +38,3 @@ fit4 <- redis$get(key)
 
 ## check
 all.equal(fit, fit4)
-
-
-
-                                 
-                                 
-
-

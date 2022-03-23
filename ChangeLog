@@ -1,3 +1,12 @@
+2022-03-23  Dirk Eddelbuettel  <edd@debian.org>
+
+	* demo/quickTest.R: Note that rredis is now on ghrr.github.io/drat
+	* demo/simDemo.R: Idem
+	* demo/simpleBenchmark.R: Idem
+	* demo/simpleBenchmark2.R: Idem
+	* demo/spDemo.R: Idem
+	* inst/pubsub/README.md: Idem
+
 2022-03-22  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/pubsub/intraday-GLOBEX-from-Redis.r: Updated to four symbols

@@ -51,8 +51,8 @@ this [extended and documented version in package
 dang](https://github.com/eddelbuettel/dang/blob/master/R/intradayMarketMonitor.R). This
 was then generalized to use a symbol such as `ES=F` (for the front month SP500
 futures contract) for which no history is available by both caching in [Redis](https://redis.io)
-and using pub/sub to distribute.  The
-[rredis](https://cloud.r-project.org/package=rredis) was used for the initial
+and using pub/sub to distribute.  The `rredis` package (installable from the
+[ghrr drat](https://ghrr.github.io/drat) repo) was used for the initial
 pub/sub approach.  Bryan W. Lewis then ported and adapted the pub/sub model to
 this RcppRedis package.
 

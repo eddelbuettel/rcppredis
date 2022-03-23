@@ -1,6 +1,6 @@
 
 
-library(rredis)
+library(rredis) # use install.packages("rredis", repos=c("https://ghrr.github.io/drat", getOption("repos")))
 suppressMessages(library(RcppRedis))
 suppressMessages(library(xts))
 library(rbenchmark)
@@ -14,7 +14,7 @@ if (!redisExists("sp500")) {
     sp <- getSymbols("^GSPC", auto.assign=FALSE, from="1950-01-01", to=Sys.Date())
     redisSet("sp500", sp)
     cat("Downloaded SP500 and stored in redis\n")
-} else { 
+} else {
     cat("Retrieving SP500 from redis\n")
     sp <- redisGet("sp500")
 }
@@ -34,9 +34,9 @@ rInsert <- function(x) {
 ## This is atrociously slow:
 ##
 ## R> system.time(rInsert(sp))
-##    user  system elapsed 
-##  16.392   0.292 645.643 
-## R> 
+##    user  system elapsed
+##  16.392   0.292 645.643
+## R>
 
 system.time(m1 <- do.call(rbind, redisLRange("sp500_R", 0, -1)))
 system.time(m2 <- do.call(rbind, redis$lrange("sp500_R", 0, -1)))
@@ -81,7 +81,7 @@ print(res)
 ## 3    redis$listToMatrix(redis$lrange("sp500_R", 0, -1))           25   2.300    7.770
 ## 2        do.call(rbind, redis$lrange("sp500_R", 0, -1))           25   2.629    8.882
 ## 1         do.call(rbind, redisLRange("sp500_R", 0, -1))           25  48.028  162.257
-## R> 
+## R>
 
 ## redo after Bryan's socket/nagle update to rredis:
 ##                                                    test replications elapsed relative
@@ -89,4 +89,4 @@ print(res)
 ## 3    redis$listToMatrix(redis$lrange("sp500_R", 0, -1))           25   2.112    5.189
 ## 2        do.call(rbind, redis$lrange("sp500_R", 0, -1))           25   2.458    6.039
 ## 1         do.call(rbind, redisLRange("sp500_R", 0, -1))           25  48.367  118.838
-## edd@max:~/git/rhiredis/demo$ 
+## edd@max:~/git/rhiredis/demo$

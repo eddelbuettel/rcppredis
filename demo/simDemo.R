@@ -1,6 +1,6 @@
 
 library(xts)
-library(rredis)
+library(rredis) # use install.packages("rredis", repos=c("https://ghrr.github.io/drat", getOption("repos")))
 library(RcppRedis)
 library(rbenchmark)
 
@@ -54,9 +54,8 @@ identical(xt,zt)
 redis$zremrangebyscore("ex:ascii:series", 0, Inf)
 redis$zremrangebyscore("ex:bin:series", 0, Inf)
 
-benchmark(setAsAscii(dat), setAsBinary(dat), 
+benchmark(setAsAscii(dat), setAsBinary(dat),
           replications=1, order="relative")[,1:4]
 
 
 benchmark(getFromAscii(), getFromBinary(), replications=10, order="relative")[,1:4]
-
