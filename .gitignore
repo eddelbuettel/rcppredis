@@ -7,3 +7,6 @@ src/*.dll
 ^\.Rproj\.user$
 vignettes/rmd/redis-intro.pdf
 vignettes/rmd/redis-monitoring.pdf
+local/
+vignettes/rmd/intro-arxiv/
+vignettes/rmd/monitoring-arxiv/

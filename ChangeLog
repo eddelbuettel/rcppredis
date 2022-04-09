@@ -1,3 +1,7 @@
+2022-04-09  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .gitignore: Update .gitignore
+
 2022-03-23  Dirk Eddelbuettel  <edd@debian.org>
 
 	* demo/quickTest.R: Note that rredis is now on ghrr.github.io/drat
