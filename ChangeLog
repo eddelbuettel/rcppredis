@@ -1,5 +1,9 @@
 2022-04-09  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Release 0.2.1
+	* configure.ac: Idem
+	* configure: Regenerated
+
 	* .gitignore: Update .gitignore
 
 2022-03-23  Dirk Eddelbuettel  <edd@debian.org>
