@@ -1,3 +1,8 @@
+2022-04-14  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/pubsub/intraday-GLOBEX-from-Redis.r (show_plot_base): Use
+	dev.hold() and.flush() to avoid flicker, with thanks to Paul Murrell
+
 2022-04-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.1

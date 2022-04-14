@@ -46,11 +46,9 @@ get_all_data <- function(symbols, host) {
     })
 }
 
-## using a trick from the BioConductor slack from 2022-02-15
 show_plot_base <- function(symbols, rl) {
-    pdf(NULL)
+    dev.hold(1L)                        # thanks to Paul Murrell: hold the plot device ...
     op <- par(no.readonly=TRUE)
-    dev.control(displaylist = "enable")
     par(mfrow=c(length(symbols), 1))
     res <- lapply(symbols, function(symbol) {
         x <- rl[[symbol]]
@@ -61,8 +59,6 @@ show_plot_base <- function(symbols, rl) {
                        round(lastx[,"PctChange"], 5),
                        format(Sys.time(), "%H:%M:%S"),
                        sep = "   ")
-        ##print(dim(x))
-        ##if (nrow(x) > 1)
         cs <- quantmod::chart_Series(x[,"Close"], name = cname)
         ## cf issue 270
         ##    chart_Series(IBM, name=NULL)
@@ -70,9 +66,7 @@ show_plot_base <- function(symbols, rl) {
         plot(cs)
     })
     par(op)
-    p <- grDevices::recordPlot()
-    invisible(dev.off())
-    print(p)
+    dev.flush(1L)                       # ... and flush all at once without flicker
 }
 
 ## alternate using ggplot and patchwork
