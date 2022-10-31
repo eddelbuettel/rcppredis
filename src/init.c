@@ -3,12 +3,12 @@
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
 
-/* FIXME: 
+/* FIXME:
    Check these declarations against the C/Fortran source code.
 */
 
 /* .Call calls */
-extern SEXP _rcpp_module_boot_Redis();
+extern SEXP _rcpp_module_boot_Redis(void);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_Redis", (DL_FUNC) &_rcpp_module_boot_Redis, 0},
