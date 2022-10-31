@@ -22,7 +22,7 @@
 AC_PREREQ(2.61)
 
 # Process this file with autoconf to produce a configure script.
-AC_INIT([RcppRedis],[0.2.1],[edd@debian.org])
+AC_INIT([RcppRedis],[0.2.2],[edd@debian.org])
 
 # Ensure C++ is set up as R expects
 : ${R_HOME=`R RHOME`}

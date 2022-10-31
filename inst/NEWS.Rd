@@ -3,6 +3,15 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.2.2 (2022-10-31)}{
+  \itemize{
+    \item Thanks to a suggestion by Paul Murrell, the real-time chart
+    demo now uses dev.hold() and.flush() for flicker-free updates.
+    \item One function prototype was updated for \code{clang-15}.
+    \item GitHub Actions were updated to checkout version 3.
+  }
+}
+
 \section{Changes in version 0.2.1 (2022-04-09)}{
   \itemize{
     \item The \code{rredis} package can be installed via the repo listed in

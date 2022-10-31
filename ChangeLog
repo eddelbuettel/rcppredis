@@ -1,5 +1,9 @@
 2022-10-31  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Release 0.2.2
+	* configure.ac: Idem
+	* configure: Regenerated
+
 	* src/init.c: Add 'void' for proper prototypes pleasing clang-15
 
 	* .github/workflows/ci.yaml (jobs): Update to actions/checkout@v3
