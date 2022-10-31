@@ -2,6 +2,8 @@
 
 	* src/init.c: Add 'void' for proper prototypes pleasing clang-15
 
+	* .github/workflows/ci.yaml (jobs): Update to actions/checkout@v3
+
 2022-04-14  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/pubsub/intraday-GLOBEX-from-Redis.r (show_plot_base): Use
