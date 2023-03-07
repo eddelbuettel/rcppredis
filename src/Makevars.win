@@ -4,8 +4,6 @@ RWINLIB=../windows/hiredis-1.0.0
 PKG_CPPFLAGS = -I${RWINLIB}/include -DSTRICT_R_HEADERS
 PKG_LIBS = -L${RWINLIB}/lib${R_ARCH}${CRT} -lhiredis -lws2_32
 
-CXX_STD = CXX11
-
 all: winlibs
 
 winlibs:
