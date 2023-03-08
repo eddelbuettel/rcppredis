@@ -2,5 +2,3 @@
 ##
 PKG_CPPFLAGS = -I${R_TOOLS_SOFT}/include/hiredis -DSTRICT_R_HEADERS
 PKG_LIBS = -lhiredis -lws2_32
-
-CXX_STD = CXX11
