@@ -3,6 +3,15 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.2.3 (2023-03-08)}{
+  \itemize{
+    \item No longer set a C++ compilation standard as the default choices by
+    R are sufficient for the package
+    \item Switch include to Rcpp/Rcpp which signals use of all Rcpp features
+    including Modules
+  }
+}
+
 \section{Changes in version 0.2.2 (2022-10-31)}{
   \itemize{
     \item Thanks to a suggestion by Paul Murrell, the real-time chart

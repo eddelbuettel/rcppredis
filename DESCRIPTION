@@ -1,8 +1,8 @@
 Package: RcppRedis
 Type: Package
 Title: 'Rcpp' Bindings for 'Redis' using the 'hiredis' Library
-Version: 0.2.2
-Date: 2022-10-31
+Version: 0.2.3
+Date: 2023-03-08
 Author: Dirk Eddelbuettel and Bryan W. Lewis
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: Connection to the 'Redis' key/value store using the

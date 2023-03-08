@@ -1,3 +1,11 @@
+2023-03-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.2.3
+	* configure.ac: Idem
+	* configure: Regenerated
+
+	* src/Makevars.ucrt: No longer set a C++ standard
+
 2023-03-07  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Switch to including Rcpp/Rcpp (no net change)
