@@ -6,6 +6,7 @@
 \alias{unserializeFromChar}
 \alias{serializeToRaw}
 \alias{unserializeFromRaw}
+\alias{RcppRedis-package}
 \docType{package}
 \title{Rcpp module using hiredis library to connect R to Redis}
 \description{
@@ -30,7 +31,7 @@
 }
 \details{
   Please consult the Redis documentation for details on the available
-  commands. See the Rcpp-modules vignette for details on Rcpp modules. 
+  commands. See the Rcpp-modules vignette for details on Rcpp modules.
 }
 \author{Dirk Eddelbuettel \email{edd@debian.org}}
 \keyword{package}
