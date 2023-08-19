@@ -1,9 +1,10 @@
-## RcppRedis: RcppRedis is a Rcpp and hiredis-based Redis client for R 
+## RcppRedis: RcppRedis is a Rcpp and hiredis-based Redis client for R
 
 [![CI](https://github.com/eddelbuettel/rcppredis/workflows/ci/badge.svg)](https://github.com/eddelbuettel/rcppredis/actions?query=workflow%3Aci)
-[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
-[![CRAN](http://www.r-pkg.org/badges/version/RcppRedis)](https://cran.r-project.org/package=RcppRedis) 
-[![Dependencies](https://tinyverse.netlify.com/badge/RcppRedis)](https://cran.r-project.org/package=RcppRedis) 
+[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
+[![CRAN](http://www.r-pkg.org/badges/version/RcppRedis)](https://cran.r-project.org/package=RcppRedis)
+[![r-universe](https://eddelbuettel.r-universe.dev/badges/RcppRedis)](https://eddelbuettel.r-universe.dev/RcppRedis)
+[![Dependencies](https://tinyverse.netlify.com/badge/RcppRedis)](https://cran.r-project.org/package=RcppRedis)
 [![Downloads](http://cranlogs.r-pkg.org/badges/RcppRedis?color=brightgreen)](https://www.r-pkg.org:443/pkg/RcppRedis)
 [![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/rcppredis)](https://github.com/eddelbuettel/rcppredis)
 
@@ -60,4 +61,3 @@ with contributions by William Pleasant, Russell Pierce and Whit Armstrong.
 ### License
 
 GPL (>= 2)
-
