@@ -3,12 +3,20 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.2.4 (2023-08-19)}{
+  \itemize{
+    \item Add missing alias for \sQuote{RcppRedis-package} to \code{rhiredis.Rd}.
+    \item Remove Suggests: \pkg{rredis} which triggers a NOTE nag as it is
+    only on an \sQuote{Additional_repositories}.
+  }
+}
+
 \section{Changes in version 0.2.3 (2023-03-08)}{
   \itemize{
     \item No longer set a C++ compilation standard as the default choices by
-    R are sufficient for the package
+    R are sufficient for the package.
     \item Switch include to Rcpp/Rcpp which signals use of all Rcpp features
-    including Modules
+    including Modules.
   }
 }
 
