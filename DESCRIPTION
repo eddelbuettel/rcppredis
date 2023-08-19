@@ -20,5 +20,4 @@ BugReports: https://github.com/eddelbuettel/rcppredis/issues
 License: GPL (>= 2)
 Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
 LinkingTo: Rcpp, RApiSerialize
-Suggests: RcppMsgPack, rredis, tinytest
-Additional_repositories: https://ghrr.github.io/drat
+Suggests: RcppMsgPack, tinytest
