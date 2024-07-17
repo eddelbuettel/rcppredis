@@ -1,7 +1,7 @@
 
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2013 - 2023    Dirk Eddelbuettel
+//  Copyright (C) 2013 - 2024    Dirk Eddelbuettel
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
 //  Portions Copyright (C) 2015  Russell S. Pierce
