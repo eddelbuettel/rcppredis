@@ -1,3 +1,12 @@
+2024-10-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Authors@R): Added
+
+2024-09-29  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Use R::serializeToRaw() and R::unserializeFromRaw()
+	* DESCRIPTION: Add versioned imports on RApiSerialize (>= 0.1.4)
+
 2024-07-16  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Switch some URLs from http to https
