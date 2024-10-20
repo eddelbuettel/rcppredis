@@ -248,7 +248,7 @@ public:
     std::string set(std::string key, SEXP s) {
 
         // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
 
         // uses binary protocol, see hiredis doc at github
         redisReply *reply =
@@ -271,7 +271,7 @@ public:
             int nc = reply->len;
             Rcpp::RawVector res(nc);
             memcpy(res.begin(), reply->str, nc);
-            obj = unserializeFromRaw(res);
+            obj = R::unserializeFromRaw(res);
         }
         freeReplyObject(reply);
         return(obj);
@@ -281,7 +281,7 @@ public:
     int hset(std::string key, std::string field, SEXP s) {
 
         // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
 
         // uses binary protocol, see hiredis doc at github
         redisReply *reply =
@@ -305,7 +305,7 @@ public:
         Rcpp::RawVector res(nc);
         memcpy(res.begin(), reply->str, nc);
         freeReplyObject(reply);
-        SEXP obj = unserializeFromRaw(res);
+        SEXP obj = R::unserializeFromRaw(res);
         return(obj);
     }
 
@@ -379,7 +379,7 @@ public:
             int vlen = reply->element[valueidx]->len;
             Rcpp::RawVector res(vlen);
             memcpy(res.begin(), reply->element[valueidx]->str, vlen);
-            SEXP obj = unserializeFromRaw(res);
+            SEXP obj = R::unserializeFromRaw(res);
             vec[i] = obj;
         }
         vec.names() = keys;
@@ -391,7 +391,7 @@ public:
     SEXP sadd(std::string key, SEXP s) {
 
         // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
         const char* cmdv[3] = {"SADD", key.c_str(), reinterpret_cast<char*>(x.begin())};
         size_t cmdlen[3] = {4, key.length(), static_cast<size_t>(x.size())};
 
@@ -407,7 +407,7 @@ public:
     SEXP srem(std::string key, SEXP s) {
 
         // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
         const char* cmdv[3] = {"SREM", key.c_str(), reinterpret_cast<char*>(x.begin())};
         size_t cmdlen[3] = {4, key.length(), static_cast<size_t>(x.size())};
 
@@ -431,7 +431,7 @@ public:
             int nc = reply->element[i]->len;
             Rcpp::RawVector res(nc);
             memcpy(res.begin(), reply->element[i]->str, nc);
-            SEXP obj = unserializeFromRaw(res);
+            SEXP obj = R::unserializeFromRaw(res);
             x[i] = obj;
         }
 
@@ -479,7 +479,7 @@ public:
             int nc = reply->element[i]->len;
             Rcpp::RawVector res(nc);
             memcpy(res.begin(), reply->element[i]->str, nc);
-            SEXP obj = unserializeFromRaw(res);
+            SEXP obj = R::unserializeFromRaw(res);
             x[i] = obj;
         }
 
@@ -513,7 +513,7 @@ public:
             int nc = reply->len;
             Rcpp::RawVector res(nc);
             memcpy(res.begin(), reply->str, nc);
-            obj = unserializeFromRaw(res);
+            obj = R::unserializeFromRaw(res);
         }
 
         return(obj);
@@ -543,7 +543,7 @@ public:
     SEXP lpush(std::string key, SEXP s) {
 
         // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
 
       // uses binary protocol, see hiredis doc at github
         redisReply *reply =
@@ -561,7 +561,7 @@ public:
     SEXP rpush(std::string key, SEXP s) {
 
         // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
 
       // uses binary protocol, see hiredis doc at github
         redisReply *reply =
@@ -939,17 +939,17 @@ public:
                 vec[i] = extract_reply(reply->element[i]);
             } else
             {
-              if(type == "string") {
+              if (type == "string") {
                   vec[i] = Rcpp::wrap(std::string(reply->element[i]->str));
                   goto end;
               }
               int vlen = reply->element[i]->len;
               Rcpp::RawVector res(vlen);
               memcpy(res.begin(), reply->element[i]->str, vlen);
-              if(type == "raw") {
+              if (type == "raw") {
                   vec[i] = res;
               } else {
-                  vec[i] = unserializeFromRaw(res);
+                  vec[i] = R::unserializeFromRaw(res);
               }
             }
         }
@@ -995,7 +995,7 @@ end:
     SEXP publish(std::string channel, SEXP s) {
 
         // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : serializeToRaw(s);
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
 
         // uses binary protocol, see hiredis doc at github
         redisReply *reply =
