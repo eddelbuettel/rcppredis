@@ -18,6 +18,6 @@ SystemRequirements: An available hiredis library (eg via package
 URL: https://github.com/eddelbuettel/rcppredis, https://dirk.eddelbuettel.com/code/rcpp.redis.html
 BugReports: https://github.com/eddelbuettel/rcppredis/issues
 License: GPL (>= 2)
-Imports: methods, Rcpp (>= 0.11.0), RApiSerialize
+Imports: methods, Rcpp (>= 0.11.0), RApiSerialize (>= 0.1.4)
 LinkingTo: Rcpp, RApiSerialize
 Suggests: RcppMsgPack, tinytest
