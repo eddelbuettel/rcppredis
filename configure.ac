@@ -46,7 +46,7 @@ AC_PROG_PKGCONFIG
 
 ## use pkg-config for hiredis
 ##
-if test x"${PKGCONFIG}" == x"yes"; then
+if test x"${PKGCONFIG}" = x"yes"; then
     ## check via pkg-config for hiredis
     if pkg-config --exists hiredis; then
         ## obtain cflags and obtain libs
@@ -92,7 +92,7 @@ AC_CHECK_HEADER([$hiredis_header],,[
 AC_MSG_CHECKING([for RcppMsgPack])
 ## Check if R has RcppMsgPack
 $("${R_HOME}/bin/Rscript" --vanilla -e 'hasPkg <- "RcppMsgPack" %in% rownames(installed.packages()); q(save="no", status=if (hasPkg) packageVersion("RcppMsgPack") >= "0.2.0" else FALSE)')
-if test x"$?" == x"1"; then
+if test x"$?" = x"1"; then
     AC_MSG_RESULT([yes])
     msgpackincdir=$("${R_HOME}/bin/Rscript" --vanilla -e 'cat(system.file("include", package="RcppMsgPack"))')
     msgpack_cxxflags="-I${msgpackincdir} -DHAVE_MSGPACK"
