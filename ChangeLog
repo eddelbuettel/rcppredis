@@ -1,3 +1,7 @@
+2025-01-09  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll micro version and date
+
 2025-01-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* configure.ac: Correct two possible bashisms
