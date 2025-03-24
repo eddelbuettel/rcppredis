@@ -495,9 +495,9 @@ int redisvFormatCommand(char **target, const char *format, va_list ap) {
     cmd = hi_malloc(totlen+1);
     if (cmd == NULL) goto memory_err;
 
-    pos = sprintf(cmd,"*%d\r\n",argc);
+    pos = snprintf(cmd,totlen,"*%d\r\n",argc);
     for (j = 0; j < argc; j++) {
-        pos += sprintf(cmd+pos,"$%zu\r\n",sdslen(curargv[j]));
+        pos += snprintf(cmd+pos,totlen-pos,"$%zu\r\n",sdslen(curargv[j]));
         memcpy(cmd+pos,curargv[j],sdslen(curargv[j]));
         pos += sdslen(curargv[j]);
         sdsfree(curargv[j]);
@@ -644,10 +644,10 @@ int redisFormatCommandArgv(char **target, int argc, const char **argv, const siz
     if (cmd == NULL)
         return -1;
 
-    pos = sprintf(cmd,"*%d\r\n",argc);
+    pos = snprintf(cmd,totlen,"*%d\r\n",argc);
     for (j = 0; j < argc; j++) {
         len = argvlen ? argvlen[j] : strlen(argv[j]);
-        pos += sprintf(cmd+pos,"$%zu\r\n",len);
+        pos += snprintf(cmd+pos,totlen-pos,"$%zu\r\n",len);
         memcpy(cmd+pos,argv[j],len);
         pos += len;
         cmd[pos++] = '\r';

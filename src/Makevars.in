@@ -13,4 +13,4 @@ all: 		$(SHLIB)
 $(SHLIB): 	@PKG_TARGET@
 
 libhiredis.a:
-		$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)" --directory=hiredis --makefile=GNUmakefile libhiredis.a
+		$(MAKE) CC="$(CC)" CFLAGS="-DNDEBUG $(CFLAGS) $(CPICFLAGS)" AR="$(AR)" RANLIB="$(RANLIB)" --directory=hiredis --makefile=GNUmakefile libhiredis.a

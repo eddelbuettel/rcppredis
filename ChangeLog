@@ -1,3 +1,8 @@
+2025-03-24  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/hiredis/hiredis.c: Convert four sprintf uses to snprintf
+	* src/Makevars.in: Ensure -DNDEBUG is set for libhiredis.a build
+
 2025-01-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll micro version and date
