@@ -3,6 +3,19 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.2.5 (2025-03-26)}{
+  \itemize{
+    \item The continuous integration setup was updated several times
+    \item Badges and URLs in README.md have been updated
+    \item An updated interface from \pkg{RApiSerialize} is now used, and a
+    versioned dependency on version 0.1.4 or later has been added
+    \item The DESCRIPTION file now uses Authors@R
+    \item Two possible bashisms have been converted in \code{configure.ac}
+    \item The (fallback if needed) build of \code{libhiredis.a} now sets
+    \code{-DNDEBUG}, four uses of \code{sprintf} converted to \code{snprintf}
+  }
+}
+
 \section{Changes in version 0.2.4 (2023-08-19)}{
   \itemize{
     \item Add missing alias for \sQuote{RcppRedis-package} to \code{rhiredis.Rd}.

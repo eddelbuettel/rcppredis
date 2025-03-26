@@ -1,3 +1,11 @@
+2025-03-26  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.2.5
+	* configure.ac: Idem
+	* configure: Regenerated
+
+	* inst/demos/*: Moved from demo/
+
 2025-03-24  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll micro version and date

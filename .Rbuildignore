@@ -7,3 +7,4 @@ LICENSE
 ^\.github
 ^\.editorconfig$
 ^vignettes/rmd
+demo/00Index
