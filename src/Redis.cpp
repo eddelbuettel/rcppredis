@@ -1,7 +1,7 @@
 
 //  RcppRedis -- Rcpp bindings to Hiredis for some Redis functionality
 //
-//  Copyright (C) 2013 - 2024    Dirk Eddelbuettel
+//  Copyright (C) 2013 - 2025    Dirk Eddelbuettel
 //  Portions Copyright (C) 2013  Wush Wu
 //  Portions Copyright (C) 2013  William Pleasant
 //  Portions Copyright (C) 2015  Russell S. Pierce
@@ -186,6 +186,9 @@ public:
     Redis(std::string host, int port)                                 { init(host, port);       }
     Redis(std::string host)                                           { init(host);             }
     Redis()                                                           { init();                 }
+
+    // used in functions below
+    static const unsigned int szdb = sizeof(double);
 
     // could create new functions to (re-)connect with given host and port etc pp
 
@@ -455,14 +458,58 @@ public:
     }
 
     // redis ltrim: trim list so that it contains only the range of elements specified
-     SEXP ltrim(std::string key, int start, int end) {
+    SEXP ltrim(std::string key, int start, int end) {
 
         redisReply *reply =
             static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LTRIM %s %d %d",
                                                           key.c_str(), start, end));
         SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
         return(rep);
     }
+
+    // redis lrem: removes 'count' elements 's' under 'key'
+    // sadly does not cooperate with the serialized key
+    // TODO remove
+    SEXP lrem(std::string key, int count, SEXP s) {
+        // if raw, use as is else serialize to raw
+        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
+
+        // uses binary protocol, see hiredis doc at github
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LREM %s %d %b",
+                                                          key.c_str(), count,
+                                                          x.begin(), x.size()*szdb));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
+
+    // redis lmove: return first/last from src and places it first/last at dest
+    // this uses R serialization
+    SEXP lmove(std::string src, std::string dest, std::string wherefrom, std::string whereto) {
+        SEXP obj;
+        std::string res;
+        redisReply *reply =
+            static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LMOVE %s %s %s %s",
+                                                          src.c_str(), dest.c_str(),
+                                                          wherefrom.c_str(), whereto.c_str()));
+        //SEXP rep = extract_reply(reply);
+        //freeReplyObject(reply);
+        //return(rep);
+        if (replyTypeToInteger(reply) == replyNil_t) {
+            obj = R_NilValue;
+        } else {
+            checkReplyType(reply, replyString_t); // ensure we got string
+            int nc = reply->len;
+            Rcpp::RawVector res(nc);
+            memcpy(res.begin(), reply->str, nc);
+            obj = R::unserializeFromRaw(res);
+        }
+        freeReplyObject(reply);
+        return(obj);
+    }
+
 
     // redis lrange: get list from start to end -- with R serialization
     Rcpp::List lrange(std::string key, int start, int end) {
@@ -515,11 +562,11 @@ public:
             memcpy(res.begin(), reply->str, nc);
             obj = R::unserializeFromRaw(res);
         }
-
+        freeReplyObject(reply);
         return(obj);
     }
 
-  // redis "rpop from" -- with R serialization
+    // redis "rpop from" -- with R serialization
     SEXP rpop(std::string key) {
         SEXP obj;
         std::string res;
@@ -535,7 +582,7 @@ public:
             memcpy(res.begin(), reply->str, nc);
             obj = unserializeFromRaw(res);
         }
-
+        freeReplyObject(reply);
         return(obj);
     }
 
@@ -545,7 +592,7 @@ public:
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
 
-      // uses binary protocol, see hiredis doc at github
+        // uses binary protocol, see hiredis doc at github
         redisReply *reply =
             static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LPUSH %s %b",
                                                           key.c_str(), x.begin(),
@@ -557,13 +604,13 @@ public:
         return(rep);
     }
 
-      // redis "append to list" -- with R serialization
+    // redis "append to list" -- with R serialization
     SEXP rpush(std::string key, SEXP s) {
 
         // if raw, use as is else serialize to raw
         Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
 
-      // uses binary protocol, see hiredis doc at github
+        // uses binary protocol, see hiredis doc at github
         redisReply *reply =
             static_cast<redisReply*>(redisCommandNULLSafe(prc_, "RPUSH %s %b",
                                                           key.c_str(), x.begin(),
@@ -576,9 +623,6 @@ public:
 
 
     // Some "non-R-serialzation" functions below
-
-    // used in functions below
-    static const unsigned int szdb = sizeof(double);
 
     // redis set a string without deserializes from R format [as set() above does]
     std::string setString(std::string key, std::string value) {
@@ -1049,6 +1093,8 @@ RCPP_MODULE(Redis) {
         .method("lrange",   &Redis::lrange,   "runs 'LRANGE key start end' for list")
         .method("llen",     &Redis::llen,     "runs 'LLEN key' for list")
         .method("ltrim",    &Redis::ltrim,    "runs 'LTRIM key start end' for list")
+        .method("lrem",     &Redis::lrem,     "runs 'LREM key count element' for list")
+        .method("lmove",    &Redis::lmove,    "runs 'LMOVE src dest <LEFT | RIGHT> <LEFT | RIGHT>' for list")
 
         // non-R serialization methods below
         .method("setString",  &Redis::setString,   "runs 'SET key obj' without serialization")
@@ -1061,7 +1107,6 @@ RCPP_MODULE(Redis) {
         .method("listRPush",  &Redis::listRPush,   "appends numeric vector to list")
         .method("listRange",  &Redis::listRange,   "runs 'LRANGE key start end' for list, native")
         .method("zadd",       &Redis::zadd,        "inserts rows of matrix into sorted set, first value is score, binary")
-
         .method("zrange",     &Redis::zrange,      "retrieve sorted range over index [min, max], binary")
         .method("zrangebyscore", &Redis::zrangebyscore,  "retrieve sorted range over score [min, max], binary")
         .method("zremrangebyscore", &Redis::zremrangebyscore,  "remove sorted range in [min, max]")
