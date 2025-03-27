@@ -1,17 +1,6 @@
 ## Initial version by Iñaki Ucar using Redux
 ## Adapted to RcppRedis by Dirk Eddelbuettel
 
-## -- quick test
-## redis <- new(Redis)
-## redis$lpush("foo", "banana")
-## redis$lpush("foo", "banana")
-## ##redis$lpop("foo")
-## ##redis$lpop("foo")
-## redis$lrem("foo", 1, "banana") # not removed
-## redis$lpop("foo")
-## redis$lpop("foo")
-## q()
-
 useRcppRedis <- function() {
 
     ensure_queue <- function(name) {
@@ -140,5 +129,18 @@ useRedux <- function() {
 
 }
 
+quickCheck <- function() {
+    redis <- new(RcppRedis::Redis)
+    redis$lpush("foo", "banana")
+    redis$lpush("foo", "banana")
+    print(str(redis$lrange("foo", 0, -1)))
+    redis$lrem("foo", 1, "banana")
+    print(str(redis$lrange("foo", 0, -1)))
+    redis$lpop("foo")
+    print(str(redis$lrange("foo", 0, -1)))
+    invisible(NULL)
+}
+
 useRcppRedis()
 #useRedux()
+#quickCheck()
