@@ -78,9 +78,6 @@ useRcppRedis <- function() {
     str(try_consume(q))
 
     ##system("docker stop valkey")
-    ## cleanup
-    x<-q$con$lpop(q$temp)
-    x<-q$con$lpop(q$temp)
 }
 
 useRedux <- function() {
