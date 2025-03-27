@@ -479,7 +479,7 @@ public:
         redisReply *reply =
             static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LREM %s %d %b",
                                                           key.c_str(), count,
-                                                          x.begin(), x.size()*szdb));
+                                                          x.begin(), x.size()));
         SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
         return(rep);
@@ -596,7 +596,7 @@ public:
         redisReply *reply =
             static_cast<redisReply*>(redisCommandNULLSafe(prc_, "LPUSH %s %b",
                                                           key.c_str(), x.begin(),
-                                                          x.size()*szdb));
+                                                          x.size()));
 
 
         SEXP rep = extract_reply(reply);
@@ -614,7 +614,7 @@ public:
         redisReply *reply =
             static_cast<redisReply*>(redisCommandNULLSafe(prc_, "RPUSH %s %b",
                                                           key.c_str(), x.begin(),
-                                                          x.size()*szdb));
+                                                          x.size()));
 
         SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
