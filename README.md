@@ -12,7 +12,7 @@
 
 The package has three dependencies that should be easily resolvable:
 
-- [hiredis](https://github.com/redis/hiredis), the main C library for Redis, eg via
+- [hiredis](https://github.com/redis/hiredis), the main C library for redis, eg via
   [libhiredis-dev](https://packages.debian.org/sid/libhiredis-dev) on Debian or Ubuntu; as
   a fallback [hiredis](https://github.com/redis/hiredis) is also included
 - [Rcpp](https://github.com/RcppCore/Rcpp) for seamless R and C++ integration (on
@@ -34,10 +34,12 @@ the recommended approach) or GitHub.
 provide [MessagePack](http://msgpack.org/index.html) headers for
 [MessagePack](http://msgpack.org/index.html) serialization.
 
+A backend is needed to run the code. The package will work with any protocol-compatible backend and
+for example [valkey](https://valkey.io/) (which is increasingly replacing redis) works just fine.
 
 ### Getting Started
 
-Run some of the scripts from the `demo/` directory.
+Run some of the scripts from the `demos/` or `examples/` directories.
 
 ### Status
 
@@ -51,7 +53,9 @@ It is however only providing a subset of the Redis API.
 This package was derived from an initial fork of an earlier attempt named
 'rhiredis' by Wush Wu, and has since been extended in a number of
 ways. William Pleasant provided some early patches. Whit Armstrong and
-Russell Pierce contributed extensions.
+Russell Pierce contributed extensions. We also offered a new home for the
+pub/sub mechanism first implemented in the now archived package `rredis` by
+Bryan W. Lewis.
 
 ### Authors
 

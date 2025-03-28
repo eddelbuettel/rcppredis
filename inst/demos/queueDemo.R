@@ -144,6 +144,6 @@ quickCheck <- function() {
     invisible(NULL)
 }
 
-#useRcppRedis()
+useRcppRedis()
 #useRedux()
-quickCheck()
+#quickCheck()
