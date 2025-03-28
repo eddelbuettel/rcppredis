@@ -54,5 +54,4 @@ expect_identical(y, mem[[1]])
 
 #test_09_cleanup <- function() {
 ## delete set
-n <- redis$exec(paste("del", key))
-expect_equal(n, 1)
+expect_equal(redis$del(key), 1)

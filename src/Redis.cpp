@@ -243,6 +243,18 @@ public:
         return(exec("EXPIRE " + key + " " + ms));
     }
 
+    // redis DEL key1 [key2 key3 ...]
+    SEXP del(std::vector<std::string> sv) {
+        std::string cmd = "DEL";
+        for (auto s: sv) {
+            cmd += " " + s;
+        }
+        redisReply *reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, cmd.c_str()));
+        SEXP rep = extract_reply(reply);
+        freeReplyObject(reply);
+        return(rep);
+    }
+
     // redis set -- serializes to R internal format
     std::string set(std::string key, SEXP s) {
 
@@ -981,6 +993,7 @@ RCPP_MODULE(Redis) {
         .method("exists", &Redis::exists,  "runs 'EXISTS' command to count the number of specified keys present")
         .method("expire", &Redis::expire,  "runs 'EXPIRE' command to expire the key after a given number of seconds")
         .method("pexpire", &Redis::pexpire,  "runs 'PEXPIRE' command to expire the key after a given number of milliseconds")
+        .method("del", &Redis::del,  "runs 'DEL key1 [key2 key3 ...]' removing a key")
         .method("set",  &Redis::set,   "runs 'SET key object', serializes internally")
         .method("get",  &Redis::get,   "runs 'GET key', deserializes internally")
 

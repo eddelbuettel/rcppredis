@@ -17,5 +17,4 @@ expect_equal(n, 0)
 
 #test_03_cleanup <- function() {
 ## delete key
-n <- redis$exec(paste("del", key))
-expect_equal(n, 1)
+expect_equal(redis$del(key), 1)

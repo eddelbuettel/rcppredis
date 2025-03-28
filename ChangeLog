@@ -1,3 +1,15 @@
+2025-03-27  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll micro version and date
+
+	* src/Redis.cpp: Add proper DEL, LREM, LMOVE commands
+	* inst/tinytest/test_basics.R: Adjust tests
+        * inst/tinytest/test_exec.R: Idem
+        * inst/tinytest/test_exists.R: Idem
+        * inst/tinytest/test_expire.R: Idem
+        * inst/tinytest/test_list.R: Idem
+        * inst/tinytest/test_set.R: Idem
+
 2025-03-26  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.5

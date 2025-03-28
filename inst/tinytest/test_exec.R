@@ -19,5 +19,4 @@ expect_error(redis$exec("LRANGE mylist 0 elephant"))
 
 #test_04_cleanup <- function() {
 ## delete set
-n <- redis$exec(paste("del", key))
-expect_equal(n, 1)
+expect_equal(redis$del(key), 1)

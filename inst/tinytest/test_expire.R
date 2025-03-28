@@ -36,5 +36,5 @@ expect_equal(n, 0)
 
 #test_03_cleanup <- function() {
 ## delete key
-redis$exec(paste("del", key))
+expect_equal(redis$del(key), 0)
 expect_equal(redis$exists(key), 0)

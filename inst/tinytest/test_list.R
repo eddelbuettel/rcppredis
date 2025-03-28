@@ -5,7 +5,7 @@ redis <- new(Redis)
 exampleNumericElement <- 1.0
 exampleCharElement <- "a"
 key <- "RcppRedis:test:mylist"
-redis$exec(paste("del", key))
+expect_equal(redis$del(key), 0)
 
 
 #test_02_lpush <- function() {
@@ -60,17 +60,16 @@ redis$lpush(key, 3)
 redis$ltrim(key, 0, 1)
 res <- redis$lrange(key, 0, 100)
 expect_equal(res,list(3,2))
-redis$exec(paste("del", key))
+expect_equal(redis$del(key), 1)
 
 
 #test_09_cleanup <- function() {
 ## delete key
-n <- redis$exec(paste("del", key))
-expect_equal(n, 0)
+expect_equal(redis$del(key), 0)
 
 
 ## check lrem
-redis$exec(paste("del", key))
+redis$del(key)
 elem <- "abc"
 redis$lpush(key, elem)
 redis$lpush(key, elem)
@@ -87,7 +86,7 @@ expect_equal(redis$keys(key), character())
 
 ## check lmove
 altkey <- "RcppRedis:test:myotherlist"
-redis$exec(paste("del", altkey))
+redis$del(altkey)
 redis$rpush(key, 1)
 redis$rpush(key, 2)
 redis$rpush(key, 3)

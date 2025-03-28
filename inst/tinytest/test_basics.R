@@ -56,5 +56,4 @@ res <- redis$ping()
 expect_equal(res, "PONG")
 
 #test_06_cleanup <- function() {
-expect_equal(redis$exec("del RcppRedis:test:foo"), 1)
-expect_equal(redis$exec("del RcppRedis:test:foo2"), 1)
+expect_equal(redis$del(c("RcppRedis:test:foo","RcppRedis:test:foo2")), 2)
