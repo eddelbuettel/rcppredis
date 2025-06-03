@@ -1,3 +1,7 @@
+2025-06-03  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp (publishText): Additional plain text publisher
+
 2025-03-28  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Mention valkey as well
