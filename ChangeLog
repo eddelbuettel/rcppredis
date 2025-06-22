@@ -1,3 +1,8 @@
+2025-06-22  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Redis.cpp: Plain text publisher folded into existing 'publish'
+	method along 'type' selector, similar to listening mode
+
 2025-06-15  Dirk Eddelbuettel  <edd@debian.org>
 
 	* .github/workflows/ci.yaml: Use r-ci action with embedded bootstrap

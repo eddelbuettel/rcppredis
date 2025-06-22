@@ -963,21 +963,24 @@ end:
     }
 
     // redis publish -- serializes to R internal format
-    SEXP publish(std::string channel, SEXP s) {
+    SEXP publish(std::string channel, SEXP s, std::string type = "rds") {
+        redisReply *reply = nullptr;
 
-        // if raw, use as is else serialize to raw
-        Rcpp::RawVector x = (TYPEOF(s) == RAWSXP) ? s : R::serializeToRaw(s);
-
-        // uses binary protocol, see hiredis doc at github
-        redisReply *reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %b", channel.c_str(), x.begin(), x.size()));
-        SEXP rep = extract_reply(reply);
-        freeReplyObject(reply);
-        return(rep);
-    }
-
-    // redis publish as text, no serialization
-    SEXP publishText(std::string channel, std::string msg) {
-        redisReply *reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %s", channel.c_str(), msg.c_str()));
+        if (type == "string") {
+            std::string msg = Rcpp::as<std::string>(s);
+            reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %s", channel.c_str(), msg.c_str()));
+        } else if (type == "rds") {
+            Rcpp::RawVector x = R::serializeToRaw(s);
+            // uses binary protocol, see hiredis doc at github
+            reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %b", channel.c_str(), x.begin(), x.size()));
+        } else if (type == "raw") {
+            Rcpp::RawVector x(s);
+            // uses binary protocol, see hiredis doc at github
+            reply = static_cast<redisReply*>(redisCommandNULLSafe(prc_, "PUBLISH %s %b", channel.c_str(), x.begin(), x.size()));
+        } else {
+            Rcpp::warning("Ignoring unsupported 'publish' type '%s'", type);
+            return(R_NilValue);
+        }
         SEXP rep = extract_reply(reply);
         freeReplyObject(reply);
         return(rep);
@@ -1054,7 +1057,6 @@ RCPP_MODULE(Redis) {
         .method("quit", &Redis::quit,  "runs 'QUIT' to close connection")
 
         .method("publish", &Redis::publish,  "runs 'PUBLISH channel message', serializes message internally")
-        .method("publishText", &Redis::publishText,  "runs 'PUBLISH channel message' without serialization of the message")
         .method("subscribe", &Redis::subscribe,  "runs 'SUBSCRIBE channel(s)', subscribe to one or more channels specified as a character vector")
         .method("psubscribe", &Redis::subscribe,  "runs 'PSUBSCRIBE channel(s)', subscribe to one or more channel patterns specified as a character vector")
         .method("unsubscribe", &Redis::subscribe,  "runs 'UNSUBSCRIBE channel(s)', unsubscribe one or more channels specified as a character vector")
