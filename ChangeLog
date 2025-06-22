@@ -1,5 +1,7 @@
 2025-06-22  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Roll micro version and date
+
 	* src/Redis.cpp: Plain text publisher folded into existing 'publish'
 	method along 'type' selector, similar to listening mode
 
