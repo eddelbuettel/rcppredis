@@ -1,15 +1,15 @@
 Package: RcppRedis
 Type: Package
 Title: 'Rcpp' Bindings for 'Redis' using the 'hiredis' Library
-Version: 0.2.5.2
-Date: 2025-06-22
+Version: 0.2.6
+Date: 2025-06-24
 Authors@R: c(person("Dirk", "Eddelbuettel", role = c("aut", "cre"), email = "edd@debian.org",
                     comment = c(ORCID = "0000-0001-6419-907X")),
              person("Bryan", "Lewis", role = "aut", comment = "pub/sub code from 'rredis'"))
-Description: Connection to the 'Redis' key/value store using the
- C-language client library 'hiredis' (included as a fallback) with
- 'MsgPack' encoding provided via 'RcppMsgPack' headers. It now also
- includes the pub/sub functions from the 'rredis' package.
+Description: Connection to the 'Redis' (or 'Valkey') key/value store
+ using the C-language client library 'hiredis' (included as a fallback)
+ with 'MsgPack' encoding provided via 'RcppMsgPack' headers. It now
+ also includes the pub/sub functions from the 'rredis' package.
 SystemRequirements: An available hiredis library (eg via package
  libhiredis-dev on Debian/Ubuntu, hiredis-devel on Fedora/RedHat, or
  directly from source from <https://github.com/redis/hiredis>) can be

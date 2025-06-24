@@ -1,6 +1,12 @@
-2025-06-22  Dirk Eddelbuettel  <edd@debian.org>
+2025-06-24  Dirk Eddelbuettel  <edd@debian.org>
 
-	* DESCRIPTION (Version, Date): Roll micro version and date
+	* DESCRIPTION (Version, Date): Release 0.2.6
+	* configure.ac: Idem
+	* configure: Regenerated
+
+	* DESCRIPTION (Description): Mention Valkey as a suitable backend
+
+2025-06-22  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/Redis.cpp: Plain text publisher folded into existing 'publish'
 	method along 'type' selector, similar to listening mode
@@ -15,7 +21,7 @@
 
 2025-03-28  Dirk Eddelbuettel  <edd@debian.org>
 
-	* README.md: Mention valkey as well
+	* README.md: Mention Valkey as well
 
 2025-03-27  Dirk Eddelbuettel  <edd@debian.org>
 

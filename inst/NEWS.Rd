@@ -3,6 +3,15 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppredis/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppredis/issues/#1}{##1}}
 
+\section{Changes in version 0.2.6 (2025-06-24)}{
+  \itemize{
+    \item The commands \code{DEL}, \code{LREM} and \code{LMOVE} have been added
+    \item The continuous integration setup was updated once more
+    \item The pub/sub publisher now supports a type argument similar to the
+    listener, this allows string message publishing for non-R subscribers
+  }
+}
+
 \section{Changes in version 0.2.5 (2025-03-26)}{
   \itemize{
     \item The continuous integration setup was updated several times
