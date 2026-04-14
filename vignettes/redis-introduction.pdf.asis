@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{Introduction to Redis}
+%\VignetteKeywords{Redis, RcppRedis, introduction, key-value, data}
+%\VignettePackage{RcppRedis}
+%\VignetteEncoding{UTF-8}
+%\VignetteEngine{Rcpp::asis}

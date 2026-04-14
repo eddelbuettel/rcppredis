@@ -1,3 +1,12 @@
+2026-04-14  Dirk Eddelbuettel  <edd@debian.org>
+
+	* vignettes/redis-introduction.pdf.asis: Converted from Rnw
+	* vignettes/market-monitoring.pdf.asis: Idem
+	* vignettes/rmd/redis.bib: Updated reference
+	* vignettes/rmd/Makefile: Added
+	* DESCRIPTION (VignetteBuilder): Add 'VignetteBuilder: Rcpp' along
+	with versioned Imports: on version 1.1.1 or newer
+
 2026-01-27  Dirk Eddelbuettel  <edd@debian.org>
 
 	* .github/workflows/ci.yaml: Switch to actions/checkout@v6

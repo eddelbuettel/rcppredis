@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{Redis for Market Monitoring}
+%\VignetteKeywords{Redis, RcppRedis, market data, streaming, real-time, realtime}
+%\VignettePackage{RcppRedis}
+%\VignetteEncoding{UTF-8}
+%\VignetteEngine{Rcpp::asis}
