@@ -1,5 +1,7 @@
 2026-04-14  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Roll micro version and date
+
 	* vignettes/redis-introduction.pdf.asis: Converted from Rnw
 	* vignettes/market-monitoring.pdf.asis: Idem
 	* vignettes/rmd/redis.bib: Updated reference

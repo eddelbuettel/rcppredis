@@ -1,8 +1,8 @@
 Package: RcppRedis
 Type: Package
 Title: 'Rcpp' Bindings for 'Redis' using the 'hiredis' Library
-Version: 0.2.6
-Date: 2025-06-24
+Version: 0.2.6.1
+Date: 2026-04-14
 Authors@R: c(person("Dirk", "Eddelbuettel", role = c("aut", "cre"), email = "edd@debian.org",
                     comment = c(ORCID = "0000-0001-6419-907X")),
              person("Bryan", "Lewis", role = "aut", comment = "pub/sub code from 'rredis'"))
@@ -19,6 +19,7 @@ SystemRequirements: An available hiredis library (eg via package
 URL: https://github.com/eddelbuettel/rcppredis, https://dirk.eddelbuettel.com/code/rcpp.redis.html
 BugReports: https://github.com/eddelbuettel/rcppredis/issues
 License: GPL (>= 2)
-Imports: methods, Rcpp (>= 0.11.0), RApiSerialize (>= 0.1.4)
+Imports: methods, Rcpp (>= 1.1.1), RApiSerialize (>= 0.1.4)
 LinkingTo: Rcpp, RApiSerialize
 Suggests: RcppMsgPack, tinytest
+VignetteBuilder: Rcpp
